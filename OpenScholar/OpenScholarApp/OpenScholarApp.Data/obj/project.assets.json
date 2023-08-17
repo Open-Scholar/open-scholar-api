@@ -1214,6 +1214,16 @@
             "rid": "win"
           }
         }
+      },
+      "OpenScholarApp.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Domain.dll": {}
+        }
       }
     }
   },
@@ -3625,6 +3635,11 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "OpenScholarApp.Domain/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Domain/OpenScholarApp.Domain.csproj",
+      "msbuildProject": "../OpenScholarApp.Domain/OpenScholarApp.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3635,7 +3650,8 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.10",
       "Microsoft.EntityFrameworkCore.Relational >= 7.0.10",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.10",
-      "Microsoft.EntityFrameworkCore.Tools >= 7.0.10"
+      "Microsoft.EntityFrameworkCore.Tools >= 7.0.10",
+      "OpenScholarApp.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -3669,7 +3685,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\OpenScholarApp.Domain.csproj": {
+              "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\OpenScholarApp.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
