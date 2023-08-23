@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using OpenScholarApp.Data.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace OpenScholarApp.Helpers.DIContainer
     {
         public static void InjectDbCotext(IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<OpenScholarAppDbContext>(x => x.UseSqlServer(connectionString));
+            services.AddDbContext<OpenScholarDbContext>(x => x.UseSqlServer(connectionString));
         }
     }
 }

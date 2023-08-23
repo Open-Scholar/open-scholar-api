@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenScholarApp.Domain.Entities
 {
-    public class Student : ApplicationUser
+    public class Student
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public EmailAddressAttribute EmailAddress { get; set; } = new EmailAddressAttribute();
         public string FirstName { get; set; } = string.Empty;

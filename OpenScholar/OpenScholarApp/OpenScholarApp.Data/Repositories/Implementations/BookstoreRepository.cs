@@ -4,48 +4,45 @@ using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenScholarApp.Data.Repositories.Implementations
 {
-    public class BookRepository : IBookRepository
+    internal class BookstoreRepository : IBookStoreRepository
     {
 
         private readonly OpenScholarDbContext _openScholarDbContext;
 
-        public BookRepository(OpenScholarDbContext openScholarDbContext)
+        public BookstoreRepository(OpenScholarDbContext openScholarDbContext)
         {
             _openScholarDbContext = openScholarDbContext;
         }
 
-        public async Task Add(Book entity)
+        public async Task Add(BookStore entity)
         {
-            _openScholarDbContext.Books.Add(entity);
+            _openScholarDbContext.BookStores.Add(entity);
             await _openScholarDbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(Book entity)
+        public async Task Delete(BookStore entity)
         {
-            _openScholarDbContext.Books.Remove(entity);
+            _openScholarDbContext.BookStores.Remove(entity);
             await _openScholarDbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Book>> GetAll()
+        public async Task<List<BookStore>> GetAll()
         {
-            return await _openScholarDbContext.Books
-                .ToListAsync();
+            return await _openScholarDbContext.BookStores.ToListAsync();
         }
 
-        public async Task<Book> GetById(int id)
+        public async Task<BookStore> GetById(int id)
         {
-            return await _openScholarDbContext.Books
-                .SingleOrDefaultAsync(a => a.Id == id);
+            return await _openScholarDbContext.BookStores.SingleOrDefaultAsync(x => x.Id == id); 
         }
 
-        public async Task Update(Book entity)
+        public async Task Update(BookStore entity)
         {
             _openScholarDbContext.Update(entity);
             await _openScholarDbContext.SaveChangesAsync();

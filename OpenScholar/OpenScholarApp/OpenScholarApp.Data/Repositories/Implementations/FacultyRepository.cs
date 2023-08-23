@@ -4,50 +4,46 @@ using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenScholarApp.Data.Repositories.Implementations
 {
-    public class BookRepository : IBookRepository
+    public class FacultyRepository : IFacultyRepository
     {
-
         private readonly OpenScholarDbContext _openScholarDbContext;
 
-        public BookRepository(OpenScholarDbContext openScholarDbContext)
+        public FacultyRepository(OpenScholarDbContext openScholarDbContext)
         {
             _openScholarDbContext = openScholarDbContext;
         }
 
-        public async Task Add(Book entity)
+        public async Task Add(Faculty entity)
         {
-            _openScholarDbContext.Books.Add(entity);
+            _openScholarDbContext.Faculties.Add(entity);
             await _openScholarDbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(Book entity)
+        public async Task Delete(Faculty entity)
         {
-            _openScholarDbContext.Books.Remove(entity);
+            _openScholarDbContext.Faculties.Remove(entity);
             await _openScholarDbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Book>> GetAll()
+        public async Task<List<Faculty>> GetAll()
         {
-            return await _openScholarDbContext.Books
-                .ToListAsync();
+            return await _openScholarDbContext.Faculties.ToListAsync();
         }
 
-        public async Task<Book> GetById(int id)
+        public async Task<Faculty> GetById(int id)
         {
-            return await _openScholarDbContext.Books
-                .SingleOrDefaultAsync(a => a.Id == id);
+            return await _openScholarDbContext.Faculties.SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task Update(Book entity)
+        public async Task Update(Faculty entity)
         {
-            _openScholarDbContext.Update(entity);
+            _openScholarDbContext.Faculties.Update(entity);
             await _openScholarDbContext.SaveChangesAsync();
         }
     }

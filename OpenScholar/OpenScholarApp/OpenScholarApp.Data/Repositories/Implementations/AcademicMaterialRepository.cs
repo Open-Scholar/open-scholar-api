@@ -4,48 +4,45 @@ using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenScholarApp.Data.Repositories.Implementations
 {
-    public class BookRepository : IBookRepository
+    public class AcademicMaterialRepository : IAcademicMaterialRepository
     {
-
         private readonly OpenScholarDbContext _openScholarDbContext;
 
-        public BookRepository(OpenScholarDbContext openScholarDbContext)
+        public AcademicMaterialRepository(OpenScholarDbContext openScholarDbContext)
         {
             _openScholarDbContext = openScholarDbContext;
         }
 
-        public async Task Add(Book entity)
+        public async Task Add(AcademicMaterial entity)
         {
-            _openScholarDbContext.Books.Add(entity);
+            _openScholarDbContext.AcademicMaterials.Add(entity);
             await _openScholarDbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(Book entity)
+        public async Task Delete(AcademicMaterial entity)
         {
-            _openScholarDbContext.Books.Remove(entity);
+            _openScholarDbContext.AcademicMaterials.Remove(entity);
             await _openScholarDbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Book>> GetAll()
+        public Task<List<AcademicMaterial>> GetAll()
         {
-            return await _openScholarDbContext.Books
-                .ToListAsync();
+            return _openScholarDbContext.AcademicMaterials.ToListAsync();
         }
 
-        public async Task<Book> GetById(int id)
+        public async Task<AcademicMaterial> GetById(int id)
         {
-            return await _openScholarDbContext.Books
+            return await _openScholarDbContext.AcademicMaterials
                 .SingleOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task Update(Book entity)
+        public async Task Update(AcademicMaterial entity)
         {
             _openScholarDbContext.Update(entity);
             await _openScholarDbContext.SaveChangesAsync();
