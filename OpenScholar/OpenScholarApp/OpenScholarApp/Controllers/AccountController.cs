@@ -7,6 +7,5 @@ namespace OpenScholarApp.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-
     }
 }

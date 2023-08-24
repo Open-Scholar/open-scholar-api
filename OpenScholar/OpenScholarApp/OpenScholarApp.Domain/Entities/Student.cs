@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OpenScholarApp.Domain.Entities
 {
-    public class Student
+    public class Student : ApplicationUser
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -20,7 +20,8 @@ namespace OpenScholarApp.Domain.Entities
         public Enum StudentStatus { get; set; }
         public int StudentIndexNumber { get; set; }
         public string? Description { get; set; }
-        public University University { get; set; }
-        
-    }
+        //public University University { get; set; }
+        public ICollection<Faculty> Faculties { get; set; }
+        public ICollection<AcademicMaterial> AcademicMaterials { get; set; }
+    } 
 }

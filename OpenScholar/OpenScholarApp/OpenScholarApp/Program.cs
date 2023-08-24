@@ -24,10 +24,6 @@ builder.Services.AddDbContext<OpenScholarDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("ConnectionString")));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<OpenScholarDbContext>()
-                .AddDefaultTokenProviders();
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

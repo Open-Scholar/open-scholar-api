@@ -6,4 +6,22 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.10" />
+    <PackageReference Include="Microsoft.IdentityModel.Abstractions" Version="6.32.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AcademicMaterialDto\" />
+    <Folder Include="BookStoreDto\" />
+    <Folder Include="BookSellerDto\" />
+    <Folder Include="FacultyDto\" />
+    <Folder Include="BookDto\" />
+    <Folder Include="UniversityDto\" />
+    <Folder Include="SubjectDto\" />
+    <Folder Include="ProfessorDto\" />
+    <Folder Include="StudentDto\" />
+  </ItemGroup>
+
 </Project>

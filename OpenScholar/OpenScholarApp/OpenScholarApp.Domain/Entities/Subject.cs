@@ -14,5 +14,6 @@ namespace OpenScholarApp.Domain.Entities
         public int Id { get; set; }
         public string SubjectName { get; set; } = string.Empty;
         public string? Description { get; set; } 
+        public Faculty Faculty { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "O9zK9+A4ELhEHWLYyq8h3gzVaSg2S5cceVQULJdSC5AEf4GC2HRTzXuntC0vo0jwTZQzEEv15yvaJnPve0T2XA==",
+  "dgSpecHash": "AZwV99ZBiMib2zEqlQwQ3C+ercQNEuiJ7+cLsj8JrXm6BI9jL4v2sOruy8Akv7t7l7OasqwTM0KuQAz0Tu1IjQ==",
   "success": true,
   "projectFilePath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj",
   "expectedPackageFiles": [
@@ -21,7 +21,8 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.logging\\7.0.0\\microsoft.extensions.logging.7.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0\\microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.options\\7.0.1\\microsoft.extensions.options.7.0.1.nupkg.sha512",
-    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512"
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.abstractions\\6.32.1\\microsoft.identitymodel.abstractions.6.32.1.nupkg.sha512"
   ],
   "logs": []
 }

@@ -13,9 +13,10 @@ namespace OpenScholarApp.Domain.Entities
         public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public ICollection<Subject> Subjects { get; set; } = new List<Subject>();
         public string? Description { get; set; }
-        public ICollection<Faculty> Faculty { get; set; } = new List<Faculty>();
+        public List<Subject> Subject { get; set; } = new List<Subject>();
+        public List<Faculty> Faculty { get; set; } = new List<Faculty>();
+        public List<Book> Books { get; set; } = new List<Book>();
 
     }
 }

@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace OpenScholarApp.Data.Repositories.Implementations
 {
-    internal class BookstoreRepository : IBookStoreRepository
+    public class BookStoreRepository : IBookStoreRepository
     {
 
         private readonly OpenScholarDbContext _openScholarDbContext;
 
-        public BookstoreRepository(OpenScholarDbContext openScholarDbContext)
+        public BookStoreRepository(OpenScholarDbContext openScholarDbContext)
         {
             _openScholarDbContext = openScholarDbContext;
         }

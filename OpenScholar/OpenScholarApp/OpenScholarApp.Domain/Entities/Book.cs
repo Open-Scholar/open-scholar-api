@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OpenScholarApp.Domain.Entities
 {
@@ -14,6 +9,7 @@ namespace OpenScholarApp.Domain.Entities
         public string Title { get; set; } = string.Empty;
         public DateOnly ReleaseDate { get; set; } 
         public string? Description { get; set; }
-        public List<string> Authors { get; set; } = new List<string>();
+        public ICollection<string> Authors { get; set; }
+        public List<int> AuthorId { get; set; } 
     }
 }
