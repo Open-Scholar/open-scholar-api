@@ -1,3 +1,5 @@
+using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -83,6 +85,8 @@ builder.Services.AddCors(options =>
     .AllowCredentials()
     .SetIsOriginAllowed((hosts) => true));
 });
+
+
 
 var app = builder.Build();
 
