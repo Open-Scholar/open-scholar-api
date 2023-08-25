@@ -14,7 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenScholarApp.Data\OpenScholarApp.Data.csproj" />
     <ProjectReference Include="..\OpenScholarApp.Dtos\OpenScholarApp.Dtos.csproj" />
+    <ProjectReference Include="..\OpenScholarApp.Mappers\OpenScholarApp.Mappers.csproj" />
   </ItemGroup>
 
 </Project>

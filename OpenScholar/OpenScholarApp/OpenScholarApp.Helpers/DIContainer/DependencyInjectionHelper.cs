@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
+using OpenScholarApp.Services.Implementations;
+using OpenScholarApp.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +35,7 @@ namespace OpenScholarApp.Helpers.DIContainer
 
         public static void InjectServices(IServiceCollection services)
         {
-
+            services.AddTransient<IBookService, BookService>();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace OpenScholarApp.Domain.Entities
         public string Title { get; set; } = string.Empty;
         public DateOnly ReleaseDate { get; set; } 
         public string? Description { get; set; }
-        public ICollection<string> Authors { get; set; }
+        public List<string> Authors { get; set; }
         public List<int> AuthorId { get; set; } 
     }
 }

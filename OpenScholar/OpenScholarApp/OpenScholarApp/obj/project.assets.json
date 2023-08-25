@@ -2,22 +2,6 @@
   "version": 3,
   "targets": {
     "net7.0": {
-      "AutoMapper/12.0.1": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.CSharp": "4.7.0"
-        },
-        "compile": {
-          "lib/netstandard2.1/AutoMapper.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.1/AutoMapper.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Azure.Core/1.24.0": {
         "type": "package",
         "dependencies": {
@@ -4262,7 +4246,6 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
-          "EntityFramework": "6.4.4",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.10",
           "Microsoft.Extensions.Identity.Core": "7.0.10",
           "Microsoft.Extensions.Identity.Stores": "7.0.10",
@@ -4273,6 +4256,54 @@
         },
         "runtime": {
           "bin/placeholder/OpenScholarApp.Domain.dll": {}
+        }
+      },
+      "OpenScholarApp.Dtos/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.Extensions.Identity.Core": "7.0.10",
+          "Microsoft.Extensions.Identity.Stores": "7.0.10",
+          "Microsoft.IdentityModel.Abstractions": "6.32.1",
+          "OpenScholarApp.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Dtos.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Dtos.dll": {}
+        }
+      },
+      "OpenScholarApp.Mappers/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "OpenScholarApp.Dtos": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Mappers.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Mappers.dll": {}
+        }
+      },
+      "OpenScholarApp.Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.10",
+          "Microsoft.Extensions.Identity.Core": "7.0.10",
+          "Microsoft.Extensions.Identity.Stores": "7.0.10",
+          "Microsoft.IdentityModel.Abstractions": "6.32.1",
+          "OpenScholarApp.Data": "1.0.0",
+          "OpenScholarApp.Dtos": "1.0.0",
+          "OpenScholarApp.Mappers": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Services.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Services.dll": {}
         }
       },
       "OpenScholarApp.Shared/1.0.0": {
@@ -4293,21 +4324,6 @@
     }
   },
   "libraries": {
-    "AutoMapper/12.0.1": {
-      "sha512": "hvV62vl6Hp/WfQ24yzo3Co9+OPl8wH8hApwVtgWpiAynVJkUcs7xvehnSftawL8Pe8FrPffBRM3hwzLQqWDNjA==",
-      "type": "package",
-      "path": "automapper/12.0.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "automapper.12.0.1.nupkg.sha512",
-        "automapper.nuspec",
-        "icon.png",
-        "lib/netstandard2.1/AutoMapper.dll",
-        "lib/netstandard2.1/AutoMapper.xml"
-      ]
-    },
     "Azure.Core/1.24.0": {
       "sha512": "+/qI1j2oU1S4/nvxb2k/wDsol00iGf1AyJX5g3epV7eOpQEP/2xcgh/cxgKMeFgn3U2fmgSiBnQZdkV+l5y0Uw==",
       "type": "package",
@@ -12518,6 +12534,21 @@
       "path": "../OpenScholarApp.Domain/OpenScholarApp.Domain.csproj",
       "msbuildProject": "../OpenScholarApp.Domain/OpenScholarApp.Domain.csproj"
     },
+    "OpenScholarApp.Dtos/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Dtos/OpenScholarApp.Dtos.csproj",
+      "msbuildProject": "../OpenScholarApp.Dtos/OpenScholarApp.Dtos.csproj"
+    },
+    "OpenScholarApp.Mappers/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Mappers/OpenScholarApp.Mappers.csproj",
+      "msbuildProject": "../OpenScholarApp.Mappers/OpenScholarApp.Mappers.csproj"
+    },
+    "OpenScholarApp.Services/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Services/OpenScholarApp.Services.csproj",
+      "msbuildProject": "../OpenScholarApp.Services/OpenScholarApp.Services.csproj"
+    },
     "OpenScholarApp.Shared/1.0.0": {
       "type": "project",
       "path": "../OpenScholarApp.Shared/OpenScholarApp.Shared.csproj",
@@ -12526,7 +12557,6 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "AutoMapper >= 12.0.1",
       "EntityFramework >= 6.4.4",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.10",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 7.0.10",
@@ -12539,6 +12569,7 @@
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 7.0.9",
       "Newtonsoft.Json >= 13.0.3",
       "OpenScholarApp.Data >= 1.0.0",
+      "OpenScholarApp.Services >= 1.0.0",
       "OpenScholarApp.Shared >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.4.0",
       "Swashbuckle.AspNetCore.Filters >= 7.0.8"
@@ -12579,6 +12610,9 @@
             "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj": {
               "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj"
             },
+            "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj": {
+              "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj"
+            },
             "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\OpenScholarApp.Shared.csproj": {
               "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\OpenScholarApp.Shared.csproj"
             }
@@ -12595,10 +12629,6 @@
       "net7.0": {
         "targetAlias": "net7.0",
         "dependencies": {
-          "AutoMapper": {
-            "target": "Package",
-            "version": "[12.0.1, )"
-          },
           "EntityFramework": {
             "target": "Package",
             "version": "[6.4.4, )"

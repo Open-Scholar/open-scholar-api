@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "6rX9mlkQ2e8vs/T+yoWsRKigLuLFnIuOlmNCoXoMeAX7aK9yhI4HMXn6Gi2lPgm4VOtCTsmISxskLDWZzSgWyA==",
+  "dgSpecHash": "GLf/M50JK4nHVOzBxEx0FXoTsV2k7V4bpDbk7VLQTdev8zOfn4hwsQztzy/zqL4bUyaxtPCN4fTHHTQfdVo8tw==",
   "success": true,
   "projectFilePath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp\\OpenScholarApp.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Administrator\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",

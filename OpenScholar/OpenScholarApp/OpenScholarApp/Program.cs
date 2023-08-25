@@ -1,5 +1,3 @@
-using AutoMapper;
-using AutoMapper.Configuration.Conventions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

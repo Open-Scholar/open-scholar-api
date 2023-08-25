@@ -10,16 +10,16 @@ namespace OpenScholarApp.Mappers
 {
     public static class BookMapper
     {
-        public static BookDto ToBookDto(this Book book)
+        public static BookDto ToBookDto(this Book bookDb)
         {
             return new BookDto
             {
-                Id = book.Id,
-                Title = book.Title,
-                ReleaseDate = book.ReleaseDate,
-                Description = book.Description,
-                Authors = book.Authors,
-                AuthorId = book.AuthorId,
+                Id = bookDb.Id,
+                Title = bookDb.Title,
+                ReleaseDate = bookDb.ReleaseDate,
+                Description = bookDb.Description,
+                Authors = bookDb.Authors,
+                AuthorId = bookDb.AuthorId,
             };
         }
 
@@ -31,7 +31,7 @@ namespace OpenScholarApp.Mappers
                 Title = bookDto.Title,
                 ReleaseDate = bookDto.ReleaseDate,
                 Description = bookDto.Description,
-                Authors = bookDto.Authors,
+                Authors = bookDto.Authors. Authors,
                 AuthorId = bookDto.AuthorId,
             };
         }

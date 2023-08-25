@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp", "OpenScholarApp\OpenScholarApp.csproj", "{0FDD6DD2-A700-43E0-A60A-F339798463A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp", "OpenScholarApp\OpenScholarApp.csproj", "{0FDD6DD2-A700-43E0-A60A-F339798463A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp.Domain", "OpenScholarApp.Domain\OpenScholarApp.Domain.csproj", "{D90BBFFA-10F3-433C-A2E3-01039965CDBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Domain", "OpenScholarApp.Domain\OpenScholarApp.Domain.csproj", "{D90BBFFA-10F3-433C-A2E3-01039965CDBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp.Data", "OpenScholarApp.Data\OpenScholarApp.Data.csproj", "{F950661B-C1E9-4BB9-995B-19839D65DB90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Data", "OpenScholarApp.Data\OpenScholarApp.Data.csproj", "{F950661B-C1E9-4BB9-995B-19839D65DB90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp.Dtos", "OpenScholarApp.Dtos\OpenScholarApp.Dtos.csproj", "{E4652524-33F7-4AB1-82BD-F51C96089EA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Dtos", "OpenScholarApp.Dtos\OpenScholarApp.Dtos.csproj", "{E4652524-33F7-4AB1-82BD-F51C96089EA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp.Mappers", "OpenScholarApp.Mappers\OpenScholarApp.Mappers.csproj", "{C9461523-2E25-451E-B72F-0863EDB4406E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Mappers", "OpenScholarApp.Mappers\OpenScholarApp.Mappers.csproj", "{C9461523-2E25-451E-B72F-0863EDB4406E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp.Services", "OpenScholarApp.Services\OpenScholarApp.Services.csproj", "{07802BEF-A833-453F-B214-3F45132BC444}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Services", "OpenScholarApp.Services\OpenScholarApp.Services.csproj", "{07802BEF-A833-453F-B214-3F45132BC444}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp.Helpers", "OpenScholarApp.Helpers\OpenScholarApp.Helpers.csproj", "{1457CA88-4199-4994-9205-538B02A6DB38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Helpers", "OpenScholarApp.Helpers\OpenScholarApp.Helpers.csproj", "{1457CA88-4199-4994-9205-538B02A6DB38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp.Shared", "OpenScholarApp.Shared\OpenScholarApp.Shared.csproj", "{346D2F45-3842-4F90-8E8D-D308E6FE5275}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Shared", "OpenScholarApp.Shared\OpenScholarApp.Shared.csproj", "{346D2F45-3842-4F90-8E8D-D308E6FE5275}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

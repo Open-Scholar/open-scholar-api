@@ -16,6 +16,6 @@ namespace OpenScholarApp.Domain.Entities
         public string EmailAdress { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public Book Book { get; set; }
-        public ICollection<Book> Books { get; set;}
+        public List<Book> Books { get; set;}
     }
 }

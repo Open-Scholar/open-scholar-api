@@ -1592,7 +1592,6 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
-          "EntityFramework": "6.4.4",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.10",
           "Microsoft.Extensions.Identity.Core": "7.0.10",
           "Microsoft.Extensions.Identity.Stores": "7.0.10",
@@ -1603,6 +1602,54 @@
         },
         "runtime": {
           "bin/placeholder/OpenScholarApp.Domain.dll": {}
+        }
+      },
+      "OpenScholarApp.Dtos/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.Extensions.Identity.Core": "7.0.10",
+          "Microsoft.Extensions.Identity.Stores": "7.0.10",
+          "Microsoft.IdentityModel.Abstractions": "6.32.1",
+          "OpenScholarApp.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Dtos.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Dtos.dll": {}
+        }
+      },
+      "OpenScholarApp.Mappers/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "OpenScholarApp.Dtos": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Mappers.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Mappers.dll": {}
+        }
+      },
+      "OpenScholarApp.Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.10",
+          "Microsoft.Extensions.Identity.Core": "7.0.10",
+          "Microsoft.Extensions.Identity.Stores": "7.0.10",
+          "Microsoft.IdentityModel.Abstractions": "6.32.1",
+          "OpenScholarApp.Data": "1.0.0",
+          "OpenScholarApp.Dtos": "1.0.0",
+          "OpenScholarApp.Mappers": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Services.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Services.dll": {}
         }
       }
     }
@@ -4445,6 +4492,21 @@
       "type": "project",
       "path": "../OpenScholarApp.Domain/OpenScholarApp.Domain.csproj",
       "msbuildProject": "../OpenScholarApp.Domain/OpenScholarApp.Domain.csproj"
+    },
+    "OpenScholarApp.Dtos/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Dtos/OpenScholarApp.Dtos.csproj",
+      "msbuildProject": "../OpenScholarApp.Dtos/OpenScholarApp.Dtos.csproj"
+    },
+    "OpenScholarApp.Mappers/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Mappers/OpenScholarApp.Mappers.csproj",
+      "msbuildProject": "../OpenScholarApp.Mappers/OpenScholarApp.Mappers.csproj"
+    },
+    "OpenScholarApp.Services/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Services/OpenScholarApp.Services.csproj",
+      "msbuildProject": "../OpenScholarApp.Services/OpenScholarApp.Services.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -4454,7 +4516,8 @@
       "Microsoft.Extensions.Identity.Core >= 7.0.10",
       "Microsoft.Extensions.Identity.Stores >= 7.0.10",
       "Microsoft.IdentityModel.Abstractions >= 6.32.1",
-      "OpenScholarApp.Data >= 1.0.0"
+      "OpenScholarApp.Data >= 1.0.0",
+      "OpenScholarApp.Services >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4491,6 +4554,9 @@
           "projectReferences": {
             "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj": {
               "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj"
+            },
+            "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj": {
+              "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj"
             }
           }
         }

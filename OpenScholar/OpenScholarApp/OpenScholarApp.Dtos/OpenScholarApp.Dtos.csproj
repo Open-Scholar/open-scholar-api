@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AcademicMaterialDto\" />
     <Folder Include="BookStoreDto\" />
     <Folder Include="BookSellerDto\" />
     <Folder Include="FacultyDto\" />
@@ -21,6 +20,10 @@
     <Folder Include="SubjectDto\" />
     <Folder Include="ProfessorDto\" />
     <Folder Include="StudentDto\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenScholarApp.Domain\OpenScholarApp.Domain.csproj" />
   </ItemGroup>
 
 </Project>
