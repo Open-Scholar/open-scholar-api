@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Domain.Entities;
+using OpenScholarApp.Helpers.DIContainer;
 using OpenScholarApp.Shared.Settings;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
@@ -19,6 +18,17 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddDbContext<IdentityDbContext>(options =>
 //    options.UseSqlServer(
 //        builder.Configuration.GetConnectionString("ConnectionString")));
+var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
+builder.Services.AddDbContext<OpenScholarDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddIdentityCore<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+})
+.AddEntityFrameworkStores<OpenScholarDbContext>()
+.AddDefaultTokenProviders();
+
 
 builder.Services.AddDbContext<OpenScholarDbContext>(options =>
     options.UseSqlServer(
@@ -84,11 +94,18 @@ builder.Services.AddCors(options =>
     .SetIsOriginAllowed((hosts) => true));
 });
 
+//DependencyInjectionHelper.InjectDbContext(builder.Services, appSettingsObject.ConnectionString);
+DependencyInjectionHelper.InjectRepositories(builder.Services);
+DependencyInjectionHelper.InjectServices(builder.Services);
+
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseAuthentication();
+app.UseAuthorization();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -102,8 +119,6 @@ if (app.Environment.IsDevelopment())
         .AllowAnyHeader();
     });
 }
-
-app.UseAuthorization();
 
 app.MapControllers();
 

@@ -14,12 +14,12 @@ namespace OpenScholarApp.Mappers
         {
             return new BookDto
             {
-                Id = bookDb.Id,
+                Id = bookDb.BookId,
                 Title = bookDb.Title,
                 ReleaseDate = bookDb.ReleaseDate,
                 Description = bookDb.Description,
                 Authors = bookDb.Authors,
-                AuthorId = bookDb.AuthorId,
+                //AuthorId = bookDb.AuthorId,
             };
         }
 
@@ -27,12 +27,12 @@ namespace OpenScholarApp.Mappers
         {
             return new Book
             {
-                Id = bookDto.Id,
+                BookId = bookDto.Id,
                 Title = bookDto.Title,
                 ReleaseDate = bookDto.ReleaseDate,
                 Description = bookDto.Description,
-                Authors = bookDto.Authors. Authors,
-                AuthorId = bookDto.AuthorId,
+                Authors = bookDto.Authors,
+                //AuthorId = bookDto.AuthorId,
             };
         }
     }

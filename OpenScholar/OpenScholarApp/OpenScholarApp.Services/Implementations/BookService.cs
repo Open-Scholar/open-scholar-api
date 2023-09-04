@@ -27,6 +27,7 @@ namespace OpenScholarApp.Services.Implementations
 
             Book newBook = BookDto.ToBook();
             await _bookRepository.Add(newBook);
+            
             //User userDb = await _userRepository.GetById(userId);
             //if (userDb == null)
             //{
@@ -56,9 +57,14 @@ namespace OpenScholarApp.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<List<BookDto>> GetAllBooks(int userId)
+        public async Task<List<BookDto>> GetAllBooks(int userId = 1)
         {
             throw new NotImplementedException();
+
+            //List<Book> booksDb = await _bookRepository.GetAll();
+
+            //List<BookDto> booksDto = booksDb.Where(x => x.UserId == userId).Select(s => s.ToReminderDto()).ToList();
+            //return remindersDto;
         }
 
         public Task<BookDto> GetBookById(int id)

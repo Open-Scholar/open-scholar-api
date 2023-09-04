@@ -5,11 +5,14 @@ namespace OpenScholarApp.Domain.Entities
     public class Book
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int BookId { get; set; }
         public string Title { get; set; } = string.Empty;
-        public DateOnly ReleaseDate { get; set; } 
+        public string ReleaseDate { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public List<string> Authors { get; set; }
-        public List<int> AuthorId { get; set; } 
+        public int AuthorId { get; set; }
+
+        [ForeignKey("AuthorId")]
+        public List<Author> Authors { get; set; } = new List<Author>();
+        //public List<string> AuthorId { get; set; } 
     }
 }

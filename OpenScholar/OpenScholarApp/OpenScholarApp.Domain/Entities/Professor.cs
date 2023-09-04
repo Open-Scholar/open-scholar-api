@@ -10,9 +10,12 @@ namespace OpenScholarApp.Domain.Entities
     public class Professor
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int ProfessorId { get; set; }
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public string EmailAdress { get; set; } = string.Empty;
         public string? Description { get; set; }
         public List<Subject> Subject { get; set; } = new List<Subject>();
         public List<Faculty> Faculty { get; set; } = new List<Faculty>();

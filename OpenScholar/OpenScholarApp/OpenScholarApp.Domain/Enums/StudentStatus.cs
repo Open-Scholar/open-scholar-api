@@ -8,8 +8,8 @@ namespace OpenScholarApp.Domain.Enums
 {
     public enum StudentStatus
     {
-        GraduateStudies = 0,
-        MasterStudies,
-        DoctorStudies
+        Graduate = 0,
+        Master,
+        Doctor
     }
 }

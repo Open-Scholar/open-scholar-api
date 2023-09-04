@@ -39,7 +39,7 @@ namespace OpenScholarApp.Data.Repositories.Implementations
 
         public async Task<BookSeller> GetById(int id)
         {
-            return await _openScholarDbContext.BookSellers.SingleOrDefaultAsync(x => x.Id == id);
+            return await _openScholarDbContext.BookSellers.SingleOrDefaultAsync(x => x.BookSellerId == id);
         }
 
         public async Task Update(BookSeller entity)

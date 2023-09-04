@@ -14,7 +14,7 @@ namespace OpenScholarApp.Data.Repositories.Implementations
     {
         private readonly OpenScholarDbContext _openScholarDbContext;
 
-        ProfessorRepository(OpenScholarDbContext openScholarDbContext)
+        public ProfessorRepository(OpenScholarDbContext openScholarDbContext)
         {
             _openScholarDbContext = openScholarDbContext;
         }
@@ -38,7 +38,7 @@ namespace OpenScholarApp.Data.Repositories.Implementations
 
         public async Task<Professor> GetById(int id)
         {
-            return await _openScholarDbContext.Professors.SingleAsync(p => p.Id == id);
+            return await _openScholarDbContext.Professors.SingleAsync(p => p.ProfessorId == id);
         }
 
         public async Task Update(Professor entity)

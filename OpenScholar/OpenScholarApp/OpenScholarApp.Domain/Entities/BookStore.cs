@@ -10,12 +10,16 @@ namespace OpenScholarApp.Domain.Entities
     public class BookStore
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int BookStoreId { get; set; }
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public string Name { get; set; } = string.Empty;
         public string Adress { get; set; } = string.Empty;
         public string EmailAdress { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public Book Book { get; set; }
-        public List<Book> Books { get; set;}
+        public string? Description { get; set; } = string.Empty;
+        public int BookId { get; set; }
+        [ForeignKey("BookId")]
+        public Book? Book { get; set; }
+        public List<Book> Books { get; set;} = new List<Book>();
     }
 }

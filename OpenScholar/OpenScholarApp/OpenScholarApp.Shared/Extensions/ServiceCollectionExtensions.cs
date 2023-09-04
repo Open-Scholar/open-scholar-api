@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenScholarApp.Services.UserServices
+namespace OpenScholarApp.Shared.Extensions
 {
-    public class UserManagerService
+    internal class ServiceCollectionExtensions
     {
-
     }
 }

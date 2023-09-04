@@ -12,8 +12,10 @@ namespace OpenScholarApp.Domain.Entities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public int PublisherId { get; set; }
+        [ForeignKey("PublisherId")]
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
-        public AcademicMaterialType Type { get; set; }
+        public AcademicMaterialType Type { get; set; } = AcademicMaterialType.Other;
     }
 }

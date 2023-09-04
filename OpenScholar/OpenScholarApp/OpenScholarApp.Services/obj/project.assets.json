@@ -1295,6 +1295,21 @@
         "runtime": {
           "bin/placeholder/OpenScholarApp.Mappers.dll": {}
         }
+      },
+      "OpenScholarApp.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.Extensions.Identity.Core": "7.0.10",
+          "Microsoft.Extensions.Identity.Stores": "7.0.10",
+          "Microsoft.IdentityModel.Abstractions": "6.32.1"
+        },
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Shared.dll": {}
+        }
       }
     }
   },
@@ -3871,6 +3886,11 @@
       "type": "project",
       "path": "../OpenScholarApp.Mappers/OpenScholarApp.Mappers.csproj",
       "msbuildProject": "../OpenScholarApp.Mappers/OpenScholarApp.Mappers.csproj"
+    },
+    "OpenScholarApp.Shared/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Shared/OpenScholarApp.Shared.csproj",
+      "msbuildProject": "../OpenScholarApp.Shared/OpenScholarApp.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3881,7 +3901,8 @@
       "Microsoft.IdentityModel.Abstractions >= 6.32.1",
       "OpenScholarApp.Data >= 1.0.0",
       "OpenScholarApp.Dtos >= 1.0.0",
-      "OpenScholarApp.Mappers >= 1.0.0"
+      "OpenScholarApp.Mappers >= 1.0.0",
+      "OpenScholarApp.Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -3924,6 +3945,9 @@
             },
             "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Mappers\\OpenScholarApp.Mappers.csproj": {
               "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Mappers\\OpenScholarApp.Mappers.csproj"
+            },
+            "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\OpenScholarApp.Shared.csproj": {
+              "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\OpenScholarApp.Shared.csproj"
             }
           }
         }

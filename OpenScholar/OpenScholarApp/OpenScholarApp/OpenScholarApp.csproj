@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenScholarApp.Data\OpenScholarApp.Data.csproj" />
+    <ProjectReference Include="..\OpenScholarApp.Helpers\OpenScholarApp.Helpers.csproj" />
     <ProjectReference Include="..\OpenScholarApp.Services\OpenScholarApp.Services.csproj" />
     <ProjectReference Include="..\OpenScholarApp.Shared\OpenScholarApp.Shared.csproj" />
   </ItemGroup>

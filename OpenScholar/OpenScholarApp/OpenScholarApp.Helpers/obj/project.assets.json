@@ -1643,13 +1643,29 @@
           "Microsoft.IdentityModel.Abstractions": "6.32.1",
           "OpenScholarApp.Data": "1.0.0",
           "OpenScholarApp.Dtos": "1.0.0",
-          "OpenScholarApp.Mappers": "1.0.0"
+          "OpenScholarApp.Mappers": "1.0.0",
+          "OpenScholarApp.Shared": "1.0.0"
         },
         "compile": {
           "bin/placeholder/OpenScholarApp.Services.dll": {}
         },
         "runtime": {
           "bin/placeholder/OpenScholarApp.Services.dll": {}
+        }
+      },
+      "OpenScholarApp.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.Extensions.Identity.Core": "7.0.10",
+          "Microsoft.Extensions.Identity.Stores": "7.0.10",
+          "Microsoft.IdentityModel.Abstractions": "6.32.1"
+        },
+        "compile": {
+          "bin/placeholder/OpenScholarApp.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.Shared.dll": {}
         }
       }
     }
@@ -4507,6 +4523,11 @@
       "type": "project",
       "path": "../OpenScholarApp.Services/OpenScholarApp.Services.csproj",
       "msbuildProject": "../OpenScholarApp.Services/OpenScholarApp.Services.csproj"
+    },
+    "OpenScholarApp.Shared/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholarApp.Shared/OpenScholarApp.Shared.csproj",
+      "msbuildProject": "../OpenScholarApp.Shared/OpenScholarApp.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
