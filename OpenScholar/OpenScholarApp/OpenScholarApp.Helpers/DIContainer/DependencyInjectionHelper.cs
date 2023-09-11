@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Data.Repositories.Implementations;
@@ -8,11 +7,6 @@ using OpenScholarApp.Services.Implementations;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Services.UserServices.Implementations;
 using OpenScholarApp.Services.UserServices.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenScholarApp.Helpers.DIContainer
 {

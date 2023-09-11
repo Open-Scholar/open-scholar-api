@@ -10,11 +10,6 @@ using OpenScholarApp.Dtos.ProfessorDto;
 using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Dtos.SubjectDto;
 using OpenScholarApp.Dtos.UniversityDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenScholarApp.Mappers.MapperConfig
 {
@@ -22,7 +17,6 @@ namespace OpenScholarApp.Mappers.MapperConfig
     {
         public AutoMapperProfile() 
         {
-            
             CreateMap<Book, BookDto>().ReverseMap();
             CreateMap<Book, AddBookDto>().ReverseMap();
             CreateMap<Book, RemoveBookDto>().ReverseMap();
