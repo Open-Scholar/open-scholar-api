@@ -30,4 +30,8 @@
     <ProjectReference Include="..\OpenScholarApp.Domain\OpenScholarApp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

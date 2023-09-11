@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenScholarApp.Data.Repositories.Interfaces
 {
-    public interface IFacultyRepository : IGenericRepository<Faculty>
+    public interface IFacultyRepository : IBaseRepository<Faculty>
     {
     }
 }

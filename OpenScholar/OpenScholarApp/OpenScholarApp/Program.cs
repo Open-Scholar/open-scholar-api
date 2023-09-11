@@ -14,10 +14,10 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var appSettings = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppSettings>(appSettings);
+AppSettings appSettingsObject = appSettings.Get<AppSettings>();
 
-//builder.Services.AddDbContext<IdentityDbContext>(options =>
-//    options.UseSqlServer(
-//        builder.Configuration.GetConnectionString("ConnectionString")));
 var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 builder.Services.AddDbContext<OpenScholarDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -35,8 +35,8 @@ builder.Services.AddDbContext<OpenScholarDbContext>(options =>
         builder.Configuration.GetConnectionString("ConnectionString")));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -48,18 +48,7 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey
     });
     c.OperationFilter<SecurityRequirementsOperationFilter>();
-    //  add the security definition, enable the swagger UI to add the bearer token
 });
-
-//builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-//{
-//    // Identity user options
-//    options.User.RequireUniqueEmail = true;
-
-//    // Identity role options
-//    options.Roles.RoleClaimType = "customroleclaim";
-//})
-//.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -79,12 +68,6 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-//read from appsettings.json, find the property AppSettings from the main object, 
-//make instance of the class in order to call the token and connection string property
-
-var appSettings = builder.Configuration.GetSection("AppSettings");
-builder.Services.Configure<AppSettings>(appSettings);
-AppSettings appSettingsObject = appSettings.Get<AppSettings>();
 
 builder.Services.AddCors(options =>
 {
@@ -97,8 +80,6 @@ builder.Services.AddCors(options =>
 //DependencyInjectionHelper.InjectDbContext(builder.Services, appSettingsObject.ConnectionString);
 DependencyInjectionHelper.InjectRepositories(builder.Services);
 DependencyInjectionHelper.InjectServices(builder.Services);
-
-
 
 var app = builder.Build();
 

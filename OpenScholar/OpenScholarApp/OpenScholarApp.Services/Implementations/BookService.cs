@@ -1,13 +1,11 @@
-﻿using OpenScholarApp.Data.Repositories.Interfaces;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.BookDto;
 using OpenScholarApp.Services.Interfaces;
-using OpenScholarApp.Mappers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OpenScholarApp.Shared.CustomExceptions.BookException;
+using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
 
 namespace OpenScholarApp.Services.Implementations
 {
@@ -15,41 +13,43 @@ namespace OpenScholarApp.Services.Implementations
     {
 
         private readonly IBookRepository _bookRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
 
-        public BookService(IBookRepository bookRepository)
+        public BookService(IBookRepository bookRepository, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
+            _mapper = mapper;
+            _userManager = userManager;
             _bookRepository = bookRepository;
         }
 
 
-        public async Task AddBook(BookDto BookDto, int userId)
+        public async Task AddBook(AddBookDto addBookDto, string userId)
         {
+            ApplicationUser user = await _userManager.FindByIdAsync(userId.ToString());
 
-            Book newBook = BookDto.ToBook();
+            if (user == null)
+            {
+                throw new UserNotFoundException($"user with id {userId} was not found in the Database");
+            }
+            if(string.IsNullOrEmpty(addBookDto.Title))
+            {
+                throw new BookDataException($"Field {addBookDto.Title} must not be empty");
+            }
+            if (string.IsNullOrEmpty(addBookDto.ReleaseDate))
+            {
+                throw new BookDataException($"Field {addBookDto.ReleaseDate} must not be empty");
+            }
+            if (string.IsNullOrEmpty(addBookDto.Title))
+            {
+                throw new BookDataException($"Field {addBookDto.Title} must not be empty");
+            }
+            if (string.IsNullOrEmpty(addBookDto.Title))
+            {
+                throw new BookDataException($"Field {addBookDto.Title} must not be empty");
+            }
+            Book newBook = _mapper.Map<Book>(addBookDto);
             await _bookRepository.Add(newBook);
-            
-            //User userDb = await _userRepository.GetById(userId);
-            //if (userDb == null)
-            //{
-            //    Log.Logger.Error($"The user id entered {userId} was not found entered by");
-            //    throw new UserNotFoundException($"User with id {userId} was not found in the database.");
-            //}
-            //if (string.IsNullOrEmpty(addReminderDto.ReminderTitle))
-            //{
-            //    throw new ReminderDataException($"Reminder Title must not be empty!");
-            //}
-            //if (string.IsNullOrEmpty(addReminderDto.ReminderTime))
-            //{
-            //    throw new ReminderDataException($"Reminder Time must not be empty!");
-            //}
-            //if (string.IsNullOrEmpty(addReminderDto.ReminderDate))
-            //{
-            //    throw new ReminderDataException($"Reminder Date must not be empty!");
-            //}
-            //Reminder newReminder = addReminderDto.ToReminder();
-            //newReminder.UserId = userId;
-            //Log.Logger.Information($"User {userDb.Username} added the reminder {newReminder.ReminderTitle}");
-            //await _reminderRepository.Add(newReminder);
         }
 
         public Task DeleteBook(int id)
@@ -57,7 +57,7 @@ namespace OpenScholarApp.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public async Task<List<BookDto>> GetAllBooks(int userId = 1)
+        public async Task<List<BookDto>> GetAllBooks()
         {
             throw new NotImplementedException();
 

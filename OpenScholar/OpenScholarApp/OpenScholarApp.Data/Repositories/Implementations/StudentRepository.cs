@@ -10,41 +10,13 @@ using System.Threading.Tasks;
 
 namespace OpenScholarApp.Data.Repositories.Implementations
 {
-    public class StudentRepository : IStudentRepository
+    public class StudentRepository : BaseRepository<Student>, IStudentRepository
     {
         private readonly OpenScholarDbContext _openScholarDbContext;
 
-        public StudentRepository(OpenScholarDbContext openScholarDbContext)
+        public StudentRepository(OpenScholarDbContext openScholarDbContext) : base(openScholarDbContext)
         {
             _openScholarDbContext = openScholarDbContext;
-        }
-
-        public async Task Add(Student entity)
-        {
-            _openScholarDbContext.Students.Add(entity);
-            await _openScholarDbContext.SaveChangesAsync();
-        }
-
-        public async Task Delete(Student entity)
-        {
-            _openScholarDbContext.Students.Remove(entity);
-            await _openScholarDbContext.SaveChangesAsync();
-        }
-
-        public async Task<List<Student>> GetAll()
-        {
-            return await _openScholarDbContext.Students.ToListAsync();
-        }
-
-        public async Task<Student> GetById(int id)
-        {
-            return await _openScholarDbContext.Students.SingleOrDefaultAsync(x => x.StudentId.ToString() == id.ToString());
-        }
-
-        public async Task Update(Student entity)
-        {
-            _openScholarDbContext.Students.Update(entity);
-            await _openScholarDbContext.SaveChangesAsync();
         }
     }
 }

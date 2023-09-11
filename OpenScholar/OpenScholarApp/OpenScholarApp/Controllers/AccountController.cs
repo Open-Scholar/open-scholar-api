@@ -4,6 +4,7 @@ using OpenScholarApp.Services.UserServices.Interfaces;
 using OpenScholarApp.Services.UserServices.Models;
 using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
 using OpenScholarApp.Shared.Requests;
+using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
 {
@@ -67,5 +68,19 @@ namespace OpenScholarApp.Controllers
         {
             throw new Exception("error");
         }
+
+        //[HttpGet]
+        //public async int GetAuthorizedUserId()
+        //{
+            
+        //    if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?
+        //        .Value, out var userId))
+        //    {
+        //        string? name = User.FindFirst(ClaimTypes.Name)?.Value;
+        //        throw new UserNotFoundException(
+        //            "Name identifier claim does not exist!");
+        //    }
+        //    return userId;
+        //}
     }
 }

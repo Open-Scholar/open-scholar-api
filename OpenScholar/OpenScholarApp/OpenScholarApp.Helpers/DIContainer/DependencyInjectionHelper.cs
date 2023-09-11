@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Data.Repositories.Implementations;
@@ -34,6 +35,7 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IBookSellerRepository, BookSellerRepository>();
             services.AddTransient<IBookStoreRepository, BookStoreRepository>();
             services.AddTransient<IMembershipRepository, MembershipRepository>();
+            //services.AddTransient<IMapper, MapperConfiguration>();
         }
 
         public static void InjectServices(IServiceCollection services)

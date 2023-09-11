@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using OpenScholarApp.Dtos.BookDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
+using OpenScholarApp.Shared.CustomExceptions.BookException;
+using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
+using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
 {
@@ -20,11 +23,12 @@ namespace OpenScholarApp.Controllers
         }
 
         [HttpPost("addBook")]
-        public async Task<IActionResult> AddBook([FromBody] BookDto book)
+        public async Task<IActionResult> AddBook([FromBody] AddBookDto book)
         {
             try
             {
-                await _bookService.AddBook(book, 1);
+                var userId = GetAuthorizedUserId();
+                await _bookService.AddBook(book, userId.ToString());
                 return StatusCode(StatusCodes.Status201Created, "New reminder was added");
             }
             catch (BookDataException e)
@@ -42,7 +46,7 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
-                await _bookService.GetAllBooks(1);
+                await _bookService.GetAllBooks();
                 return StatusCode(StatusCodes.Status201Created, "New reminder was added");
             }
             catch (BookDataException e)
@@ -55,7 +59,17 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-
+        private int GetAuthorizedUserId()
+        {
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?
+                .Value, out var userId))
+            {
+                string? name = User.FindFirst(ClaimTypes.Name)?.Value;
+                throw new UserNotFoundException(
+                    "Name identifier claim does not exist!");
+            }
+            return userId;
+        }
 
     }
 }

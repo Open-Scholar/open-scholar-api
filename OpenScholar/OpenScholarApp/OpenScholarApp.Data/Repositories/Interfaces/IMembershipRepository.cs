@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenScholarApp.Data.Repositories.Interfaces
 {
 
-    public interface IMembershipRepository : IGenericRepository<ApplicationUser>
+    public interface IMembershipRepository : IBaseRepository<ApplicationUser>
     {
 
     }

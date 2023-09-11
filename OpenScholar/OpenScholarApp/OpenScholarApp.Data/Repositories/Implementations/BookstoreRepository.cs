@@ -10,42 +10,14 @@ using System.Threading.Tasks;
 
 namespace OpenScholarApp.Data.Repositories.Implementations
 {
-    public class BookStoreRepository : IBookStoreRepository
-    {
-
+    public class BookStoreRepository : BaseRepository<BookStore>, IBookStoreRepository
+    { 
         private readonly OpenScholarDbContext _openScholarDbContext;
 
-        public BookStoreRepository(OpenScholarDbContext openScholarDbContext)
+        public BookStoreRepository(OpenScholarDbContext openScholarDbContext) : base(openScholarDbContext)
         {
             _openScholarDbContext = openScholarDbContext;
         }
-
-        public async Task Add(BookStore entity)
-        {
-            _openScholarDbContext.BookStores.Add(entity);
-            await _openScholarDbContext.SaveChangesAsync();
-        }
-
-        public async Task Delete(BookStore entity)
-        {
-            _openScholarDbContext.BookStores.Remove(entity);
-            await _openScholarDbContext.SaveChangesAsync();
-        }
-
-        public async Task<List<BookStore>> GetAll()
-        {
-            return await _openScholarDbContext.BookStores.ToListAsync();
-        }
-
-        public async Task<BookStore> GetById(int id)
-        {
-            return await _openScholarDbContext.BookStores.SingleOrDefaultAsync(x => x.BookStoreId == id); 
-        }
-
-        public async Task Update(BookStore entity)
-        {
-            _openScholarDbContext.Update(entity);
-            await _openScholarDbContext.SaveChangesAsync();
-        }
+        
     }
 }

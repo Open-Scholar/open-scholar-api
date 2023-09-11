@@ -9,8 +9,9 @@ namespace OpenScholarApp.Dtos.AcademicMaterialDto
 {
     public class AddAcademicMaterialDto
     {
+        public int PublisherId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
-        public AcademicMaterialType Type { get; set; }
+        public AcademicMaterialType Type { get; set; } = AcademicMaterialType.Other;
     }
 }

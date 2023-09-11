@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OpenScholarApp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class inital5 : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,26 +55,29 @@ namespace OpenScholarApp.Data.Migrations
                 name: "BookSellers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    BookSellerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmailAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BookID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookSellers", x => x.Id);
+                    table.PrimaryKey("PK_BookSellers", x => x.BookSellerId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Professors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ProfessorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmailAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -82,7 +85,7 @@ namespace OpenScholarApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Professors", x => x.Id);
+                    table.PrimaryKey("PK_Professors", x => x.ProfessorId);
                 });
 
             migrationBuilder.CreateTable(
@@ -110,8 +113,9 @@ namespace OpenScholarApp.Data.Migrations
                 name: "Universities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    UniversityId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmailAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -120,7 +124,7 @@ namespace OpenScholarApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Universities", x => x.Id);
+                    table.PrimaryKey("PK_Universities", x => x.UniversityId);
                 });
 
             migrationBuilder.CreateTable(
@@ -235,10 +239,10 @@ namespace OpenScholarApp.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PublisherId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    PublisherID = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -255,7 +259,7 @@ namespace OpenScholarApp.Data.Migrations
                 name: "Faculties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    FacultyId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmailAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -266,12 +270,12 @@ namespace OpenScholarApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faculties", x => x.Id);
+                    table.PrimaryKey("PK_Faculties", x => x.FacultyId);
                     table.ForeignKey(
                         name: "FK_Faculties_Professors_ProfessorId",
                         column: x => x.ProfessorId,
                         principalTable: "Professors",
-                        principalColumn: "Id");
+                        principalColumn: "ProfessorId");
                     table.ForeignKey(
                         name: "FK_Faculties_Students_StudentId",
                         column: x => x.StudentId,
@@ -281,7 +285,7 @@ namespace OpenScholarApp.Data.Migrations
                         name: "FK_Faculties_Universities_UniversityId",
                         column: x => x.UniversityId,
                         principalTable: "Universities",
-                        principalColumn: "Id",
+                        principalColumn: "UniversityId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -303,67 +307,67 @@ namespace OpenScholarApp.Data.Migrations
                         name: "FK_Subjects_Faculties_FacultyId",
                         column: x => x.FacultyId,
                         principalTable: "Faculties",
-                        principalColumn: "Id",
+                        principalColumn: "FacultyId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Subjects_Professors_ProfessorId",
                         column: x => x.ProfessorId,
                         principalTable: "Professors",
-                        principalColumn: "Id");
+                        principalColumn: "ProfessorId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Author",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    AuthorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailAdress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PublisherId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Author", x => x.Id);
+                    table.PrimaryKey("PK_Author", x => x.AuthorId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReleaseDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BookSellerId = table.Column<int>(type: "int", nullable: true),
+                    PublisherId = table.Column<int>(type: "int", nullable: false),
                     BookStoreId = table.Column<int>(type: "int", nullable: true),
                     ProfessorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_Books", x => x.BookId);
                     table.ForeignKey(
-                        name: "FK_Books_BookSellers_BookSellerId",
-                        column: x => x.BookSellerId,
+                        name: "FK_Books_BookSellers_BookId",
+                        column: x => x.BookId,
                         principalTable: "BookSellers",
-                        principalColumn: "Id");
+                        principalColumn: "BookSellerId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Books_Professors_ProfessorId",
                         column: x => x.ProfessorId,
                         principalTable: "Professors",
-                        principalColumn: "Id");
+                        principalColumn: "ProfessorId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "BookStores",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    BookStoreId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmailAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -372,12 +376,12 @@ namespace OpenScholarApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookStores", x => x.Id);
+                    table.PrimaryKey("PK_BookStores", x => x.BookStoreId);
                     table.ForeignKey(
                         name: "FK_BookStores_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "Id",
+                        principalColumn: "BookId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -426,14 +430,9 @@ namespace OpenScholarApp.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Author_BookId",
+                name: "IX_Author_PublisherId",
                 table: "Author",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Books_BookSellerId",
-                table: "Books",
-                column: "BookSellerId");
+                column: "PublisherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_BookStoreId",
@@ -476,18 +475,18 @@ namespace OpenScholarApp.Data.Migrations
                 column: "ProfessorId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Author_Books_BookId",
+                name: "FK_Author_Books_PublisherId",
                 table: "Author",
-                column: "BookId",
+                column: "PublisherId",
                 principalTable: "Books",
-                principalColumn: "Id");
+                principalColumn: "BookId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Books_BookStores_BookStoreId",
                 table: "Books",
                 column: "BookStoreId",
                 principalTable: "BookStores",
-                principalColumn: "Id");
+                principalColumn: "BookStoreId");
         }
 
         /// <inheritdoc />

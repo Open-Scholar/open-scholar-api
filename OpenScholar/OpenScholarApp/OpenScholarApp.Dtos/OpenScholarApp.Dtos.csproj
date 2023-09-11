@@ -13,17 +13,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BookStoreDto\" />
-    <Folder Include="BookSellerDto\" />
-    <Folder Include="FacultyDto\" />
-    <Folder Include="UniversityDto\" />
-    <Folder Include="SubjectDto\" />
-    <Folder Include="ProfessorDto\" />
-    <Folder Include="StudentDto\" />
+    <ProjectReference Include="..\OpenScholarApp.Domain\OpenScholarApp.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OpenScholarApp.Domain\OpenScholarApp.Domain.csproj" />
+    <EditorConfigFiles Remove="C:\src\OpenScholar\open-scholar-api\OpenScholar\OpenScholarApp\OpenScholarApp.Dtos\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\src\OpenScholar\open-scholar-api\OpenScholar\OpenScholarApp\OpenScholarApp.Dtos\.editorconfig" />
   </ItemGroup>
 
 </Project>

@@ -9,9 +9,9 @@ namespace OpenScholarApp.Services.Interfaces
 {
     public interface IBookService
     {
-        Task<List<BookDto>> GetAllBooks(int userId);
+        Task<List<BookDto>> GetAllBooks();
         Task<BookDto> GetBookById(int id);
-        Task AddBook(BookDto addBookDto, int userId);
+        Task AddBook(AddBookDto addBookDto, string userId);
         Task UpdateBook(UpdateBookDto updateBookDto);
         Task DeleteBook(int id);
     }

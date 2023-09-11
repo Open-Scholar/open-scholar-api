@@ -71,6 +71,8 @@ namespace OpenScholarApp.Services.UserServices.Implementations
                 Email = user.Email
             });
         }
+
+
     }
 
 }
