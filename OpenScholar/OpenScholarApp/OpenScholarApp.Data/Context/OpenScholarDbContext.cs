@@ -23,6 +23,9 @@ namespace OpenScholarApp.Data.Context
         public DbSet<Book> Books { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<AcademicMaterial> AcademicMaterials { get; set; }
+        public DbSet<Blabla> Blabla { get; set; }
+        public DbSet<Student3> TestStudents3 { get; set; }
+        public DbSet<Student2> TestStudents2 { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

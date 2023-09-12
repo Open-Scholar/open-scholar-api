@@ -157,11 +157,11 @@ namespace OpenScholarApp.Data.Migrations
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.AcademicMaterial", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AcademicMaterialId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AcademicMaterialId"));
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -179,7 +179,7 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("AcademicMaterialId");
 
                     b.HasIndex("StudentId");
 
@@ -199,6 +199,10 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -252,6 +256,10 @@ namespace OpenScholarApp.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Author", b =>
@@ -261,6 +269,9 @@ namespace OpenScholarApp.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorId"));
+
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -276,14 +287,28 @@ namespace OpenScholarApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PublisherId")
-                        .HasColumnType("int");
-
                     b.HasKey("AuthorId");
 
-                    b.HasIndex("PublisherId");
+                    b.HasIndex("BookId");
 
                     b.ToTable("Author");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.Blabla", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("abrakadabra")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Blabla");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Book", b =>
@@ -292,8 +317,7 @@ namespace OpenScholarApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("BookStoreId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"));
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -315,8 +339,6 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.HasKey("BookId");
 
-                    b.HasIndex("BookStoreId");
-
                     b.HasIndex("ProfessorId");
 
                     b.ToTable("Books");
@@ -333,9 +355,6 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<string>("Adress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BookID")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -376,14 +395,10 @@ namespace OpenScholarApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmailAdress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -394,8 +409,6 @@ namespace OpenScholarApp.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("BookStoreId");
-
-                    b.HasIndex("BookId");
 
                     b.ToTable("BookStores");
                 });
@@ -419,22 +432,16 @@ namespace OpenScholarApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProfessorId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UniversityId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FacultyId");
 
-                    b.HasIndex("ProfessorId");
-
                     b.HasIndex("StudentId");
-
-                    b.HasIndex("UniversityId");
 
                     b.ToTable("Faculties");
                 });
@@ -515,6 +522,61 @@ namespace OpenScholarApp.Data.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.Student3", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted3")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TestStudents3");
+                });
+
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Subject", b =>
                 {
                     b.Property<int>("Id")
@@ -523,8 +585,15 @@ namespace OpenScholarApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EKSTCredits")
+                        .HasColumnType("int");
 
                     b.Property<int>("FacultyId")
                         .HasColumnType("int");
@@ -534,7 +603,8 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.Property<string>("SubjectName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -578,6 +648,26 @@ namespace OpenScholarApp.Data.Migrations
                     b.HasKey("UniversityId");
 
                     b.ToTable("Universities");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.Student2", b =>
+                {
+                    b.HasBaseType("OpenScholarApp.Domain.Entities.ApplicationUser");
+
+                    b.Property<bool>("IsDeleted2")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Student2ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("blabla")
+                        .HasColumnType("int");
+
+                    b.Property<string>("testesteeeeeed")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("Student2");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -642,54 +732,21 @@ namespace OpenScholarApp.Data.Migrations
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.Book", null)
                         .WithMany("Authors")
-                        .HasForeignKey("PublisherId");
+                        .HasForeignKey("BookId");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Book", b =>
                 {
-                    b.HasOne("OpenScholarApp.Domain.Entities.BookSeller", null)
-                        .WithMany("Books")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OpenScholarApp.Domain.Entities.BookStore", null)
-                        .WithMany("Books")
-                        .HasForeignKey("BookStoreId");
-
                     b.HasOne("OpenScholarApp.Domain.Entities.Professor", null)
                         .WithMany("Books")
                         .HasForeignKey("ProfessorId");
-                });
-
-            modelBuilder.Entity("OpenScholarApp.Domain.Entities.BookStore", b =>
-                {
-                    b.HasOne("OpenScholarApp.Domain.Entities.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Faculty", b =>
                 {
-                    b.HasOne("OpenScholarApp.Domain.Entities.Professor", null)
-                        .WithMany("Faculty")
-                        .HasForeignKey("ProfessorId");
-
                     b.HasOne("OpenScholarApp.Domain.Entities.Student", null)
                         .WithMany("Faculties")
                         .HasForeignKey("StudentId");
-
-                    b.HasOne("OpenScholarApp.Domain.Entities.University", "University")
-                        .WithMany()
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("University");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Subject", b =>
@@ -712,21 +769,9 @@ namespace OpenScholarApp.Data.Migrations
                     b.Navigation("Authors");
                 });
 
-            modelBuilder.Entity("OpenScholarApp.Domain.Entities.BookSeller", b =>
-                {
-                    b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("OpenScholarApp.Domain.Entities.BookStore", b =>
-                {
-                    b.Navigation("Books");
-                });
-
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Professor", b =>
                 {
                     b.Navigation("Books");
-
-                    b.Navigation("Faculty");
 
                     b.Navigation("Subject");
                 });
