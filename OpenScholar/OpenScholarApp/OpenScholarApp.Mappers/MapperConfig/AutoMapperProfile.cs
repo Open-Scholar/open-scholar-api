@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.AcademicMaterialDto;
+using OpenScholarApp.Dtos.ApplicationUserDtos;
 using OpenScholarApp.Dtos.AuthorDto;
 using OpenScholarApp.Dtos.BookDto;
 using OpenScholarApp.Dtos.BookSellerDto;
@@ -66,6 +67,9 @@ namespace OpenScholarApp.Mappers.MapperConfig
             CreateMap<University, AddUniversityDto>().ReverseMap();
             CreateMap<University, RemoveUniversityDto>().ReverseMap();
             CreateMap<University, UpdateUniversityDto>().ReverseMap();
+
+            CreateMap<ApplicationUser, ResetPasswordDto>().ReverseMap();
+            CreateMap<ApplicationUser, ForgotPasswordDto>().ReverseMap();
         }
         
     }

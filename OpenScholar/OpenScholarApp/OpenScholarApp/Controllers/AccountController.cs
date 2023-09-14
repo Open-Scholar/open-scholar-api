@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenScholarApp.Dtos.ApplicationUserDtos;
 using OpenScholarApp.Services.UserServices.Interfaces;
 using OpenScholarApp.Services.UserServices.Models;
 using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
@@ -69,18 +70,54 @@ namespace OpenScholarApp.Controllers
             throw new Exception("error");
         }
 
-        //[HttpGet]
-        //public async int GetAuthorizedUserId()
-        //{
-            
-        //    if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?
-        //        .Value, out var userId))
-        //    {
-        //        string? name = User.FindFirst(ClaimTypes.Name)?.Value;
-        //        throw new UserNotFoundException(
-        //            "Name identifier claim does not exist!");
-        //    }
-        //    return userId;
-        //}
+        [HttpGet("getauthuser")]
+        public int GetAuthorizedUserId()
+        {
+
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?
+                .Value, out var userId))
+            {
+                string? name = User.FindFirst(ClaimTypes.Name)?.Value;
+                throw new UserNotFoundException(
+                    "Name identifier claim does not exist!");
+            }
+            return userId;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                await _membershipService.ResetPassword(request.Email, request.Token, request.NewPassword);
+                return Ok("Password reset successful.");
+            }
+            catch (UserDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                await _membershipService.ForgotPassword(request.Email);
+                return Ok("Password reset email sent successfully.");
+            }
+            catch (UserDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
