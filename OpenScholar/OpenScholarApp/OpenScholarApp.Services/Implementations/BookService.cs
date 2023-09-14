@@ -24,7 +24,7 @@ namespace OpenScholarApp.Services.Implementations
         }
 
 
-        public async Task AddBook(AddBookDto addBookDto, string userId)
+        public async Task Add(AddBookDto addBookDto, string userId)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(userId.ToString());
 
@@ -48,16 +48,16 @@ namespace OpenScholarApp.Services.Implementations
             {
                 throw new BookDataException($"Field {addBookDto.Title} must not be empty");
             }
-            Book newBook = _mapper.Map<Book>(addBookDto);
+            var newBook = _mapper.Map<Book>(addBookDto);
             await _bookRepository.Add(newBook);
         }
 
-        public Task DeleteBook(int id)
+        public Task Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<BookDto>> GetAllBooks()
+        public Task<List<BookDto>> GetAll()
         {
             throw new NotImplementedException();
 
@@ -67,12 +67,12 @@ namespace OpenScholarApp.Services.Implementations
             //return remindersDto;
         }
 
-        public Task<BookDto> GetBookById(int id)
+        public Task<BookDto> GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateBook(UpdateBookDto updateBookDto)
+        public Task Update(UpdateBookDto updateBookDto)
         {
             throw new NotImplementedException();
         }

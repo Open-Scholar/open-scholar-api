@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.BookDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
@@ -16,9 +18,11 @@ namespace OpenScholarApp.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-            public BookController(IBookService bookService)
+        public BookController(IBookService bookService, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _bookService = bookService;
         }
 
@@ -27,9 +31,11 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
-                var userId = GetAuthorizedUserId();
-                await _bookService.AddBook(book, userId.ToString());
-                return StatusCode(StatusCodes.Status201Created, "New reminder was added");
+                //var userId = GetAuthorizedUserId();
+                var user = await _userManager.GetUserAsync(User);
+             if (user == null) { throw new UserNotFoundException($"User with id {user.Id} doesnt exist"); }
+                await _bookService.Add(book, user.Id.ToString());
+                return StatusCode(StatusCodes.Status201Created, "New Book was added");
             }
             catch (BookDataException e)
             {
@@ -46,8 +52,8 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
-                await _bookService.GetAllBooks();
-                return StatusCode(StatusCodes.Status201Created, "New reminder was added");
+                await _bookService.GetAll();
+                return StatusCode(StatusCodes.Status201Created, "New Book was added");
             }
             catch (BookDataException e)
             {

@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Helpers.DIContainer;
+using OpenScholarApp.Mappers.MapperConfig;
 using OpenScholarApp.Shared.Settings;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
@@ -36,7 +36,7 @@ builder.Services.AddDbContext<OpenScholarDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
