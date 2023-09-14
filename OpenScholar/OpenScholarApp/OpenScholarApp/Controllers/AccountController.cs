@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.ApplicationUserDtos;
 using OpenScholarApp.Services.UserServices.Interfaces;
 using OpenScholarApp.Services.UserServices.Models;
@@ -64,6 +65,54 @@ namespace OpenScholarApp.Controllers
         //        TokenValidUntil = HttpContext.GetJWTokenExpiryDate()
         //    });
         //}
+
+        //[Authorize(Roles = "SuperAdmin")]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var response = await _membershipService.GetAllUsers();
+
+            if (response.IsSuccessfull)
+            {
+                return Ok(response); // Return the list of users
+            }
+            else
+            {
+                return BadRequest(response.Errors); // Return errors, if any
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var response = await _membershipService.DeleteUserAsync(id);
+
+            if (response.IsSuccessfull)
+            {
+                return Ok(response.Errors);
+            }
+            else
+            {
+                return NotFound(response.Errors);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] ApplicationUserDto updatedUser)
+        {
+            var response = await _membershipService.UpdateUserAsync(id, updatedUser);
+
+            if (response.IsSuccessfull)
+            {
+                return Ok(response.Errors);
+            }
+            else
+            {
+                return BadRequest(response.Errors);
+            }
+        }
+
+
         [HttpGet("error")]
         public IActionResult Error()
         {

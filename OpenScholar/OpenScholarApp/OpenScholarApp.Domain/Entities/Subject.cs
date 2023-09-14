@@ -9,7 +9,7 @@ namespace OpenScholarApp.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [ForeignKey("CreatorId")]
+        [ForeignKey("ApplicationUser")]
         public string CreatorId { get; set; } = string.Empty;
         [Required]
         [StringLength(50)]

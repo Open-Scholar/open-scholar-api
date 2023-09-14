@@ -2,12 +2,13 @@
 {
     public enum AccountType
     {
-        Student = 0,
-        Professor = 1,
-        Faculty = 2,
-        BookStore = 3,
-        BookSeller = 4,
-        University = 5,
-        SuperAdmin = 6
+        Other = 0,
+        Student = 1,
+        Professor = 2,
+        Faculty = 3,
+        BookStore = 4,
+        BookSeller = 5,
+        University = 6,
+        SuperAdmin = 7
     }
 }

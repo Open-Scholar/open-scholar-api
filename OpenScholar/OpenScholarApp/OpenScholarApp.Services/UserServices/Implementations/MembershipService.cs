@@ -3,7 +3,6 @@ using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-//using OpenScholarApp.Data.IdentityModels;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Services.UserServices.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.EmailExceptions;
@@ -11,7 +10,8 @@ using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
 using OpenScholarApp.Shared.Requests;
 using OpenScholarApp.Shared.Responses;
 using System.IdentityModel.Tokens.Jwt;
-//using System.Net.Mail;
+using OpenScholarApp.Dtos.ApplicationUserDtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace OpenScholarApp.Services.UserServices.Implementations
 {
@@ -37,9 +37,27 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             return resetPasswordUrl;
         }
 
-        public Task<Response> DeleteUser(string id)
+        public async Task<Response> DeleteUserAsync(string id)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return new Response("User deleted successfully.");
+                }
+                else
+                {
+                    return new Response(result.Errors.Select(error => error.Description));
+                }
+            }
+            else
+            {
+                return new Response("User not found.");
+            }
         }
 
         public async Task ForgotPassword(string email)
@@ -50,29 +68,33 @@ namespace OpenScholarApp.Services.UserServices.Implementations
                 throw new UserDataException($"There is no user with this email {email}.");
             }
 
-            // Generate a password reset token
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            // Generate a password reset link using the token
             var resetPasswordLink = GenerateResetPasswordLink(user, token);
-
-            // Send the password reset email
             await SendEmailAsync(email, resetPasswordLink);
         }
 
-        public Task<Response> GetAllUsers()
+        public async Task<Response> GetAllUsers()
         {
-            throw new NotImplementedException();
+            var response = new Response<List<ApplicationUser>>();
+            var userDb = await _userManager.Users.ToListAsync();
+            response.Result = userDb;
+            response.IsSuccessfull = true;
+
+            return response;
         }
 
-        public Task<Response> GetResetPasswordToken(string email)
+        public async Task<Response<ApplicationUser>> GetUserByIdAsync(string id)
         {
-            throw new NotImplementedException();
-        }
+            var user = await _userManager.FindByIdAsync(id);
 
-        public Task<Response> GetUserById(string id)
-        {
-            throw new NotImplementedException();
+            if (user != null)
+            {
+                return new Response<ApplicationUser>(user);
+            }
+            else
+            {
+                return new Response<ApplicationUser>("User not found.");
+            }
         }
 
         public Task<Response> GetUserByIdInt(int id)
@@ -163,7 +185,9 @@ namespace OpenScholarApp.Services.UserServices.Implementations
 
             var builder = new BodyBuilder
             {
-                HtmlBody = $"Click <a href=\"{resetPasswordLink}\">here</a> to reset your password."
+                HtmlBody = $"Click <a href=\"Dear user, you have requested to reset your password." +
+                $"Please click on the following link to reset your password => {resetPasswordLink}\">CLICK HERE</a>." +
+                "If this request was made by mistake, please disregard this message"
             };
             email.Body = builder.ToMessageBody();
 
@@ -188,9 +212,30 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             }
         }
 
-        public Task<Response> UpdateUser(string id)
+        public async Task<Response<ApplicationUserDto>> UpdateUserAsync(string id, ApplicationUserDto updatedUser)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user != null)
+            {
+                // Update user properties here based on the updatedUser object
+                // Example: user.UserName = updatedUser.UserName;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return new Response<ApplicationUserDto>("User updated successfully.");
+                }
+                else
+                {
+                    return new Response<ApplicationUserDto>(result.Errors.Select(error => error.Description));
+                }
+            }
+            else
+            {
+                return new Response<ApplicationUserDto>("User not found.");
+            }
         }
     }
 
