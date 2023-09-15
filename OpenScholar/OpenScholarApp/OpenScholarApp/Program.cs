@@ -1,12 +1,10 @@
 using OpenScholarApp.Helpers.DIContainer;
 using OpenScholarApp.Helpers.Extensions;
 using OpenScholarApp.Mappers.MapperConfig;
-using OpenScholarApp.Shared.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var appSettings = builder.Configuration.GetSection("AppSettings");
-//builder.Services.Configure<AppSettings>(appSettings);
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
