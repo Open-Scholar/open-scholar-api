@@ -8,8 +8,10 @@ namespace OpenScholarApp.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BookId { get; set; }
-        [ForeignKey("ApplicationUser")]
-        public string PublisherId { get; set; } = string.Empty;
+        //[ForeignKey("ApplicationUser")]
+        //public string PublisherId { get; set; } = string.Empty;
+        [ForeignKey("Id")]
+        public ApplicationUser UserId { get; set; }
         [Required]
         public string Title { get; set; } = string.Empty;
         public int? NumOfPages { get; set; }

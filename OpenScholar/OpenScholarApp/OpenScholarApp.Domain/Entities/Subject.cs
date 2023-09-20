@@ -9,14 +9,12 @@ namespace OpenScholarApp.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [ForeignKey("ApplicationUser")]
-        public string CreatorId { get; set; } = string.Empty;
+        public ApplicationUser UserId { get; set; }
+        [ForeignKey("Id")]
         [Required]
         [StringLength(50)]
         public string SubjectName { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public int? EKSTCredits { get; set; }
-        [AllowNull]
-        public Faculty Faculty { get; set; } 
     }
 }

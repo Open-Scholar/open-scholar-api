@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.ApplicationUserDtos;
 using OpenScholarApp.Services.UserServices.Interfaces;
 using OpenScholarApp.Services.UserServices.Models;
@@ -112,25 +111,10 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-
         [HttpGet("error")]
         public IActionResult Error()
         {
             throw new Exception("error");
-        }
-
-        [HttpGet("getauthuser")]
-        public int GetAuthorizedUserId()
-        {
-
-            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?
-                .Value, out var userId))
-            {
-                string? name = User.FindFirst(ClaimTypes.Name)?.Value;
-                throw new UserNotFoundException(
-                    "Name identifier claim does not exist!");
-            }
-            return userId;
         }
 
         [AllowAnonymous]

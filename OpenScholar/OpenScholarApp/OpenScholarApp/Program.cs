@@ -8,8 +8,9 @@ var appSettings = builder.Configuration.GetSection("AppSettings");
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-builder.Services.AddDbContext(appSettings)
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly)
+    .AddPostgreSqlDbContext(appSettings) // FOR POSTRESQL DB
+    //.AddMSSQLDbContext(appSettings) //=> For MS SQL DB
     .AddAuthentication()
     .AddJWT(appSettings)
     .AddIdentity()

@@ -7,7 +7,7 @@ namespace OpenScholarApp.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AuthorId { get; set; }
+        public int Id { get; set; }
         [Required]
         public string FirstName { get; set; } = string.Empty;
         [Required]

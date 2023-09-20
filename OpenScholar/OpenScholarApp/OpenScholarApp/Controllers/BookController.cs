@@ -31,7 +31,6 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
-                //var userId = GetAuthorizedUserId();
                 var user = await _userManager.GetUserAsync(User);
              if (user == null) { throw new UserNotFoundException($"User with id {user.Id} doesnt exist"); }
                 await _bookService.Add(book, user.Id.ToString());
@@ -47,12 +46,14 @@ namespace OpenScholarApp.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAllBooks")]
         public async Task<IActionResult> GetAll()
         {
             try
             {
-                await _bookService.GetAll();
+                var books = await _bookService.GetAll();
+                return Ok(books);
                 return StatusCode(StatusCodes.Status201Created, "New Book was added");
             }
             catch (BookDataException e)
@@ -64,18 +65,5 @@ namespace OpenScholarApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
-
-        private int GetAuthorizedUserId()
-        {
-            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?
-                .Value, out var userId))
-            {
-                string? name = User.FindFirst(ClaimTypes.Name)?.Value;
-                throw new UserNotFoundException(
-                    "Name identifier claim does not exist!");
-            }
-            return userId;
-        }
-
     }
 }

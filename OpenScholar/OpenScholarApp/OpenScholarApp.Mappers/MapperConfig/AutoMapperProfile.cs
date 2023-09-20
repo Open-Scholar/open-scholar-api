@@ -4,6 +4,7 @@ using OpenScholarApp.Dtos.AcademicMaterialDto;
 using OpenScholarApp.Dtos.ApplicationUserDtos;
 using OpenScholarApp.Dtos.AuthorDto;
 using OpenScholarApp.Dtos.BookDto;
+using OpenScholarApp.Dtos.BookRatingDto;
 using OpenScholarApp.Dtos.BookSellerDto;
 using OpenScholarApp.Dtos.BookStoreDto;
 using OpenScholarApp.Dtos.FacultyDto;
@@ -68,10 +69,17 @@ namespace OpenScholarApp.Mappers.MapperConfig
             CreateMap<University, AddUniversityDto>().ReverseMap();
             CreateMap<University, RemoveUniversityDto>().ReverseMap();
             CreateMap<University, UpdateUniversityDto>().ReverseMap();
+            //BookRating Mappings
+            CreateMap<BookRating, BookRatingDto>().ReverseMap();
+            CreateMap<BookRating, AddBookRatingDto>().ReverseMap();
+            CreateMap<BookRating, RemoveBookRatingDto>().ReverseMap();
+            CreateMap<BookRating, UpdateBookRatingDto>().ReverseMap();
             //ApplicationUser Mappings
             CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
             CreateMap<ApplicationUser, ResetPasswordDto>().ReverseMap();
             CreateMap<ApplicationUser, ForgotPasswordDto>().ReverseMap();
+
+
         }
     }
 }

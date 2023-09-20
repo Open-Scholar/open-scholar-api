@@ -13,9 +13,7 @@ namespace OpenScholarApp.Services.UserServices.Interfaces
         Task<Response<ApplicationUser>> GetUserByIdAsync(string id);
         Task<Response> GetUserByIdInt(int id);
         Task<Response<ApplicationUserDto>> UpdateUserAsync(string id, ApplicationUserDto updatedUser);
-        //Task<Response> UpdateUserint(int id);
         Task<Response> DeleteUserAsync(string id);
-        //Task<Response> DeleteUser(int id);
         Task ForgotPassword(string email);
         Task<Response> ResetPassword(string email, string token, string newPassword);
         Task SendEmailAsync(string toEmail, string resetPasswordLink);

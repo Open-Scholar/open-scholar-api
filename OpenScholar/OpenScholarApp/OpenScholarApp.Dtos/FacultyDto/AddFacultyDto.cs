@@ -8,6 +8,5 @@ namespace OpenScholarApp.Dtos.FacultyDto
         public string Name { get; set; } = string.Empty;
         public string EmailAdress { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
-        public University? University { get; set; }
     }
 }

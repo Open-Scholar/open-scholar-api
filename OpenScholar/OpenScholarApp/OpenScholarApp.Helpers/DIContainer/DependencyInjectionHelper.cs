@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
-using OpenScholarApp.Services.Implementations;
-using OpenScholarApp.Services.Interfaces;
+//using OpenScholarApp.Services.Implementations;
+//using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Services.UserServices.Implementations;
 using OpenScholarApp.Services.UserServices.Interfaces;
 
@@ -14,7 +14,8 @@ namespace OpenScholarApp.Helpers.DIContainer
     {
         public static void InjectDbCotext(IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<OpenScholarDbContext>(x => x.UseSqlServer(connectionString));
+            //services.AddDbContext<OpenScholarDbContext>(x => x.UseSqlServer(connectionString)); // => for MSSQL
+            services.AddDbContext<OpenScholarDbContext>(x => x.UseNpgsql(connectionString));  // => for PostgreSQL
         }
 
         public static void InjectRepositories(IServiceCollection services)
@@ -34,9 +35,10 @@ namespace OpenScholarApp.Helpers.DIContainer
 
         public static void InjectServices(IServiceCollection services)
         {
-            services.AddTransient<IBookService, BookService>();
             services.AddTransient<IMembershipService, MembershipService>();
             services.AddTransient<ITokenService, JWTService>();
+            //services.AddTransient<IBookService, BookService>();
+            //services.AddTransient<IBookRatingService, BookRatingService>();
         }
     }
 }

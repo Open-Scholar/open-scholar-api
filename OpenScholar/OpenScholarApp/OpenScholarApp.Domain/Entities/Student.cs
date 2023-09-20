@@ -7,12 +7,9 @@ namespace OpenScholarApp.Domain.Entities
     public class Student
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int StudentId { get; set; }
-        [ForeignKey("ApplicationUser")]
-        public string ApplicationUserId { get; set; } = string.Empty;
-        //[EmailAddress]
-        //[Required]
-        //public string EmailAddress { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public ApplicationUser UserId { get; set; }
+        [ForeignKey("Id")]
         [Required]
         public string FirstName { get; set; } = string.Empty;
         [Required]
@@ -28,6 +25,5 @@ namespace OpenScholarApp.Domain.Entities
         public string? Description { get; set; }
         public List<Faculty>? Faculties { get; set; } = new List<Faculty>();
         public List<AcademicMaterial>? AcademicMaterials { get; set; } = new List<AcademicMaterial>();
-        public ApplicationUser? User { get; set; }
     } 
 }

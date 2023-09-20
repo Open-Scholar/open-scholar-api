@@ -6,8 +6,11 @@ namespace OpenScholarApp.Data.Context
 {
     public class OpenScholarDbContext : IdentityDbContext<ApplicationUser>
     {
-        public OpenScholarDbContext(DbContextOptions options) : base(options) { }
-       
+        public OpenScholarDbContext(DbContextOptions options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
+
         //Users
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
@@ -18,6 +21,7 @@ namespace OpenScholarApp.Data.Context
         public DbSet<University> Universities { get; set; }
         public DbSet<BookStore> BookStores { get; set; }
         public DbSet<BookSeller> BookSellers { get; set; }
+        public DbSet<BookRating> BookRatings { get; set; }
 
         //Items
         public DbSet<Book> Books { get; set; }
@@ -27,11 +31,6 @@ namespace OpenScholarApp.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            //Students
-            modelBuilder.Entity<Student>()
-                .Property(x => x.FirstName)
-                .IsRequired();
         }
     }
 }

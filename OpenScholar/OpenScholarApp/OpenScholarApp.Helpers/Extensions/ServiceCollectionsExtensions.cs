@@ -30,11 +30,20 @@ namespace OpenScholarApp.Helpers.Extensions
             }
         }
 
-        public static ConfigBuilder AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static ConfigBuilder AddMSSQLDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetSection("ConnectionString").Value;
             services.AddDbContext<OpenScholarDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            return new(services, configuration);
+        }
+
+        public static ConfigBuilder AddPostgreSqlDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetSection("ConnectionString").Value;
+            services.AddDbContext<OpenScholarDbContext>(options =>
+                options.UseNpgsql(connectionString)); // Use UseNpgsql instead of useNpgsql
 
             return new(services, configuration);
         }

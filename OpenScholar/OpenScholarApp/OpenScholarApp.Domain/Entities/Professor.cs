@@ -7,21 +7,17 @@ namespace OpenScholarApp.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProfessorId { get; set; }
-        [ForeignKey("ApplicationUser")]
-        public string ApplicationUserId { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public ApplicationUser UserId { get; set; }
+        [ForeignKey("Id")]
         [Required]
         public string FirstName { get; set; } = string.Empty;
         [Required]
         public string LastName { get; set; } = string.Empty;
-        //[Required]
-        //[EmailAddress]
-        //public string EmailAddress { get; set; } = string.Empty;
         public string? BirthDate { get; set; } = string.Empty;
         public int? PhoneNumber { get; set; }
         public string? Description { get; set; }
         public List<Subject> Subject { get; set; } = new List<Subject>();
         public List<Book> Books { get; set; } = new List<Book>();
-        public ApplicationUser? User { get; set; }
     }
 }
