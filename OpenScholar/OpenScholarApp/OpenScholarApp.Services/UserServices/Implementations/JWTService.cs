@@ -1,15 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-//using OpenScholarApp.Data.IdentityModels;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Services.UserServices.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenScholarApp.Services.UserServices.Implementations
 {
@@ -38,7 +33,7 @@ namespace OpenScholarApp.Services.UserServices.Implementations
         private JwtSecurityToken GetJWT(List<Claim> authClaims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:Token"]));
-
+           
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
