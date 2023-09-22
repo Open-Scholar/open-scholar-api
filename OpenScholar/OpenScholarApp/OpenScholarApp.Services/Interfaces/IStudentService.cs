@@ -1,14 +1,15 @@
 ﻿using OpenScholarApp.Dtos.StudentDto;
+using OpenScholarApp.Shared.Responses;
 
 namespace OpenScholarApp.Services.Interfaces
 {
     public interface IStudentService
     {
-        Task<List<StudentDto>> GetAll();
-        Task<StudentDto> GetById(int id);
-        Task Add(AddStudentDto addDto, string userId);
-        Task Update(UpdateStudentDto updateDto);
-        Task Delete(int id);
+        Task<Response> CreateStudentAsync(AddStudentDto studentDto);
+        Task<Response> UpdateStudentAsync(string id, UpdateStudentDto updatedStudentDto);
+        Task<Response> DeleteStudentAsync(string id);
+        Task<Response<StudentDto>> GetStudentByIdAsync(string id);
+        Task<Response<List<StudentDto>>> GetAllStudentsAsync();
     }
 }
 

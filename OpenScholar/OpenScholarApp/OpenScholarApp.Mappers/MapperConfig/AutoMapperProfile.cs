@@ -56,7 +56,17 @@ namespace OpenScholarApp.Mappers.MapperConfig
             CreateMap<Professor, UpdateProfessorDto>().ReverseMap();
             //Student Mappings
             CreateMap<Student, StudentDto>().ReverseMap();
-            CreateMap<Student, AddStudentDto>().ReverseMap();
+            //CreateMap<Student, AddStudentDto>().ReverseMap();
+
+            CreateMap<Student, StudentDto>()
+    .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId.Id)) // Map UserId from ApplicationUser
+    .ReverseMap();
+
+            CreateMap<AddStudentDto, Student>()
+                .ForMember(dest => dest.UserId, opt => opt.Ignore()) // Ignore UserId when mapping from AddStudentDto
+                .ReverseMap();
+
+
             CreateMap<Student, RemoveStudentDto>().ReverseMap();
             CreateMap<Student, UpdateStudentDto>().ReverseMap();
             //Subject Mappings
@@ -78,8 +88,6 @@ namespace OpenScholarApp.Mappers.MapperConfig
             CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
             CreateMap<ApplicationUser, ResetPasswordDto>().ReverseMap();
             CreateMap<ApplicationUser, ForgotPasswordDto>().ReverseMap();
-
-
         }
     }
 }

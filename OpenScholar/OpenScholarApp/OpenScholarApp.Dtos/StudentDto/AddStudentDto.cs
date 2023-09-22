@@ -14,7 +14,7 @@ namespace OpenScholarApp.Dtos.StudentDto
         public StudentStatus StudentStatus { get; set; } = StudentStatus.Graduate;
         public int StudentIndexNumber { get; set; }
         public string? Description { get; set; }
-        public List<Faculty>? Faculties { get; set; } = new List<Faculty>();
-        public List<AcademicMaterial>? AcademicMaterials { get; set; } = new List<AcademicMaterial>();
+        //public List<Faculty>? Faculties { get; set; } = new List<Faculty>();
+        //public List<AcademicMaterial>? AcademicMaterials { get; set; } = new List<AcademicMaterial>();
     }
 }

@@ -7,6 +7,5 @@
         Book,
         MasterThesis,
         DoctorThesis
-
     }
 }

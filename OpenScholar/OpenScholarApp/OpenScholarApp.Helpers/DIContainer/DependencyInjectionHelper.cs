@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
+using OpenScholarApp.Services.Implementations;
+using OpenScholarApp.Services.Interfaces;
 //using OpenScholarApp.Services.Implementations;
 //using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Services.UserServices.Implementations;
@@ -37,6 +39,7 @@ namespace OpenScholarApp.Helpers.DIContainer
         {
             services.AddTransient<IMembershipService, MembershipService>();
             services.AddTransient<ITokenService, JWTService>();
+            services.AddTransient<IStudentService, StudentService>();
             //services.AddTransient<IBookService, BookService>();
             //services.AddTransient<IBookRatingService, BookRatingService>();
         }
