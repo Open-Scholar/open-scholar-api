@@ -1,13 +1,14 @@
 ﻿using OpenScholarApp.Dtos.AuthorDto;
+using OpenScholarApp.Shared.Responses;
 
 namespace OpenScholarApp.Services.Interfaces
 {
     public interface IAuthorService
     {
-        Task<List<AuthorDto>> GetAll();
-        Task<AuthorDto> GetById(int id);
-        Task Add(AddAuthorDto addDto, string userId);
-        Task Update(UpdateAuthorDto updateDto);
-        Task Delete(int id);
+        Task<Response<List<AuthorDto>>> GetAllAuthorsAsync();
+        Task<Response<AuthorDto>> GetAuthorByIdAsync(int id);
+        Task<Response> CreateAuthorAsync(AddAuthorDto addDto, string userId);
+        Task<Response> UpdateAuthorAsync(int id, UpdateAuthorDto updateDto);
+        Task<Response> DeleteAuthorAsync(int id);
     }
 }

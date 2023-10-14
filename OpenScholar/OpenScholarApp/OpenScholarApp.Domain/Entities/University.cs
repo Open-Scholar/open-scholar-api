@@ -7,8 +7,8 @@ namespace OpenScholarApp.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UniversityId { get; set; }
-        public ApplicationUser UserId { get; set; }
+        public int Id { get; set; }
+        public ApplicationUser? User { get; set; }
         [ForeignKey("Id")]
         [Required]
         public string Name { get; set; } = string.Empty;

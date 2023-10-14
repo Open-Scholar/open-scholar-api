@@ -1,13 +1,14 @@
 ﻿using OpenScholarApp.Dtos.FacultyDto;
+using OpenScholarApp.Shared.Responses;
 
 namespace OpenScholarApp.Services.Interfaces
 {
     public interface IFacultyService
     {
-        Task<List<FacultyDto>> GetAll();
-        Task<FacultyDto> GetById(int id);
-        Task Add(AddFacultyDto addDto, string userId);
-        Task Update(UpdateFacultyDto updateDto);
-        Task Delete(int id);
+        Task<Response<List<FacultyDto>>> GetAllFacultiesAsync();
+        Task<Response<FacultyDto>> GetFacultyByIdAsync(int id);
+        Task<Response> CreateFacultyAsync(AddFacultyDto addDto, string userId);
+        Task<Response> UpdateFacultyAsync(int id, UpdateFacultyDto updateDto);
+        Task<Response> DeleteFacultyAsync(int id);
     }
 }

@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
+using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
 {
+    [Authorize]
     [Route("api/students")]
     public class StudentController : BaseController
     {
@@ -25,27 +27,32 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
                 var response = await _studentService.CreateStudentAsync(studentDto);
-                return Response(response); // Use the base controller's Response method
+                return Response(response); 
             }
             catch (InternalServerErrorException ex)
             {
-                // Log the exception here.
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentById(string id)
+        public async Task<IActionResult> GetStudentById(int id)
         {
             try
             {
                 var response = await _studentService.GetStudentByIdAsync(id);
-                return Response(response); // Use the base controller's Response method
+                return Response(response);
             }
             catch (InternalServerErrorException ex)
             {
-                // Log the exception here.
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
@@ -56,41 +63,38 @@ namespace OpenScholarApp.Controllers
             try
             {
                 var response = await _studentService.GetAllStudentsAsync();
-                return Response(response); // Use the base controller's Response method
+                return Response(response);
             }
             catch (InternalServerErrorException ex)
             {
-                // Log the exception here.
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStudent(string id, [FromBody] UpdateStudentDto updatedStudentDto)
+        public async Task<IActionResult> UpdateStudent(int id, [FromBody] UpdateStudentDto updatedStudentDto)
         {
             try
             {
                 var response = await _studentService.UpdateStudentAsync(id, updatedStudentDto);
-                return Response(response); // Use the base controller's Response method
+                return Response(response); 
             }
             catch (InternalServerErrorException ex)
             {
-                // Log the exception here.
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(string id)
+        public async Task<IActionResult> DeleteStudent(int id)
         {
             try
             {
                 var response = await _studentService.DeleteStudentAsync(id);
-                return Response(response); // Use the base controller's Response method
+                return Response(response);
             }
             catch (InternalServerErrorException ex)
             {
-                // Log the exception here.
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }

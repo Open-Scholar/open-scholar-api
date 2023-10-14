@@ -5,7 +5,7 @@ namespace OpenScholarApp.Dtos.StudentDto
 {
     public class RemoveStudentDto
     {
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public string EmailAddress { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

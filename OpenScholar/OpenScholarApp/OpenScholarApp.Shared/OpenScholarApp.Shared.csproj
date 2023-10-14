@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OpenScholarApp.Domain\OpenScholarApp.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

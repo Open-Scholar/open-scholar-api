@@ -585,7 +585,11 @@
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\OpenScholarApp.Domain.csproj": {
+                "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\OpenScholarApp.Domain.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

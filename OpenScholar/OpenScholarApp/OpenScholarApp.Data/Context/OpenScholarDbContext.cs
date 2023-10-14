@@ -8,7 +8,8 @@ namespace OpenScholarApp.Data.Context
     {
         public OpenScholarDbContext(DbContextOptions options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
 
         //Users
@@ -31,6 +32,12 @@ namespace OpenScholarApp.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //Students
+            //modelBuilder.Entity<Student>()
+            //                 .HasRequired<Department>(s => s.Department)
+            //                 .WithMany(g => g.Employees)
+            //                 .HasForeignKey<int>(s => s.DepartmentId);
         }
     }
 }

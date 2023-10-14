@@ -1,4 +1,5 @@
-﻿using OpenScholarApp.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using OpenScholarApp.Data.Context;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 
@@ -12,6 +13,11 @@ namespace OpenScholarApp.Data.Repositories.Implementations
         public BookSellerRepository(OpenScholarDbContext openScholarDbContext) : base(openScholarDbContext)
         {
             _openScholarDbContext = openScholarDbContext;
+        }
+
+        public async Task<List<BookSeller>> GetAllWithUserAsync()
+        {
+            return await _openScholarDbContext.BookSellers.Include(s => s.User).ToListAsync();
         }
     }
 }

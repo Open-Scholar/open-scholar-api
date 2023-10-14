@@ -27,14 +27,14 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
-            var request = new RegisterUserRequest
-            {
-                Email = model.Email,
-                Password = model.Password,
-                Username = model.UserName
-            };
-            var response = await _membershipService.RegisterUserAsync(request);
-            return Response(response);
+                var request = new RegisterUserRequest
+                {
+                    Email = model.Email,
+                    Password = model.Password,
+                    Username = model.UserName
+                };
+                var response = await _membershipService.RegisterUserAsync(request);
+                return Response(response);
             }
             catch (UserDataException ex)
             {

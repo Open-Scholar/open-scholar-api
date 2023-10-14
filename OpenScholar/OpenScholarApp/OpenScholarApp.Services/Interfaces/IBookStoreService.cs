@@ -1,13 +1,14 @@
 ﻿using OpenScholarApp.Dtos.BookStoreDto;
+using OpenScholarApp.Shared.Responses;
 
 namespace OpenScholarApp.Services.Interfaces
 {
     public interface IBookStoreService
     {
-        Task<List<BookStoreDto>> GetAll();
-        Task<BookStoreDto> GetById(int id);
-        Task Add(AddBookStoreDto addDto, string userId);
-        Task Update(UpdateBookStoreDto updateDto);
-        Task Delete(int id);
+        Task<Response<List<BookStoreDto>>> GetAllBookStoresAsync();
+        Task<Response<BookStoreDto>> GetBookStoreByIdAsync(int id);
+        Task<Response> CreateBookStoreAsync(AddBookStoreDto addDto, string userId);
+        Task<Response> UpdateBookStoreAsync(int id, UpdateBookStoreDto updateDto);
+        Task<Response> DeleteBookStoreAsync(int id);
     }
 }

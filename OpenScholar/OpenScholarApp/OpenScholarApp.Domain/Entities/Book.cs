@@ -7,11 +7,11 @@ namespace OpenScholarApp.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int BookId { get; set; }
+        public int Id { get; set; }
         //[ForeignKey("ApplicationUser")]
         //public string PublisherId { get; set; } = string.Empty;
+        public List<ApplicationUser> User { get; set; } = new List<ApplicationUser>();
         [ForeignKey("Id")]
-        public ApplicationUser UserId { get; set; }
         [Required]
         public string Title { get; set; } = string.Empty;
         public int? NumOfPages { get; set; }

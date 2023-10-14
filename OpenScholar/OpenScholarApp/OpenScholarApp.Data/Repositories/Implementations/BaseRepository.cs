@@ -66,6 +66,19 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             }
         }
 
+        //public async Task<List<T>> GetAllWithUserAsync()
+        //{
+        //    try
+        //    {
+        //        List<T> getAll = await _openScholarDbContext.Set<T>().ToListAsync();
+        //        return getAll;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
+
         public async Task<T> GetById(string id)
         {
             try

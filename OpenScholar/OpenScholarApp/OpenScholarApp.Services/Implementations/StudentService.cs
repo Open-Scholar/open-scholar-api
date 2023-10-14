@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.StudentExceptions;
 using OpenScholarApp.Shared.Responses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenScholarApp.Services.Implementations
 {
@@ -17,10 +13,12 @@ namespace OpenScholarApp.Services.Implementations
     {
         private readonly IStudentRepository _studentRepository;
         private readonly IMapper _mapper;
+        private readonly UserManager<ApplicationUser> _userManager;
         
 
-        public StudentService(IStudentRepository studentRepository, IMapper mapper)
+        public StudentService(IStudentRepository studentRepository, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _studentRepository = studentRepository;
             _mapper = mapper;
         }
@@ -31,50 +29,49 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var response = new Response();
                 var student = _mapper.Map<Student>(studentDto);
+                var user = await _userManager.FindByIdAsync(studentDto.UserId);
+                if (user == null)
+                    throw new StudentDataException("User not found");
+
+                student.User = user;
                 await _studentRepository.Add(student);
                 response.IsSuccessfull = true;
                 return response;
             }
             catch (StudentDataException ex)
             {
-                // Log the exception here.
                 return new Response { Errors = new List<string> { $"An error occurred while creating the student: {ex.Message}" } };
             }
         }
 
-        public async Task<Response> UpdateStudentAsync(string id, UpdateStudentDto updatedStudentDto)
+        public async Task<Response> UpdateStudentAsync(int id, UpdateStudentDto updatedStudentDto)
         {
             try
             {
                 var response = new Response();
-                var existingStudent = await _studentRepository.GetById(id);
+                var existingStudent = await _studentRepository.GetByIdInt(id);
 
                 if (existingStudent == null)
                 {
                     response.IsSuccessfull = false;
-                    response.Errors = new List<string>() {("Student with ID {id} not found.")};
+                    response.Errors = new List<string>() {($"Student with ID {id} not found.")};
                     return response;
                 }
-
-                // Update existingStudent properties here based on updatedStudentDto.
-                // Example: existingStudent.FirstName = updatedStudentDto.FirstName;
 
                 await _studentRepository.Update(existingStudent);
                 return response;
             }
             catch (StudentDataException ex)
             {
-                // Log the exception here.
                 return new Response { Errors = new List<string> { $"An error occurred while updating the student {ex.Message}" } };
-                //return Response.($"An error occurred while updating the student: {ex.Message}");
             }
         }
 
-        public async Task<Response> DeleteStudentAsync(string id)
+        public async Task<Response> DeleteStudentAsync(int id)
         {
             try
             {
-                var existingStudent = await _studentRepository.GetById(id);
+                var existingStudent = await _studentRepository.GetByIdInt(id);
 
                 if (existingStudent == null)
                 {
@@ -87,16 +84,15 @@ namespace OpenScholarApp.Services.Implementations
             }
             catch (StudentDataException ex)
             {
-                // Log the exception here.
                 return new Response { Errors = new List<string> { $"An error occurred while deleting the student {ex.Message}" } };
             }
         }
 
-        public async Task<Response<StudentDto>> GetStudentByIdAsync(string id)
+        public async Task<Response<StudentDto>> GetStudentByIdAsync(int id)
         {
             try
             {
-                var student = await _studentRepository.GetById(id);
+                var student = await _studentRepository.GetByIdInt(id);
                 if (student == null)
                 {
                     return new Response<StudentDto>() { Errors = new List<string> { $"Student with Id {id} not found" }, IsSuccessfull = false };
@@ -107,7 +103,6 @@ namespace OpenScholarApp.Services.Implementations
             }
             catch (StudentDataException ex)
             {
-                // Log the exception here.
                 return new Response<StudentDto> { Errors = new List<string> { $"An error occurred while fetching the student {ex.Message}" } };
             }
         }
@@ -116,14 +111,12 @@ namespace OpenScholarApp.Services.Implementations
         {
             try
             {
-                var students = await _studentRepository.GetAll();
+                var students = await _studentRepository.GetAllWithUserAsync();
                 var studentDtos = _mapper.Map<List<StudentDto>>(students);
-                //return Response<List<StudentDto>>.Success(studentDtos);
                 return new Response<List<StudentDto>>() { IsSuccessfull = true, Result = studentDtos};
             }
             catch (StudentDataException ex)
             {
-                // Log the exception here.
                 return new Response<List<StudentDto>>() { Errors = new List<string> { $"An error occurred while fetching all students: {ex.Message}" }, IsSuccessfull = false };
             }
         }

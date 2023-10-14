@@ -12,6 +12,7 @@ using OpenScholarApp.Shared.Responses;
 using System.IdentityModel.Tokens.Jwt;
 using OpenScholarApp.Dtos.ApplicationUserDtos;
 using Microsoft.EntityFrameworkCore;
+using OpenScholarApp.Domain.Enums;
 
 namespace OpenScholarApp.Services.UserServices.Implementations
 {
@@ -127,6 +128,32 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             });
         }
 
+        //public async Task<Response<RegisterUserResponse>> RegisterUserAsync(RegisterUserRequest request)
+        //{
+        //    // Validation
+        //    if (string.IsNullOrWhiteSpace(request?.Username))
+        //        throw new UserDataException("username is a required field");
+
+        //    if (string.IsNullOrWhiteSpace(request?.Email)) //additional email validation can be added here
+        //        throw new UserDataException(" is a required field");
+
+        //    if (string.IsNullOrWhiteSpace(request?.Password)) //additional password validation can be added here
+        //        throw new UserDataException("username is a required field");
+
+        //    var user = new ApplicationUser { UserName = request.Username, Email = request.Email };
+        //    var result = await _userManager.CreateAsync(user, request.Password);
+
+        //    if (!result.Succeeded)
+        //        return new(result.Errors.Select(x => x.Description));
+
+        //    return new(new RegisterUserResponse
+        //    {
+        //        Id = user.Id,
+        //        Username = user.UserName,
+        //        Email = user.Email
+        //    });
+        //}
+
         public async Task<Response<RegisterUserResponse>> RegisterUserAsync(RegisterUserRequest request)
         {
             // Validation
@@ -139,7 +166,10 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             if (string.IsNullOrWhiteSpace(request?.Password)) //additional password validation can be added here
                 throw new UserDataException("username is a required field");
 
-            var user = new ApplicationUser { UserName = request.Username, Email = request.Email };
+            if(string.IsNullOrWhiteSpace(request?.AccountType.ToString()))
+                throw new UserDataException("Account type is a required field");
+
+            var user = new ApplicationUser { UserName = request.Username, Email = request.Email, AccountType = request.AccountType };
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
@@ -149,7 +179,8 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             {
                 Id = user.Id,
                 Username = user.UserName,
-                Email = user.Email
+                Email = user.Email,
+                AccountType = user.AccountType
             });
         }
 
@@ -237,6 +268,28 @@ namespace OpenScholarApp.Services.UserServices.Implementations
                 return new Response<ApplicationUserDto>("User not found.");
             }
         }
+
+        //private AccountType DetermineAccountType(RegisterUserRequest request)
+        //{
+        //    // Implement the logic to determine the account type based on the request
+        //    // For example, you can have a property in the request specifying the account type.
+        //    // Alternatively, you can check other conditions to determine the type.
+        //    // Return an appropriate AccountType enum value.
+        //    // Example:
+        //    if (request.AccountType == AccountType.Student)
+        //    {
+        //        return AccountType.Student;
+        //    }
+        //    else if (request.IsProfessor)
+        //    {
+        //        return AccountType.Professor;
+        //    }
+        //    else
+        //    {
+        //        // Default to an appropriate value (e.g., AccountType.Unknown)
+        //        return AccountType.Other;
+        //    }
+        //}
     }
 
 }

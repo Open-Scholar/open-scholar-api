@@ -15,55 +15,55 @@ namespace OpenScholarApp.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class BookController : ControllerBase
+    public class BookController : BaseController
     {
-        private readonly IBookService _bookService;
-        private readonly UserManager<ApplicationUser> _userManager;
+        //private readonly IBookService _bookService;
+        //private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookController(IBookService bookService, UserManager<ApplicationUser> userManager)
-        {
-            _userManager = userManager;
-            _bookService = bookService;
-        }
+        //public BookController(IBookService bookService, UserManager<ApplicationUser> userManager)
+        //{
+        //    _userManager = userManager;
+        //    _bookService = bookService;
+        //}
 
-        [HttpPost("addBook")]
-        public async Task<IActionResult> AddBook([FromBody] AddBookDto book)
-        {
-            try
-            {
-                var user = await _userManager.GetUserAsync(User);
-             if (user == null) { throw new UserNotFoundException($"User with id {user.Id} doesnt exist"); }
-                await _bookService.Add(book, user.Id.ToString());
-                return StatusCode(StatusCodes.Status201Created, "New Book was added");
-            }
-            catch (BookDataException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (InternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
-        }
+        //[HttpPost("addBook")]
+        //public async Task<IActionResult> AddBook([FromBody] AddBookDto book)
+        //{
+        //    try
+        //    {
+        //        var user = await _userManager.GetUserAsync(User);
+        //     if (user == null) { throw new UserNotFoundException($"User with id {user.Id} doesnt exist"); }
+        //        await _bookService.Add(book, user.Id.ToString());
+        //        return StatusCode(StatusCodes.Status201Created, "New Book was added");
+        //    }
+        //    catch (BookDataException e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //    catch (InternalServerErrorException e)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+        //    }
+        //}
 
-        [AllowAnonymous]
-        [HttpGet("GetAllBooks")]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                var books = await _bookService.GetAll();
-                return Ok(books);
-                return StatusCode(StatusCodes.Status201Created, "New Book was added");
-            }
-            catch (BookDataException e)
-            {
-                return BadRequest(e.Message);
-            }
-            catch (InternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
-        }
+        //[AllowAnonymous]
+        //[HttpGet("GetAllBooks")]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    try
+        //    {
+        //        var books = await _bookService.GetAll();
+        //        return Ok(books);
+        //        return StatusCode(StatusCodes.Status201Created, "New Book was added");
+        //    }
+        //    catch (BookDataException e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //    catch (InternalServerErrorException e)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+        //    }
+        //}
     }
 }

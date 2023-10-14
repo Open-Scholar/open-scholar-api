@@ -40,6 +40,8 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IMembershipService, MembershipService>();
             services.AddTransient<ITokenService, JWTService>();
             services.AddTransient<IStudentService, StudentService>();
+            services.AddTransient<IProfessorService, ProfessorService>();
+            services.AddTransient<IBookStoreService, BookStoreService>();
             //services.AddTransient<IBookService, BookService>();
             //services.AddTransient<IBookRatingService, BookRatingService>();
         }

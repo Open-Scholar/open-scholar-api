@@ -12,6 +12,7 @@
         Task<T> GetByIdInt(int id);
         Task<T> GetById(string id);
         Task<List<T>> GetAll();
+        //Task<List<T>> GetAllWithUserAsync();
         Task SaveChanges();
     }
 }
