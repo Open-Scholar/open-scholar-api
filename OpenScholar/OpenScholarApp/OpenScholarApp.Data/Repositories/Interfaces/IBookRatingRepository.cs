@@ -9,6 +9,6 @@ namespace OpenScholarApp.Data.Repositories.Interfaces
 {
     public interface IBookRatingRepository : IBaseRepository<BookRating>
     {
-        //Task<BookRating> GetByUserIdAndBookIdAsync(string userId, int bookId);
+        Task<List<BookRating>> GetAllWithUserAndBookAsync();
     }
 }

@@ -2,28 +2,21 @@
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenScholarApp.Data.Repositories.Implementations
 {
     public class BookRatingRepository : BaseRepository<BookRating>, IBookRatingRepository
     {
-        private readonly OpenScholarDbContext _context;
+        private readonly OpenScholarDbContext _openScholarDbContext;
+
         public BookRatingRepository(OpenScholarDbContext context): base(context)
         {
-            _context = context;
+            _openScholarDbContext = context;
         }
 
-        //public async Task<BookRating> GetByUserIdAndBookIdAsync(string userId, int bookId)
-        //{
-        //    return await _context.BookRatings
-        //.Include(br => br)
-        //.Include(br => br.Book)
-        //.FirstOrDefaultAsync(br => br.User.Id == userId && br.Book.BookId == bookId);
-        //}
+        public async Task<List<BookRating>> GetAllWithUserAndBookAsync()
+        {
+            return await _openScholarDbContext.BookRatings.Include(s => s.User).Include(a => a.Book).ToListAsync();
+        }
     }
 }

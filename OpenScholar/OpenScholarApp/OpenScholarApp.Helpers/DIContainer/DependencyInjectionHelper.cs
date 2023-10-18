@@ -5,8 +5,6 @@ using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Services.Implementations;
 using OpenScholarApp.Services.Interfaces;
-//using OpenScholarApp.Services.Implementations;
-//using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Services.UserServices.Implementations;
 using OpenScholarApp.Services.UserServices.Interfaces;
 
@@ -31,8 +29,8 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IBookSellerRepository, BookSellerRepository>();
             services.AddTransient<IBookStoreRepository, BookStoreRepository>();
+            services.AddTransient<IBookRatingRepository, BookRatingRepository>();
             services.AddTransient<IMembershipRepository, MembershipRepository>();
-            //services.AddTransient<IMapper, MapperConfiguration>();
         }
 
         public static void InjectServices(IServiceCollection services)
@@ -42,8 +40,8 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IProfessorService, ProfessorService>();
             services.AddTransient<IBookStoreService, BookStoreService>();
-            //services.AddTransient<IBookService, BookService>();
-            //services.AddTransient<IBookRatingService, BookRatingService>();
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IBookRatingService, BookRatingService>();
         }
     }
 }

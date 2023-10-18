@@ -594,11 +594,11 @@ namespace OpenScholarApp.Data.Migrations
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.University", b =>
                 {
-                    b.Property<int>("UniversityId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UniversityId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Adress")
                         .IsRequired()
@@ -617,7 +617,7 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<string>("WebAddress")
                         .HasColumnType("text");
 
-                    b.HasKey("UniversityId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 

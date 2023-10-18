@@ -32,12 +32,6 @@ namespace OpenScholarApp.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            //Students
-            //modelBuilder.Entity<Student>()
-            //                 .HasRequired<Department>(s => s.Department)
-            //                 .WithMany(g => g.Employees)
-            //                 .HasForeignKey<int>(s => s.DepartmentId);
         }
     }
 }

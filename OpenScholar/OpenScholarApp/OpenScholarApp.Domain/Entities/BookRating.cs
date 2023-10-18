@@ -9,16 +9,15 @@ namespace OpenScholarApp.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [ForeignKey("UserId")] // Define the foreign key to ApplicationUser
         public ApplicationUser User { get; set; }
-
-        [ForeignKey("BookId")] // Define the foreign key to Book
+        [ForeignKey("Id")]
         public Book Book { get; set; }
+        [ForeignKey("Id")]
         [AllowNull]
         [Range(1, 5, ErrorMessage = "Ratings must be between 1 and 5.")]
         public int RatingStars { get; set; }
         [MaxLength(100)]
         public string Review { get; set; } = string.Empty;
-        public DateTimeOffset RatedOn { get; set; }
+        //public DateTimeOffset RatedOn { get; set; }
     }
 }

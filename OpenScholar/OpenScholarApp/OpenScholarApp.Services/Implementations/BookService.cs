@@ -2,89 +2,127 @@
 using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
+using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.BookDto;
 using OpenScholarApp.Services.Interfaces;
-using OpenScholarApp.Shared.Responses;
 using OpenScholarApp.Shared.CustomExceptions.BookException;
-using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
+using OpenScholarApp.Shared.Responses;
 
 namespace OpenScholarApp.Services.Implementations
 {
-    //public class BookService : IBookService
-    //{
-    //    private readonly IBookRepository _bookRepository;
-    //    private readonly UserManager<ApplicationUser> _userManager;
-    //    private readonly IMapper _mapper;
+    public class BookService : IBookService
+    {
+        private readonly IBookRepository _bookRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
 
-    //    public BookService(IBookRepository bookRepository, UserManager<ApplicationUser> userManager, IMapper mapper)
-    //    {
-    //        _mapper = mapper;
-    //        _userManager = userManager;
-    //        _bookRepository = bookRepository;
-    //    }
+        public BookService(IBookRepository bookRepository, UserManager<ApplicationUser> userManager, IMapper mapper)
+        {
+            _mapper = mapper;
+            _userManager = userManager;
+            _bookRepository = bookRepository;
+        }
 
-    //    public async Task<Response<List<BookDto>>> GetAll()
-    //    {
-    //        var books = await _bookRepository.GetAll();
-    //        var bookDtos = _mapper.Map<List<BookDto>>(books);
-    //        return Response<List<BookDto>>.(bookDtos);
-    //    }
+        public async Task<Response<List<BookDto>>> GetAllBookAsync()
+        {
+            try
+            {
+                var books = await _bookRepository.GetAll();
+                var bookDtos = _mapper.Map<List<BookDto>>(books);
+                return new Response<List<BookDto>>(bookDtos);
+            }
+            catch (BookNotFoundException e)
+            {
+                return new Response<List<BookDto>> { Errors = new List<string> { $"An error occurred while fetching the book {e.Message}" } };
+            }
+        }
 
-    //    public async Task<Response<BookDto>> GetById(int id)
-    //    {
-    //        var book = await _bookRepository.GetByIdInt(id);
-    //        if (book == null)
-    //        {
-    //            return Response<BookDto>.Error($"Book with ID {id} not found.");
-    //        }
-    //        var bookDto = _mapper.Map<BookDto>(book);
-    //        return Response<BookDto>.Success(bookDto);
-    //    }
+        public async Task<Response<BookDto>> GetBookByIdAsync(int id)
+        {
+            try
+            {
+                var book = await _bookRepository.GetByIdInt(id);
+                if (book == null)
+                {
+                    return new Response<BookDto>() { Errors = new List<string> { $"Book with Id {id} not found" }, IsSuccessfull = false };
+                }
+                var bookDto = _mapper.Map<BookDto>(book);
+                return new Response<BookDto>() { IsSuccessfull = true, Result = bookDto };
+            }
+            catch (BookNotFoundException e)
+            {
+                return new Response<BookDto> { Errors = new List<string> { $"An error occurred while fetching the book {e.Message}" } };
+            }
+        }
 
-    //    public async Task<Response> Add(AddBookDto addBookDto, string userId)
-    //    {
-    //        ApplicationUser user = await _userManager.FindByIdAsync(userId.ToString());
+        public async Task<Response> CreateBookAsync(AddBookDto addBookDto, string userId)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(addBookDto.UserId);
+                if (user == null)
+                    return new Response() { Errors = new List<string> { $"User with ID {userId} was not found in the database"}, IsSuccessfull = false };
+                if(user.AccountType == AccountType.Student || user.AccountType == AccountType.Faculty)
+                    return new Response<AddBookDto>("Your account type cannot add a book");
 
-    //        if (user == null)
-    //        {
-    //            return Response.Error($"User with ID {userId} was not found in the database");
-    //        }
+                if (string.IsNullOrWhiteSpace(addBookDto.Title) || string.IsNullOrWhiteSpace(addBookDto.ReleaseDate))
+                {
+                    return new Response<AddBookDto>("Titles must not be empty");
+                }
 
-    //        if (string.IsNullOrEmpty(addBookDto.Title) || string.IsNullOrEmpty(addBookDto.ReleaseDate))
-    //        {
-    //            return Response.Error("Title and ReleaseDate must not be empty");
-    //        }
+                var book = _mapper.Map<Book>(addBookDto);
+                book.User = user;
+                await _bookRepository.Add(book);
 
-    //        var newBook = _mapper.Map<Book>(addBookDto);
-    //        await _bookRepository.Add(newBook);
+                return new Response<AddBookDto>($"Book Successfully added: {book}");
+                //return new Response<AddBookDto>($"new book created: {book} ");
+            }
+            catch (BookDataException e)
+            {
+                return new Response { Errors = new List<string> { $"An error occurred while creating the book: {e.Message}" } };
+            }
+        }
 
-    //        return Response.Success();
-    //    }
+        public async Task<Response> UpdateBookAsync(int id, UpdateBookDto updateBookDto)
+        {
+            try
+            {
+                var response = new Response();
+                var existingBook = await _bookRepository.GetByIdInt(id);
 
-    //    public async Task<Response> Update(UpdateBookDto updateBookDto)
-    //    {
-    //        var existingBook = await _bookRepository.GetByIdInt(updateBookDto.BookId);
+                if (existingBook == null)
+                {
+                    response.IsSuccessfull = false;
+                    response.Errors = new List<string>() { ($"Book with ID {id} not found.") };
+                    return response;
+                }
 
-    //        if (existingBook == null)
-    //        {
-    //            return Response.Error($"Book with ID {updateBookDto.BookId} was not found in the database");
-    //        }
+                await _bookRepository.Update(existingBook);
+                return response;
+            }
+            catch (BookDataException ex)
+            {
+                return new Response { Errors = new List<string> { $"An error occurred while updating the Book {ex.Message}" } };
+            }
+        }
 
-    //        _mapper.Map(updateBookDto, existingBook);
-    //        await _bookRepository.Update(existingBook);
-
-    //        return Response.Success();
-    //    }
-
-    //    public async Task<Response> Delete(int id)
-    //    {
-    //        var book = await _bookRepository.GetByIdInt(id);
-    //        if (book == null)
-    //        {
-    //            return Response.Error($"Book with ID {id} not found.");
-    //        }
-    //        await _bookRepository.RemoveEntirely(book);
-    //        return Response.Success();
-    //    }
-    //}
+        public async Task<Response> DeleteBookAsync(int id)
+        {
+            try
+            {
+                var book = await _bookRepository.GetByIdInt(id);
+                if (book == null)
+                {
+                    return new Response() { Errors = new List<string> { $"Book with Id {id} not found" }, IsSuccessfull = false };
+                }
+                await _bookRepository.RemoveEntirely(book);
+                return Response.Success;
+            }
+            catch (BookDataException e)
+            {
+                return new Response { Errors = new List<string> { $"An error occurred while Deleting the book: {e.Message}" } };
+            }
+            
+        }
+    }
 }
