@@ -31,7 +31,7 @@ namespace OpenScholarApp.Services.Implementations
                 var student = _mapper.Map<Student>(studentDto);
                 var user = await _userManager.FindByIdAsync(studentDto.UserId);
                 if (user == null)
-                    throw new StudentDataException("User not found");
+                    return new Response<AddStudentDto>("User Not found");
 
                 student.User = user;
                 await _studentRepository.Add(student);

@@ -128,32 +128,6 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             });
         }
 
-        //public async Task<Response<RegisterUserResponse>> RegisterUserAsync(RegisterUserRequest request)
-        //{
-        //    // Validation
-        //    if (string.IsNullOrWhiteSpace(request?.Username))
-        //        throw new UserDataException("username is a required field");
-
-        //    if (string.IsNullOrWhiteSpace(request?.Email)) //additional email validation can be added here
-        //        throw new UserDataException(" is a required field");
-
-        //    if (string.IsNullOrWhiteSpace(request?.Password)) //additional password validation can be added here
-        //        throw new UserDataException("username is a required field");
-
-        //    var user = new ApplicationUser { UserName = request.Username, Email = request.Email };
-        //    var result = await _userManager.CreateAsync(user, request.Password);
-
-        //    if (!result.Succeeded)
-        //        return new(result.Errors.Select(x => x.Description));
-
-        //    return new(new RegisterUserResponse
-        //    {
-        //        Id = user.Id,
-        //        Username = user.UserName,
-        //        Email = user.Email
-        //    });
-        //}
-
         public async Task<Response<RegisterUserResponse>> RegisterUserAsync(RegisterUserRequest request)
         {
             // Validation

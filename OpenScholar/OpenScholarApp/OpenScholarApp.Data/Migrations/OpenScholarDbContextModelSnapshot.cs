@@ -203,9 +203,6 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<int>("AccountType")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -252,8 +249,6 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -278,7 +273,7 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<string>("BirthDate")
                         .HasColumnType("text");
 
-                    b.Property<int?>("BookId")
+                    b.Property<int>("BookId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -302,7 +297,7 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Author");
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Book", b =>
@@ -332,11 +327,16 @@ namespace OpenScholarApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BookSellerId");
 
                     b.HasIndex("ProfessorId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Books");
                 });
@@ -347,14 +347,6 @@ namespace OpenScholarApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("RatedOn")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("RatingStars")
                         .HasColumnType("integer");
 
@@ -364,12 +356,9 @@ namespace OpenScholarApp.Data.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
@@ -692,18 +681,15 @@ namespace OpenScholarApp.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OpenScholarApp.Domain.Entities.ApplicationUser", b =>
-                {
-                    b.HasOne("OpenScholarApp.Domain.Entities.Book", null)
-                        .WithMany("User")
-                        .HasForeignKey("BookId");
-                });
-
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Author", b =>
                 {
-                    b.HasOne("OpenScholarApp.Domain.Entities.Book", null)
+                    b.HasOne("OpenScholarApp.Domain.Entities.Book", "Book")
                         .WithMany("Authors")
-                        .HasForeignKey("BookId");
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Book", b =>
@@ -715,21 +701,25 @@ namespace OpenScholarApp.Data.Migrations
                     b.HasOne("OpenScholarApp.Domain.Entities.Professor", null)
                         .WithMany("Books")
                         .HasForeignKey("ProfessorId");
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.BookRating", b =>
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.Book", "Book")
                         .WithMany()
-                        .HasForeignKey("BookId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Book");
 
@@ -825,8 +815,6 @@ namespace OpenScholarApp.Data.Migrations
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Book", b =>
                 {
                     b.Navigation("Authors");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.BookSeller", b =>

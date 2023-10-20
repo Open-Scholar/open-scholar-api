@@ -7,6 +7,7 @@ namespace OpenScholarApp.Domain.Entities
     {
         //[Required]
         public AccountType AccountType { get; set; }
+        public bool IsProfileCreated { get; set; } = false;
 
         //Acc types
         public List<Student>? Students { get; set; } = new List<Student>();

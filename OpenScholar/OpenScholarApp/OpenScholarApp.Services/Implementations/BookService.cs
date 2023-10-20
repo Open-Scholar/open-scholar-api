@@ -62,7 +62,13 @@ namespace OpenScholarApp.Services.Implementations
                 var user = await _userManager.FindByIdAsync(addBookDto.UserId);
                 if (user == null)
                     return new Response() { Errors = new List<string> { $"User with ID {userId} was not found in the database"}, IsSuccessfull = false };
-                if(user.AccountType == AccountType.Student || user.AccountType == AccountType.Faculty)
+
+                if(user.AccountType != AccountType.Student 
+                    || user.AccountType != AccountType.Faculty 
+                    || user.AccountType != AccountType.BookSeller 
+                    || user.AccountType != AccountType.BookStore 
+                    || user.AccountType != AccountType.Professor
+                    || user.AccountType != AccountType.SuperAdmin)
                     return new Response<AddBookDto>("Your account type cannot add a book");
 
                 if (string.IsNullOrWhiteSpace(addBookDto.Title) || string.IsNullOrWhiteSpace(addBookDto.ReleaseDate))
@@ -74,8 +80,9 @@ namespace OpenScholarApp.Services.Implementations
                 book.User = user;
                 await _bookRepository.Add(book);
 
+
                 return new Response<AddBookDto>($"Book Successfully added: {book}");
-                //return new Response<AddBookDto>($"new book created: {book} ");
+                
             }
             catch (BookDataException e)
             {

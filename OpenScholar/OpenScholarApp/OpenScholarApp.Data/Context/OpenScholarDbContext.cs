@@ -12,8 +12,8 @@ namespace OpenScholarApp.Data.Context
             //Database.EnsureCreated();
         }
 
-        //Users
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        //Main Users
+        //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         //User Types
         public DbSet<Student> Students { get; set; }
@@ -22,12 +22,13 @@ namespace OpenScholarApp.Data.Context
         public DbSet<University> Universities { get; set; }
         public DbSet<BookStore> BookStores { get; set; }
         public DbSet<BookSeller> BookSellers { get; set; }
-        public DbSet<BookRating> BookRatings { get; set; }
 
         //Items
         public DbSet<Book> Books { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<AcademicMaterial> AcademicMaterials { get; set; }
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<BookRating> BookRatings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
