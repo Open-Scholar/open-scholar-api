@@ -1,5 +1,4 @@
-﻿using OpenScholarApp.Domain.Entities;
-using OpenScholarApp.Domain.Enums;
+﻿using OpenScholarApp.Domain.Enums;
 
 namespace OpenScholarApp.Dtos.StudentDto
 {

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
+using OpenScholarApp.Domain.Enums;
+using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Dtos.UniversityDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.UniversityExceptions;
@@ -29,11 +31,20 @@ namespace OpenScholarApp.Services.Implementations
                 var response = new Response();
                 var university = _mapper.Map<University>(addDto);
                 var user = await _userManager.FindByIdAsync(addDto.UserId);
+
                 if (user == null)
                     throw new UniversityDataException("User not found");
 
+                if (user.IsProfileCreated == true)
+                    return new Response<AddStudentDto>("Account already exists");
+
+                if (user.AccountType != AccountType.University)
+                    return new Response<AddStudentDto>("You can only create University account type");
+
                 university.User = user;
                 await _universityRepository.Add(university);
+                user.IsProfileCreated = true;
+                await _userManager.UpdateAsync(user);
                 response.IsSuccessfull = true;
                 return response;
             }

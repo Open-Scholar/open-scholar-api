@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
+using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.BookStoreDto;
+using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.BookStoreExceptions;
 using OpenScholarApp.Shared.Responses;
@@ -32,8 +34,16 @@ namespace OpenScholarApp.Services.Implementations
                 if (user == null)
                     throw new BookStoreDataException("BookStore not found");
 
+                if (user.IsProfileCreated == true)
+                    return new Response<AddStudentDto>("Account already exists");
+
+                if (user.AccountType != AccountType.BookStore)
+                    return new Response<AddStudentDto>("You can only create Book Store account type");
+
                 bookStore.User = user;
                 await _bookStoreRepository.Add(bookStore);
+                user.IsProfileCreated = true;
+                await _userManager.UpdateAsync(user);
                 response.IsSuccessfull = true;
                 return response;
             }

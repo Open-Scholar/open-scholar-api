@@ -31,6 +31,8 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IBookStoreRepository, BookStoreRepository>();
             services.AddTransient<IBookRatingRepository, BookRatingRepository>();
             services.AddTransient<IMembershipRepository, MembershipRepository>();
+            services.AddTransient<ITopicRepository, TopicRepository>();
+            services.AddTransient<ITopicCommentRepository, TopicCommentRepository>();
         }
 
         public static void InjectServices(IServiceCollection services)

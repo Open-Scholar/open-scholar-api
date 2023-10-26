@@ -64,6 +64,7 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var user = await _userManager.FindByIdAsync(addBookRatingDto.UserId);
                 var book = await _BookRepository.GetByIdInt(bookId);
+
                 if (user == null)
                     return new Response() { Errors = new List<string> { $"User with ID {userId} was not found in the database" }, IsSuccessfull = false };
 
@@ -121,6 +122,6 @@ namespace OpenScholarApp.Services.Implementations
 
         }
 
-       
+
     }
 }

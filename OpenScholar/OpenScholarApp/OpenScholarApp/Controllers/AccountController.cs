@@ -5,6 +5,7 @@ using OpenScholarApp.Services.UserServices.Interfaces;
 using OpenScholarApp.Services.UserServices.Models;
 using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
 using OpenScholarApp.Shared.Requests;
+using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
 {
@@ -128,6 +129,7 @@ namespace OpenScholarApp.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllUsers()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var response = await _membershipService.GetAllUsers();
 
             if (response.IsSuccessfull)
@@ -143,6 +145,7 @@ namespace OpenScholarApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var response = await _membershipService.DeleteUserAsync(id);
 
             if (response.IsSuccessfull)

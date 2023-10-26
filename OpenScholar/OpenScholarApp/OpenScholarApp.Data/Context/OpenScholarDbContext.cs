@@ -29,6 +29,8 @@ namespace OpenScholarApp.Data.Context
         public DbSet<AcademicMaterial> AcademicMaterials { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<BookRating> BookRatings { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<TopicComment> TopicComments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
