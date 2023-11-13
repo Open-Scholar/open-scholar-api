@@ -31,6 +31,7 @@ namespace OpenScholarApp.Data.Context
         public DbSet<BookRating> BookRatings { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<TopicComment> TopicComments { get; set; }
+        public DbSet<DocFile> DocFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

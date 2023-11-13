@@ -8,6 +8,7 @@ using OpenScholarApp.Dtos.BookRatingDto;
 using OpenScholarApp.Dtos.BookSellerDto;
 using OpenScholarApp.Dtos.BookStoreDto;
 using OpenScholarApp.Dtos.FacultyDto;
+using OpenScholarApp.Dtos.PdfFileDto;
 using OpenScholarApp.Dtos.ProfessorDto;
 using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Dtos.SubjectDto;
@@ -77,6 +78,8 @@ namespace OpenScholarApp.Mappers.MapperConfig
             CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
             CreateMap<ApplicationUser, ResetPasswordDto>().ReverseMap();
             CreateMap<ApplicationUser, ForgotPasswordDto>().ReverseMap();
+            //PdfFileDto
+            CreateMap<DocFile, DocFileDto>().ReverseMap();
         }
     }
 }

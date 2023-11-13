@@ -440,6 +440,35 @@ namespace OpenScholarApp.Data.Migrations
                     b.ToTable("BookStores");
                 });
 
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.DocFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("FileData")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("FileType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("id")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("id");
+
+                    b.ToTable("DocFiles");
+                });
+
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Faculty", b =>
                 {
                     b.Property<int>("Id")
@@ -586,6 +615,64 @@ namespace OpenScholarApp.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.Topic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("EditedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Topics");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.TopicComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TopicComments");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.University", b =>
@@ -751,6 +838,15 @@ namespace OpenScholarApp.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.DocFile", b =>
+                {
+                    b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Faculty", b =>
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.Student", null)
@@ -791,6 +887,34 @@ namespace OpenScholarApp.Data.Migrations
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.Topic", b =>
+                {
+                    b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.TopicComment", b =>
+                {
+                    b.HasOne("OpenScholarApp.Domain.Entities.Topic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
 
                     b.Navigation("User");
                 });

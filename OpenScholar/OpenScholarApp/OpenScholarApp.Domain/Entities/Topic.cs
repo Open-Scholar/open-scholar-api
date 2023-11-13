@@ -11,8 +11,8 @@ namespace OpenScholarApp.Domain.Entities
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
-        public DateTimeOffset? EditedAt { get; set; }
-        [ForeignKey("Id")]
         public ApplicationUser User { get; set; }
+        [ForeignKey("Id")]
+        public DateTimeOffset? EditedAt { get; set; }
     }
 }

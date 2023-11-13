@@ -16,11 +16,9 @@ namespace OpenScholarApp.Controllers
     public class ProfessorController : BaseController
     {
         private readonly IProfessorService _professorService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProfessorController(IProfessorService professorService, UserManager<ApplicationUser> userManager)
+        public ProfessorController(IProfessorService professorService)
         {
-            _userManager = userManager;
             _professorService = professorService;
         }
 
