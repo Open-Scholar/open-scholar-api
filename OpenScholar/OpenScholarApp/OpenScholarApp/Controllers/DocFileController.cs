@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenScholarApp.Dtos.PdfFileDto;
 using OpenScholarApp.Services.Interfaces;
+using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DocFileController : BaseController
@@ -23,7 +23,8 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
-                var fileId = await _docFileService.AddDocFileAsync(docFileDto);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var fileId = await _docFileService.AddDocFileAsync(docFileDto , userId);
                 return Ok(new { FileId = fileId });
             }
             catch (ArgumentException ex)
@@ -41,7 +42,9 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
-                var docFile = await _docFileService.GetDocFileAsync(fileId);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                
+                var docFile = await _docFileService.GetDocFileAsync(fileId, userId);
 
                 if (docFile == null)
                 {

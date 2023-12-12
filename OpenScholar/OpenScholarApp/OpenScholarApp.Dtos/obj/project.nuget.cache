@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "h2ZkUcIvDc75n6T6gCHi1vsrNriVOfftFeyHuxXzS9x5nLpVZx20fu2sHG4ilt1GhjmiSwb3oQQnWve65Gouyg==",
+  "dgSpecHash": "3kM0Q7k7yLpGBzAGRvrmD7o++MezDwZzaHN4I7CoX/e3kz9VV9tReoKRXFJyBZmuUqhl8v53e1HBreY5Z/mAAg==",
   "success": true,
   "projectFilePath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Dtos\\OpenScholarApp.Dtos.csproj",
   "expectedPackageFiles": [

@@ -5,11 +5,7 @@ using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.PdfFileDto;
 using OpenScholarApp.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OpenScholarApp.Shared.CustomExceptions.DocFile;
 
 namespace OpenScholarApp.Services.Implementations
 {
@@ -26,18 +22,20 @@ namespace OpenScholarApp.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<int> AddDocFileAsync(DocFileDto docFileDto)
+        public async Task<int> AddDocFileAsync(DocFileDto docFileDto, string userId)
         {
             try
             {
                 var docFile = _mapper.Map<DocFile>(docFileDto);
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    throw new DocFileDataException("User not found while uploading the document");
+                docFile.User = user;
 
                 if (docFileDto.FileDetails == null)
-                {
                     throw new ArgumentException("File content is required.");
-                }
 
-                if (docFile.FileType == FileType.PDF)
+                if (docFile.FileType == FileType.PDF || docFile.FileType == FileType.DOCX)
                 {
                     using (var stream = docFileDto.FileDetails.OpenReadStream())
                     using (var memoryStream = new MemoryStream())
@@ -50,25 +48,32 @@ namespace OpenScholarApp.Services.Implementations
                 }
                 else
                 {
-                    throw new ArgumentException("Unsupported file type. Only PDF files are allowed.");
+                    throw new DocFileDataException("Unsupported file type. Only PDF or DocX files are allowed.");
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Error adding document file: {ex.Message}");
+                throw new DocFileDataException($"Error adding document file: {ex.Message}");
             }
         }
 
-        public async Task<DocFileDto> GetDocFileAsync(int fileId)
+        public async Task<DocFileDto> GetDocFileAsync(int fileId, string userId)
         {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new DocFileDataException("You are not authorised to use this, please log in");
+
             var docFile = await _docFileRepository.GetDocFileAsync(fileId);
 
             if (docFile == null)
             {
-                throw new ApplicationException("Document file not found.");
+                throw new DocFileNotFoundException("Document file not found.");
             }
 
-            return _mapper.Map<DocFileDto>(docFile);
+            var docFileDto = _mapper.Map<DocFileDto>(docFile);
+            //docFileDto.FileDetails = new Microsoft.AspNetCore.Http.FormFile(new MemoryStream(docFile.FileData), 0, docFile.FileData.Length, "File", docFile.FileName);
+
+            return docFileDto;
         }
 
         public async Task<List<DocFileDto>> GetAllDocFilesAsync()

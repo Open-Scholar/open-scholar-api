@@ -16,9 +16,9 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<int> AddDocFileAsync(DocFile docFile, IFormFile pdfFileContent)
+        public async Task<int> AddDocFileAsync(DocFile docFile, IFormFile docFileContent)
         {
-            using (var stream = pdfFileContent.OpenReadStream())
+            using (var stream = docFileContent.OpenReadStream())
             using (var memoryStream = new MemoryStream())
             {
                 await stream.CopyToAsync(memoryStream);

@@ -49,6 +49,8 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<ITopicService, TopicService>();
             services.AddTransient<ITopicCommentService, TopicCommentService>();
             services.AddTransient<IDocFileService, DocFileService>();
+            services.AddTransient<IDocFileService2, DocFileService2>();
+
         }
     }
 }
