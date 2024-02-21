@@ -14,6 +14,27 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             _openScholarDbContext = openScholarDbContext;
         }
 
+        public async Task<(IEnumerable<T> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize)
+        {
+            try
+            {
+            var query = _openScholarDbContext.Set<T>().AsQueryable();
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task Add(T entity)
         {
             try
@@ -65,19 +86,6 @@ namespace OpenScholarApp.Data.Repositories.Implementations
                 throw;
             }
         }
-
-        //public async Task<List<T>> GetAllWithUserAsync()
-        //{
-        //    try
-        //    {
-        //        List<T> getAll = await _openScholarDbContext.Set<T>().ToListAsync();
-        //        return getAll;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
 
         public async Task<T> GetById(string id)
         {

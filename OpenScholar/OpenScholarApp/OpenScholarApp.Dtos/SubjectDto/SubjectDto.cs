@@ -11,6 +11,6 @@ namespace OpenScholarApp.Dtos.SubjectDto
         public string? Description { get; set; } = string.Empty;
         public int? EKSTCredits { get; set; }
         [AllowNull]
-        public Faculty Faculty { get; set; }
+        public FacultyAcc Faculty { get; set; }
     }
 }

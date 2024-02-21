@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Domain.Entities;
-using OpenScholarApp.Dtos.UniversityDto;
+using OpenScholarApp.Dtos.FacultyDto;
+using OpenScholarApp.Dtos.University;
+using OpenScholarApp.Services.Implementations;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
 using System.Security.Claims;
@@ -15,11 +15,9 @@ namespace OpenScholarApp.Controllers
     public class UniversityController : BaseController
     {
         private readonly IUniversityService _universityService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UniversityController(IUniversityService universityService, UserManager<ApplicationUser> userManager)
+        public UniversityController(IUniversityService universityService)
         {
-            _userManager = userManager;
             _universityService = universityService;
         }
 
@@ -35,21 +33,7 @@ namespace OpenScholarApp.Controllers
                     return BadRequest("User not found.");
                 }
 
-                var response = await _universityService.CreateUniversityAsync(universityDto, userId);
-                return Response(response);
-            }
-            catch (InternalServerErrorException ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUniversityById(int id)
-        {
-            try
-            {
-                var response = await _universityService.GetUniversityByIdAsync(id);
+                var response = await _universityService.CreateUniversityAsync(userId, universityDto);
                 return Response(response);
             }
             catch (InternalServerErrorException ex)
@@ -72,12 +56,12 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUniversity(int id, [FromBody] UpdateUniversityDto updatedUniversityDto)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUniversityById(int id)
         {
             try
             {
-                var response = await _universityService.UpdateUniversityAsync(id, updatedUniversityDto);
+                var response = await _universityService.GetUniversityByIdAsync(id);
                 return Response(response);
             }
             catch (InternalServerErrorException ex)
@@ -86,13 +70,43 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUniversity(int id, [FromBody] UpdateUniversityDto universityDto)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _universityService.UpdateUniversityAsync(userId, id, universityDto);
+                return Response(response);
+
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete]
         public async Task<IActionResult> DeleteUniversity(int id)
         {
             try
             {
-                var response = await _universityService.DeleteUniversityAsync(id);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _universityService.DeleteUniversityAsync(userId, id);
                 return Response(response);
+
             }
             catch (InternalServerErrorException ex)
             {

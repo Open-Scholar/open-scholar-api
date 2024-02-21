@@ -2,6 +2,6 @@
 {
     public class UniversityNotFoundException : Exception
     {
-        public UniversityNotFoundException(string message) : base(message) { }
+        public UniversityNotFoundException(string message) :base(message) { }
     }
 }

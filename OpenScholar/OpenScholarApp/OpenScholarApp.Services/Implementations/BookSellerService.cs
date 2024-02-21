@@ -4,7 +4,6 @@ using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.BookSellerDto;
-using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.BookSellerExceptions;
 using OpenScholarApp.Shared.CustomExceptions.BookStoreExceptions;
@@ -31,18 +30,19 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var response = new Response();
                 var bookSeller = _mapper.Map<BookSeller>(addDto);
-                var user = await _userManager.FindByIdAsync(addDto.UserId);
+                var user = await _userManager.FindByIdAsync(userId);
 
                 if (user == null)
                     throw new BookSellerDataException("BookSeller not found");
 
                 if (user.IsProfileCreated == true)
-                    return new Response<AddStudentDto>("Account already exists");
+                    return new Response<AddBookSellerDto>("Account already exists");
 
                 if (user.AccountType != AccountType.BookSeller)
-                    return new Response<AddStudentDto>("You can only create BookSeller account type");
+                    return new Response<AddBookSellerDto>("You can only create BookSeller account type");
 
                 bookSeller.User = user;
+                bookSeller.ApplicationUserId = userId;
                 await _bookSellerRepository.Add(bookSeller);
                 user.IsProfileCreated = true;
                 await _userManager.UpdateAsync(user);
@@ -89,14 +89,14 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<Response<BookSellerDto>> GetBookSellerByIdAsync(int id)
+        public async Task<Response<BookSellerDto>> GetBookSellerAsync(string userId)
         {
             try
             {
-                var bookSeller = await _bookSellerRepository.GetByIdInt(id);
+                var bookSeller = await _bookSellerRepository.GetByUserIdAsync(userId);
                 if (bookSeller == null)
                 {
-                    return new Response<BookSellerDto>() { Errors = new List<string> { $"Book Seller with Id {id} not found" }, IsSuccessfull = false };
+                    return new Response<BookSellerDto>() { Errors = new List<string> { $"Book Seller account not found" }, IsSuccessfull = false };
                 }
 
                 var bookSellerDto = _mapper.Map<BookSellerDto>(bookSeller);
@@ -108,22 +108,21 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<Response> UpdateBookSellerAsync(int id, UpdateBookSellerDto updateDto)
+        public async Task<Response> UpdateBookSellerAsync(string userId, UpdateBookSellerDto updateBookSellerDto)
         {
             try
             {
-                var response = new Response();
-                var existingBookSeller = await _bookSellerRepository.GetByIdInt(id);
+                var existingBookSeller = await _bookSellerRepository.GetByUserIdAsync(userId);
 
                 if (existingBookSeller == null)
                 {
-                    response.IsSuccessfull = false;
-                    response.Errors = new List<string>() { ($"Book Seller with ID {id} not found.") };
-                    return response;
+                    return new Response("Account not found!");
                 }
 
-                await _bookSellerRepository.Update(existingBookSeller);
-                return response;
+                var updatedBookSeller = _mapper.Map(updateBookSellerDto, existingBookSeller);
+
+                await _bookSellerRepository.Update(updatedBookSeller);
+                return new Response<UpdateBookSellerDto> { IsSuccessfull = true, Result = updateBookSellerDto };
             }
             catch (BookSellerDataException ex)
             {

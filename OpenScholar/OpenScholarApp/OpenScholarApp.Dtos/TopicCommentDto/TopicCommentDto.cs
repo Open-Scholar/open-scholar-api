@@ -1,17 +1,15 @@
-﻿using OpenScholarApp.Domain.Entities;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace OpenScholarApp.Dtos.TopicCommentDto
+﻿namespace OpenScholarApp.Dtos.TopicCommentDto
 {
     public class TopicCommentDto
     {
         public int Id { get; set; }
-        public string Comment { get; set; } = string.Empty;
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
+        public string Comment { get; set; } 
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow; 
         public DateTimeOffset? UpdatedAt { get; set; }
-        [ForeignKey("Id")]
-        public ApplicationUser User { get; set; }
-        [ForeignKey("Id")]
-        public Topic Topic { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        //public ApplicationUser? User { get; set; }
+        public int TopicId { get; set; }
+        //public Topic? Topic { get; set; }
     }
 }

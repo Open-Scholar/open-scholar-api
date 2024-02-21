@@ -1,6 +1,6 @@
-﻿namespace OpenScholarApp.Dtos.UniversityDto
+﻿namespace OpenScholarApp.Dtos.UniversityAccDto
 {
-    public class UpdateUniversityDto
+    public class AddUniversityAccDto
     {
         public string UserId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;

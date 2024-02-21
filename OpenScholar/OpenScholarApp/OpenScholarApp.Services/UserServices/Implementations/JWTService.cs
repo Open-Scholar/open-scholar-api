@@ -17,6 +17,7 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             _configuration = configuration;
         }
 
+        //stavi nov claim so acctype
         public Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
         {
             var claims = new List<Claim>
@@ -37,7 +38,7 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.UtcNow.AddYears(1),
+                expires: DateTime.UtcNow.AddYears(10),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );

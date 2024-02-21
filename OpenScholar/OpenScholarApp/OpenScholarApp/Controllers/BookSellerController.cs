@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.BookSellerDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
@@ -16,11 +14,9 @@ namespace OpenScholarApp.Controllers
     public class BookSellerController : BaseController
     {
         private readonly IBookSellerService _bookSellerService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookSellerController(IBookSellerService bookSellerService, UserManager<ApplicationUser> userManager)
+        public BookSellerController(IBookSellerService bookSellerService)
         {
-            _userManager = userManager;
             _bookSellerService = bookSellerService;
         }
 
@@ -45,17 +41,20 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBookSellerById(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetBookSeller()
         {
             try
             {
-                var response = await _bookSellerService.GetBookSellerByIdAsync(id);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _bookSellerService.GetBookSellerAsync(userId);
                 return Response(response);
-            }
-            catch (BookSellerNotFoundException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
@@ -63,8 +62,8 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllBookSeller()
+        [HttpGet("/api/allsellers")]
+        public async Task<IActionResult> GetAllBookSellers()
         {
             try
             {
@@ -77,17 +76,20 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBookSeller(int id, [FromBody] UpdateBookSellerDto updatedBookSellerDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateBookSeller([FromBody] UpdateBookSellerDto updatedBookSellerDto)
         {
             try
             {
-                var response = await _bookSellerService.UpdateBookSellerAsync(id, updatedBookSellerDto);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _bookSellerService.UpdateBookSellerAsync(userId, updatedBookSellerDto);
                 return Response(response);
-            }
-            catch (BookSellerNotFoundException ex)
-            {
-                return NotFound($"There is no such book store to update {ex.Message}");
             }
             catch (InternalServerErrorException ex)
             {

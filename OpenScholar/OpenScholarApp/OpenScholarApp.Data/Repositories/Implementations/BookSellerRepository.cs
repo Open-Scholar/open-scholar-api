@@ -19,5 +19,11 @@ namespace OpenScholarApp.Data.Repositories.Implementations
         {
             return await _openScholarDbContext.BookSellers.Include(s => s.User).ToListAsync();
         }
+
+        public async Task<BookSeller> GetByUserIdAsync(string userId)
+        {
+            return await _openScholarDbContext.BookSellers
+                        .FirstOrDefaultAsync(s => s.User != null && s.User.Id == userId);
+        }
     }
 }

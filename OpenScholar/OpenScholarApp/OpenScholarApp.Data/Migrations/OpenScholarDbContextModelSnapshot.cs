@@ -169,9 +169,6 @@ namespace OpenScholarApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ProfessorId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("StudentId")
                         .HasColumnType("integer");
 
@@ -182,8 +179,6 @@ namespace OpenScholarApp.Data.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProfessorId");
 
                     b.HasIndex("StudentId");
 
@@ -214,6 +209,9 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsAccountVerified")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsProfileCreated")
                         .HasColumnType("boolean");
 
@@ -239,6 +237,9 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -382,28 +383,39 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.Property<string>("Adress")
                         .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("BookSellers");
                 });
@@ -418,39 +430,56 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.Property<string>("Adress")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("ApplicationUserId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PhoneNumber")
+                    b.Property<string>("BusinessName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int>("RegistrationNumber")
                         .HasColumnType("integer");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<int>("TaxNumber")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("BookStores");
                 });
 
-            modelBuilder.Entity("OpenScholarApp.Domain.Entities.DocFile", b =>
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.DocumentFile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<byte[]>("FileData")
-                        .IsRequired()
-                        .HasColumnType("bytea");
 
                     b.Property<string>("FileName")
                         .IsRequired()
@@ -459,17 +488,737 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<int>("FileType")
                         .HasColumnType("integer");
 
-                    b.Property<string>("id")
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("id");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("DocFiles");
+                    b.ToTable("DocumentFiles");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Faculty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int>("UniversityId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UniversityId");
+
+                    b.ToTable("Faculties");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Art Academy",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Academy of Music",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Film Academy",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Faculty of Agriculture",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Faculty of Mechanical Engineering",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Faculty of Electrical Engineering",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Faculty of Technology",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Faculty of Computer Science",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Faculty of Natural and Technical Sciences",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Faculty of Medical Sciences",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Faculty of Economics",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Faculty of Law",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Faculty of Philology",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Faculty of Educational Sciences",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Faculty of Tourism and Business Logistics",
+                            UniversityId = 1
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Blaze Koneski Faculty of Philology",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Faculty of Agricultural Sciences and Food",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Faculty of Architecture",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Faculty of Civil Engineering",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Faculty of Computer Science and Engineering",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "Faculty of Dentistry",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "Faculty of Design and Technologies of Furniture and Interior",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "Faculty of Dramatic Arts",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "Faculty of Economics",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Name = "Faculty of Electrical Engineering and Information Technologies",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Name = "Faculty of Fine Arts",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Name = "Faculty of Forestry",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Name = "Faculty of Mechanical Engineering",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Name = "Faculty of Medicine",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Name = "Faculty of Music",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Name = "Faculty of Natural Sciences and Mathematics",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Name = "Faculty of Pharmacy",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Name = "Faculty of Philosophy",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Name = "Faculty of Physical Education, Sport and Health",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Name = "Faculty of Technology and Metallurgy",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 36,
+                            Name = "Faculty of Veterinary Medicine",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 37,
+                            Name = "Iustinianus Primus Faculty of Law",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 38,
+                            Name = "St. Kliment Ohridski Faculty of Pedagogy",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 39,
+                            Name = "St. Clement of Ohrid Faculty of Theology in Skopje",
+                            UniversityId = 2
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Name = "Fakultetin e shkencave Teknike / Факултет за технички науки",
+                            UniversityId = 3
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Name = "Fakulteti i Shkencave të Informatikës / Факултет за информатички науки",
+                            UniversityId = 3
+                        },
+                        new
+                        {
+                            Id = 42,
+                            Name = "Fakulteti i Shkencave Teknologjike / Факултет за технолошки науки",
+                            UniversityId = 3
+                        },
+                        new
+                        {
+                            Id = 43,
+                            Name = "Fakulteti i Shkencave Sociale / Факултет за социјални науки",
+                            UniversityId = 3
+                        },
+                        new
+                        {
+                            Id = 44,
+                            Name = "Fakulteti i Ndërtimtarisë dhe Arkitekturës / Факултет за градежништво и архитектура",
+                            UniversityId = 3
+                        },
+                        new
+                        {
+                            Id = 45,
+                            Name = "SCIENTIFIC INSTITUTE FOR TOBACCO - PRILEP",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 46,
+                            Name = "FACULTY OF INFORMATION AND COMMUNICATION TECHNOLOGIES - BITOLA",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 47,
+                            Name = "FACULTY OF VETERINARY - BITOLA",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 48,
+                            Name = "HIGH MEDICINE SCHOOL - BITOLA",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 49,
+                            Name = "FACULTY OF TECHNOLOGY AND TECHNICAL SCIENCE - VELES",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 50,
+                            Name = "FACULTY OF LAW - KICEVO",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 51,
+                            Name = "FACULTY OF SECURITY - SKOPJE",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 52,
+                            Name = "FACULTY OF TOURISM AND HOSPITALITY - OHRID",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 53,
+                            Name = "FACULTY OF EDUCATION - BITOLA",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 54,
+                            Name = "FACULTY OF TECHNICAL SCIENCES - BITOLA",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 55,
+                            Name = "FACULTY OF BIOTECHNICAL SCIENCES - BITOLA",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 56,
+                            Name = "FACULTY OF ECONOMICS - PRILEP",
+                            UniversityId = 4
+                        },
+                        new
+                        {
+                            Id = 57,
+                            Name = "Faculty of Agriculture and Biotechnology",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 58,
+                            Name = "Faculty of Applied Sciences",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 59,
+                            Name = "Faculty of Arts",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 60,
+                            Name = "Faculty of Business Administration",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 61,
+                            Name = "Faculty of Economics",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 62,
+                            Name = "Faculty of Food Technology and Nutrition",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 63,
+                            Name = "Faculty of Law",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 64,
+                            Name = "Faculty of Medical Sciences",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 65,
+                            Name = "Faculty of Natural Sciences and Mathematics",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 66,
+                            Name = "Faculty of Philology",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 67,
+                            Name = "Faculty of Pedagogy",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 68,
+                            Name = "Faculty of Philosophy",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 69,
+                            Name = "Faculty of Physical Education",
+                            UniversityId = 5
+                        },
+                        new
+                        {
+                            Id = 70,
+                            Name = "Faculty of Communication Networks and Security (CNS)",
+                            UniversityId = 6
+                        },
+                        new
+                        {
+                            Id = 71,
+                            Name = "Faculty of Computer Science and Engineering (CSE)",
+                            UniversityId = 6
+                        },
+                        new
+                        {
+                            Id = 72,
+                            Name = "Faculty of Information Systems, Visualization, Multimedia and Animation (ISVMA)",
+                            UniversityId = 6
+                        },
+                        new
+                        {
+                            Id = 73,
+                            Name = "Faculty of Applied Information Technology, Machine Intelligence and Robotics (AITMR)",
+                            UniversityId = 6
+                        },
+                        new
+                        {
+                            Id = 74,
+                            Name = "Faculty of Information and Communication Science (ICS)",
+                            UniversityId = 6
+                        },
+                        new
+                        {
+                            Id = 75,
+                            Name = "FACULTY OF ECONOMICS AND ADMINISTRATIVE SCIENCES",
+                            UniversityId = 7
+                        },
+                        new
+                        {
+                            Id = 76,
+                            Name = "FACULTY OF ENGINEERING",
+                            UniversityId = 7
+                        },
+                        new
+                        {
+                            Id = 77,
+                            Name = "FACULTY OF LAW",
+                            UniversityId = 7
+                        },
+                        new
+                        {
+                            Id = 78,
+                            Name = "FACULTY OF DENTAL MEDICINE",
+                            UniversityId = 7
+                        },
+                        new
+                        {
+                            Id = 79,
+                            Name = "FACULTY OF EDUCATION",
+                            UniversityId = 7
+                        },
+                        new
+                        {
+                            Id = 80,
+                            Name = "FACULTY OF HUMANITIES AND SOCIAL SCIENCES",
+                            UniversityId = 7
+                        },
+                        new
+                        {
+                            Id = 81,
+                            Name = "FACULTY OF ART AND DESIGN",
+                            UniversityId = 7
+                        },
+                        new
+                        {
+                            Id = 82,
+                            Name = "FACULTY OF BUSINESS AND ECONOMICS",
+                            UniversityId = 8
+                        },
+                        new
+                        {
+                            Id = 83,
+                            Name = "FACULTY OF LAW",
+                            UniversityId = 8
+                        },
+                        new
+                        {
+                            Id = 84,
+                            Name = "FACULTY OF LANGUAGES, CULTURES AND COMMUNICATION",
+                            UniversityId = 8
+                        },
+                        new
+                        {
+                            Id = 85,
+                            Name = "FACULTY OF CONTEMPORARY SOCIAL SCIENCES",
+                            UniversityId = 8
+                        },
+                        new
+                        {
+                            Id = 86,
+                            Name = "FACULTY OF CONTEMPORARY SCIENCES AND TECHNOLOGIES",
+                            UniversityId = 8
+                        },
+                        new
+                        {
+                            Id = 87,
+                            Name = "FACULTY OF HEALTH SCIENCES",
+                            UniversityId = 8
+                        },
+                        new
+                        {
+                            Id = 88,
+                            Name = "Faculty of Cultural Studies",
+                            UniversityId = 9
+                        },
+                        new
+                        {
+                            Id = 89,
+                            Name = "Faculty of Global Studies",
+                            UniversityId = 9
+                        },
+                        new
+                        {
+                            Id = 90,
+                            Name = "Tourism Faculty",
+                            UniversityId = 9
+                        },
+                        new
+                        {
+                            Id = 91,
+                            Name = "Faculty of Applied Arts",
+                            UniversityId = 9
+                        },
+                        new
+                        {
+                            Id = 92,
+                            Name = "Faculty of Southeast European Studies",
+                            UniversityId = 9
+                        },
+                        new
+                        {
+                            Id = 93,
+                            Name = "Faculty of Dentistry",
+                            UniversityId = 10
+                        },
+                        new
+                        {
+                            Id = 94,
+                            Name = "Faculty of Detectives and Criminology",
+                            UniversityId = 10
+                        },
+                        new
+                        {
+                            Id = 95,
+                            Name = "Faculty of Art and Design",
+                            UniversityId = 10
+                        },
+                        new
+                        {
+                            Id = 96,
+                            Name = "Faculty of Informatics",
+                            UniversityId = 10
+                        },
+                        new
+                        {
+                            Id = 97,
+                            Name = "Faculty of Economics",
+                            UniversityId = 10
+                        },
+                        new
+                        {
+                            Id = 98,
+                            Name = "Faculty of Law",
+                            UniversityId = 10
+                        },
+                        new
+                        {
+                            Id = 99,
+                            Name = "Law and Political Science",
+                            UniversityId = 11
+                        },
+                        new
+                        {
+                            Id = 100,
+                            Name = "Economics",
+                            UniversityId = 11
+                        },
+                        new
+                        {
+                            Id = 101,
+                            Name = "Communication and IT",
+                            UniversityId = 11
+                        },
+                        new
+                        {
+                            Id = 102,
+                            Name = "Design and Multimedia",
+                            UniversityId = 11
+                        },
+                        new
+                        {
+                            Id = 103,
+                            Name = "Applied Foreign Languages",
+                            UniversityId = 11
+                        },
+                        new
+                        {
+                            Id = 104,
+                            Name = "Detectives and Security",
+                            UniversityId = 11
+                        },
+                        new
+                        {
+                            Id = 105,
+                            Name = "Sports Management",
+                            UniversityId = 11
+                        },
+                        new
+                        {
+                            Id = 106,
+                            Name = "Architecture",
+                            UniversityId = 11
+                        },
+                        new
+                        {
+                            Id = 107,
+                            Name = "Faculty of Law",
+                            UniversityId = 12
+                        },
+                        new
+                        {
+                            Id = 108,
+                            Name = "Faculty of Economics",
+                            UniversityId = 12
+                        },
+                        new
+                        {
+                            Id = 109,
+                            Name = "faculty of Architecture",
+                            UniversityId = 12
+                        },
+                        new
+                        {
+                            Id = 110,
+                            Name = "Faculty of Social Sciences - PDR Department",
+                            UniversityId = 12
+                        },
+                        new
+                        {
+                            Id = 111,
+                            Name = "Faculty of Social Sciences - Department of Psychology",
+                            UniversityId = 12
+                        },
+                        new
+                        {
+                            Id = 112,
+                            Name = "Faculty of Engineering and Architecture - Department of Civil Engineering",
+                            UniversityId = 12
+                        },
+                        new
+                        {
+                            Id = 113,
+                            Name = "Faculty of Engineering and Architecture - Department of Architecture",
+                            UniversityId = 12
+                        },
+                        new
+                        {
+                            Id = 114,
+                            Name = "Faculty of Engineering and Architecture - Department of Computer Engineering",
+                            UniversityId = 12
+                        },
+                        new
+                        {
+                            Id = 115,
+                            Name = "Faculty of Informatics",
+                            UniversityId = 12
+                        });
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.FacultyAcc", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -490,19 +1239,14 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<int?>("PhoneNumber")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("Faculties");
+                    b.ToTable("FacultyAccounts");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Professor", b =>
@@ -513,29 +1257,50 @@ namespace OpenScholarApp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BirthDate")
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("BirthDate")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Expertise")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("PhoneNumber")
+                        .HasMaxLength(20)
                         .HasColumnType("integer");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<int>("universityId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("FacultyId");
+
+                    b.HasIndex("universityId");
 
                     b.ToTable("Professors");
                 });
@@ -548,24 +1313,34 @@ namespace OpenScholarApp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("BirthDate")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("FieldOFStudies")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("StudentIndexNumber")
                         .HasColumnType("integer");
@@ -573,12 +1348,16 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<int>("StudentStatus")
                         .HasColumnType("integer");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<int>("UniversityId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("FacultyId");
+
+                    b.HasIndex("UniversityId");
 
                     b.ToTable("Students");
                 });
@@ -625,6 +1404,9 @@ namespace OpenScholarApp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -634,14 +1416,23 @@ namespace OpenScholarApp.Data.Migrations
                     b.Property<DateTimeOffset?>("EditedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("FacultyId");
 
                     b.HasIndex("UserId");
 
@@ -654,12 +1445,20 @@ namespace OpenScholarApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("text");
+
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -670,12 +1469,144 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("TopicId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("TopicComments");
                 });
 
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.TopicCommentLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("TopicCommentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopicCommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TopicCommentLikes");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.TopicLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopicId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TopicLikes");
+                });
+
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.University", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Universities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Goce Delčev University of Štip"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Ss. Cyril and Methodius University of Skopje"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Mother Teresa University in Skopje"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Clement of Ohrid University of Bitola"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "State University of Tetova"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "University of Information Science and Technology \"St. Paul The Apostle\""
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "International Balkan University"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "South East European University"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Euro-Balkan University"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "European University"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "FON University"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "International Vision University"
+                        });
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.UniversityAcc", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -704,7 +1635,7 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Universities");
+                    b.ToTable("UniversityAccounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -760,10 +1691,6 @@ namespace OpenScholarApp.Data.Migrations
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.AcademicMaterial", b =>
                 {
-                    b.HasOne("OpenScholarApp.Domain.Entities.Professor", null)
-                        .WithMany("AcademicMaterials")
-                        .HasForeignKey("ProfessorId");
-
                     b.HasOne("OpenScholarApp.Domain.Entities.Student", null)
                         .WithMany("AcademicMaterials")
                         .HasForeignKey("StudentId");
@@ -824,7 +1751,9 @@ namespace OpenScholarApp.Data.Migrations
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany("BookSellers")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -833,26 +1762,37 @@ namespace OpenScholarApp.Data.Migrations
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany("BookStores")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OpenScholarApp.Domain.Entities.DocFile", b =>
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.DocumentFile", b =>
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("id");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Faculty", b =>
                 {
-                    b.HasOne("OpenScholarApp.Domain.Entities.Student", null)
+                    b.HasOne("OpenScholarApp.Domain.Entities.University", "University")
                         .WithMany("Faculties")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
+                    b.Navigation("University");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.FacultyAcc", b =>
+                {
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Faculty")
                         .HasForeignKey("UserId");
@@ -864,7 +1804,25 @@ namespace OpenScholarApp.Data.Migrations
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Professors")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.Faculty", "Faculty")
+                        .WithMany("Professors")
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.University", "University")
+                        .WithMany("Professors")
+                        .HasForeignKey("universityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+
+                    b.Navigation("University");
 
                     b.Navigation("User");
                 });
@@ -873,7 +1831,25 @@ namespace OpenScholarApp.Data.Migrations
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Students")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.Faculty", "Faculty")
+                        .WithMany("Students")
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.University", "University")
+                        .WithMany("Students")
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+
+                    b.Navigation("University");
 
                     b.Navigation("User");
                 });
@@ -893,23 +1869,79 @@ namespace OpenScholarApp.Data.Migrations
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Topic", b =>
                 {
+                    b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", null)
+                        .WithMany("Topics")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.Faculty", "Faculty")
+                        .WithMany("Topics")
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.TopicComment", b =>
                 {
+                    b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", null)
+                        .WithMany("TopicComments")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("OpenScholarApp.Domain.Entities.Topic", "Topic")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                        .WithMany("Comments")
+                        .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.TopicCommentLike", b =>
+                {
+                    b.HasOne("OpenScholarApp.Domain.Entities.TopicComment", "TopicComment")
+                        .WithMany("Likes")
+                        .HasForeignKey("TopicCommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("TopicCommentLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TopicComment");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.TopicLike", b =>
+                {
+                    b.HasOne("OpenScholarApp.Domain.Entities.Topic", "Topic")
+                        .WithMany("Likes")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("TopicLikes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -919,7 +1951,7 @@ namespace OpenScholarApp.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OpenScholarApp.Domain.Entities.University", b =>
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.UniversityAcc", b =>
                 {
                     b.HasOne("OpenScholarApp.Domain.Entities.ApplicationUser", "User")
                         .WithMany("University")
@@ -940,6 +1972,14 @@ namespace OpenScholarApp.Data.Migrations
 
                     b.Navigation("Students");
 
+                    b.Navigation("TopicCommentLikes");
+
+                    b.Navigation("TopicComments");
+
+                    b.Navigation("TopicLikes");
+
+                    b.Navigation("Topics");
+
                     b.Navigation("University");
                 });
 
@@ -953,10 +1993,17 @@ namespace OpenScholarApp.Data.Migrations
                     b.Navigation("Books");
                 });
 
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.Faculty", b =>
+                {
+                    b.Navigation("Professors");
+
+                    b.Navigation("Students");
+
+                    b.Navigation("Topics");
+                });
+
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Professor", b =>
                 {
-                    b.Navigation("AcademicMaterials");
-
                     b.Navigation("Books");
 
                     b.Navigation("Subject");
@@ -965,8 +2012,27 @@ namespace OpenScholarApp.Data.Migrations
             modelBuilder.Entity("OpenScholarApp.Domain.Entities.Student", b =>
                 {
                     b.Navigation("AcademicMaterials");
+                });
 
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.Topic", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.TopicComment", b =>
+                {
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("OpenScholarApp.Domain.Entities.University", b =>
+                {
                     b.Navigation("Faculties");
+
+                    b.Navigation("Professors");
+
+                    b.Navigation("Students");
                 });
 #pragma warning restore 612, 618
         }

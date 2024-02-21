@@ -3,8 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
+using OpenScholarApp.Services.Helpers.Implementations;
+using OpenScholarApp.Services.Helpers.Interaces;
 using OpenScholarApp.Services.Implementations;
 using OpenScholarApp.Services.Interfaces;
+using OpenScholarApp.Services.StorageServices;
 using OpenScholarApp.Services.UserServices.Implementations;
 using OpenScholarApp.Services.UserServices.Interfaces;
 
@@ -24,8 +27,8 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IProfessorRepository, ProfessorRepository>();
             services.AddTransient<IAcademicMaterialRepository, AcademicMaterialRepository>();
             services.AddTransient<ISubjectRepository, SubjectRepository>();
-            services.AddTransient<IFacultyRepository, FacultyRepository>();
-            services.AddTransient<IUniversityRepository, UniversityRepository>();
+            services.AddTransient<IFacultyAccRepository, FacultyAccRepository>();
+            services.AddTransient<IUniversityAccRepository, UniversityAccRepository>();
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IBookSellerRepository, BookSellerRepository>();
             services.AddTransient<IBookStoreRepository, BookStoreRepository>();
@@ -33,7 +36,13 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IMembershipRepository, MembershipRepository>();
             services.AddTransient<ITopicRepository, TopicRepository>();
             services.AddTransient<ITopicCommentRepository, TopicCommentRepository>();
-            services.AddTransient<IDocFileRepository, DocFileRepository>();
+            services.AddTransient<ITopicLikeRepository, TopicLikeRepository>();
+            services.AddTransient<ITopicCommentLikeRepository, TopicCommentLikeRepository>();
+            services.AddTransient<IDocumentFileRepository, DocumentFileRepository>();
+            services.AddTransient<IFacultyRepository, FacultyRepository>();
+            services.AddTransient<IUniversityRepository, UniversityRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            //services.AddTransient<IDocFileRepository, DocFileRepository>();
             
         }
 
@@ -44,12 +53,21 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IProfessorService, ProfessorService>();
             services.AddTransient<IBookStoreService, BookStoreService>();
+            services.AddTransient<IBookSellerService, BookSellerService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IBookRatingService, BookRatingService>();
             services.AddTransient<ITopicService, TopicService>();
             services.AddTransient<ITopicCommentService, TopicCommentService>();
-            services.AddTransient<IDocFileService, DocFileService>();
-            services.AddTransient<IDocFileService2, DocFileService2>();
+            services.AddTransient<ITopicLikeService, TopicLikeService>();
+            services.AddTransient<ITopicCommentLikeService, TopicCommentLikeService>();
+            services.AddTransient<IDocumentFileService, DocumentFileService>();
+            services.AddTransient<IFacultyService, FacultyService>();
+            services.AddTransient<IUniversityService, UniversityService>();
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddTransient<IUserHelperService, UserHelperService>();
+
+            //services.AddTransient<IDocFileService, DocFileService>();
+            //services.AddTransient<IDocFileService2, DocFileService2>();
 
         }
     }

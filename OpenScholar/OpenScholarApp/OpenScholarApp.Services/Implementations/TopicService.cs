@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
-using OpenScholarApp.Domain.Enums;
-using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Dtos.TopicDto;
+using OpenScholarApp.Dtos.Shared;
+using OpenScholarApp.Services.Helpers.Interaces;
 using OpenScholarApp.Services.Interfaces;
-using OpenScholarApp.Shared.CustomExceptions.StudentExceptions;
 using OpenScholarApp.Shared.CustomExceptions.TopicExceptions;
 using OpenScholarApp.Shared.Responses;
 
@@ -15,12 +13,20 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class TopicService : ITopicService
     {
+        private readonly IFacultyRepository _faultyRepository;
         private readonly ITopicRepository _topicRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserHelperService _userHelperService;
 
-        public TopicService(ITopicRepository topicRepository, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public TopicService(IUserHelperService userHelperService,
+                            IFacultyRepository facultyRepository,
+                            ITopicRepository topicRepository,
+                            IMapper mapper,
+                            UserManager<ApplicationUser> userManager)
         {
+            _userHelperService = userHelperService;
+            _faultyRepository = facultyRepository;
             _topicRepository = topicRepository;
             _mapper = mapper;
             _userManager = userManager;
@@ -37,10 +43,15 @@ namespace OpenScholarApp.Services.Implementations
                 if (user == null)
                     return new Response<AddTopicDto>("User Not found");
 
-                if (user.AccountType != AccountType.Student || user.AccountType != AccountType.Professor)
-                    return new Response<AddTopicDto>("You dont have permission to post");
-
                 topic.User = user;
+                topic.UserId = UserId;
+
+                var faculty = await _faultyRepository.GetByIdInt(topic.FacultyId);
+                if (faculty == null)
+                    return new Response<AddTopicDto>("Selected faculty not found!");
+
+                topic.Faculty = faculty;
+                topic.FacultyId = topicDto.FacultyId;
                 await _topicRepository.Add(topic);
                 response.IsSuccessfull = true;
                 return response;
@@ -64,8 +75,8 @@ namespace OpenScholarApp.Services.Implementations
 
                 if (topic == null)
                     return new Response() { Errors = new List<string> { $"Topic with Id {id} not found" }, IsSuccessfull = false };
-               
-                if(topic.User.Id != userId)
+
+                if (topic.User.Id != userId)
                     return new Response() { Errors = new List<string> { $"You dont have permissions to delete this topic" }, IsSuccessfull = false };
 
                 await _topicRepository.RemoveEntirely(topic);
@@ -82,13 +93,62 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var topics = await _topicRepository.GetAllWithUserAsync();
-                var topicDtos = _mapper.Map<List<TopicDto>>(topics);
+                var topicDtos = new List<TopicDto>();
+                foreach (var topic in topics)
+                {
+                    var topicDto = _mapper.Map<TopicDto>(topic);
+                    var userName = await _userHelperService.GetUsername(topic.User);
+                    topicDto.UserName = userName;
+                    topicDtos.Add(topicDto);
+                }
                 return new Response<List<TopicDto>>() { IsSuccessfull = true, Result = topicDtos };
             }
             catch (TopicDataException ex)
             {
                 return new Response<List<TopicDto>>() { Errors = new List<string> { $"An error occurred while fetching all topics: {ex.Message}" }, IsSuccessfull = false };
             }
+        }
+
+        public async Task<Response<List<TopicDto>>> GetAllTopicsFilteredAsync(int? facultyId, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var topics = await _topicRepository.GetAllWithUserAndFiltersAsync(facultyId, pageNumber, pageSize);
+                var topicDtos = new List<TopicDto>();
+                foreach (var topic in topics)
+                {
+                    var topicDto = _mapper.Map<TopicDto>(topic);
+                    var userName = await _userHelperService.GetUsername(topic.User);
+                    topicDto.UserName = userName;
+                    topicDtos.Add(topicDto);
+                }
+                return new Response<List<TopicDto>>() { IsSuccessfull = true, Result = topicDtos };
+            }
+            catch (TopicDataException ex)
+            {
+                return new Response<List<TopicDto>>() { Errors = new List<string> { $"An error occurred: {ex.Message}" }, IsSuccessfull = false };
+            }
+        }
+
+        public async Task<PagedResultDto<TopicDto>> GetAllTopicsPagedAsync(int pageNumber, int pageSize)
+        {
+            var (items, totalCount) = await _topicRepository.GetAllPagedAsync(pageNumber, pageSize);
+            var dtos = _mapper.Map<List<TopicDto>>(items);
+            foreach (var topic in dtos)
+            {
+                var user = await _userManager.FindByIdAsync(topic.UserId);
+                var userName = await _userHelperService.GetUsername(user);
+                topic.UserName = userName;
+            }
+
+            return new PagedResultDto<TopicDto>
+            {
+                Items = dtos,
+                TotalItems = dtos.Count(),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            };
         }
 
         public async Task<Response<TopicDto>> GetTopicByIdAsync(int id, string userId)
@@ -100,8 +160,11 @@ namespace OpenScholarApp.Services.Implementations
                     return new Response<TopicDto>() { Errors = new List<string> { $"User with Id {id} not found" }, IsSuccessfull = false };
 
                 var topic = await _topicRepository.GetByIdInt(id);
+                if (topic == null)
+                    return new Response<TopicDto>() { Errors = new List<string> { $"Topic not found!" }, IsSuccessfull = false };
 
                 var topicDto = _mapper.Map<TopicDto>(topic);
+                topicDto.UserName = await _userHelperService.GetUsername(topic.User);
                 return new Response<TopicDto>() { IsSuccessfull = true, Result = topicDto };
             }
             catch (TopicDataException ex)
@@ -110,36 +173,30 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<Response> UpdateTopicAsync(int id, string userId, UpdateTopicDto updatedTopicDto)
+        public async Task<Response<UpdateTopicDto>> UpdateTopicAsync(int id, string userId, UpdateTopicDto updatedTopicDto)
         {
             try
             {
                 var existingUser = await _userManager.FindByIdAsync(userId);
                 if (existingUser == null)
-                {
-                    return new Response { Errors = new List<string> { $"User with Id {userId} not found" }, IsSuccessfull = false };
-                }
+                    return new Response<UpdateTopicDto> { Errors = new List<string> { $"User not found" }, IsSuccessfull = false };
 
                 var existingTopic = await _topicRepository.GetByIdInt(id);
-
                 if (existingTopic == null)
-                {
-                    return new Response { Errors = new List<string> { $"Topic with ID {id} not found." }, IsSuccessfull = false };
-                }
+                    return new Response<UpdateTopicDto> { Errors = new List<string> { $"Topic not found." }, IsSuccessfull = false };
 
                 if (existingTopic.User.Id != userId)
-                {
-                    return new Response { Errors = new List<string> { $"You don't have permissions to update this topic" }, IsSuccessfull = false };
-                }
+                    return new Response<UpdateTopicDto> { Errors = new List<string> { $"You don't have permissions to update this topic" }, IsSuccessfull = false };
 
-                var updatedTopic = _mapper.Map<Topic>(updatedTopicDto);
-                await _topicRepository.Update(updatedTopic);
+                var updatedTopic = _mapper.Map(updatedTopicDto, existingTopic);
+                
+                var result = _topicRepository.Update(updatedTopic);
 
-                return new Response { IsSuccessfull = true };
+                return new Response<UpdateTopicDto> { IsSuccessfull = true, Result = updatedTopicDto };
             }
             catch (TopicDataException ex)
             {
-                return new Response { Errors = new List<string> { $"An error occurred while updating the topic: {ex.Message}" }, IsSuccessfull = false };
+                return new Response<UpdateTopicDto> { Errors = new List<string> { $"An error occurred while updating the topic: {ex.Message}" }, IsSuccessfull = false };
             }
         }
     }

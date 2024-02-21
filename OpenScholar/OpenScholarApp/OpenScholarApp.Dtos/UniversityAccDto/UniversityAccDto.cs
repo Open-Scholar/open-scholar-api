@@ -1,9 +1,9 @@
 ﻿using OpenScholarApp.Domain.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OpenScholarApp.Dtos.UniversityDto
+namespace OpenScholarApp.Dtos.UniversityAccDto
 {
-    public class UniversityDto
+    public class UniversityAccDto
     {
         public int Id { get; set; }
         public ApplicationUser? User { get; set; }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenScholarApp.Dtos.ApplicationUserDtos;
 using OpenScholarApp.Services.UserServices.Interfaces;
 using OpenScholarApp.Services.UserServices.Models;
+using OpenScholarApp.Shared.CustomExceptions;
 using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
 using OpenScholarApp.Shared.Requests;
 using System.Security.Claims;
@@ -37,146 +38,138 @@ namespace OpenScholarApp.Controllers
                 var response = await _membershipService.RegisterUserAsync(request);
                 return Response(response);
             }
-            catch (UserDataException ex)
+            catch (InternalServerErrorException e)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
 
-        //[HttpPost("test")]
-        //public async Task<IActionResult> RegisterTest([FromBody] RegisterUserModel model)
-        //{
-        //    using (TransactionScope scope = new TransactionScope())
-        //    {
-        //        try
-        //        {
-        //            // Step 1: Register the user
-        //            var userRegistrationRequest = new RegisterUserRequest
-        //            {
-        //                Email = model.Email,
-        //                Password = model.Password,
-        //                Username = model.UserName,
-        //                AccountType = model.AccountType
-        //            };
-
-        //            var userRegistrationResponse = await _membershipService.RegisterUserAsync(userRegistrationRequest);
-
-        //            if (userRegistrationResponse.IsSuccessfull)
-        //            {
-        //                // Step 2: Create the student profile
-        //                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        //                if (userId == null)
-        //                    return BadRequest("User not found.");
-
-        //                var studentDto = new AddStudentDto
-        //                {
-        //                    // Populate student data from model
-        //                };
-
-        //                var studentCreationResponse = await _studentService.CreateStudentAsync(studentDto);
-
-        //                if (studentCreationResponse.Success)
-        //                {
-        //                    // Both steps completed successfully, commit the transaction
-        //                    scope.Complete();
-        //                    return Ok("User registration and student profile creation successful.");
-        //                }
-        //                else
-        //                {
-        //                    // Step 2 failed, so rollback the transaction
-        //                    return StatusCode(500, $"Failed to create student profile: {studentCreationResponse.ErrorMessage}");
-        //                }
-        //            }
-        //            else
-        //            {
-        //                // Step 1 failed, so no need to perform step 2
-        //                return BadRequest(userRegistrationResponse.ErrorMessage);
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            // Handle exceptions or log them
-        //            return StatusCode(500, $"Internal server error: {ex.Message}");
-        //        }
-        //    }
-        //}
-
-[AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserModel model)
         {
-            var request = new LoginUserRequest
+            try
             {
-                Password = model.Password,
-                Username = model.Username,
-            };
-            var response = await _membershipService.LoginUserAsync(request);
-            return Response(response);
+                var request = new LoginUserRequest
+                {
+                    Password = model.Password,
+                    Username = model.Username,
+                };
+                var response = await _membershipService.LoginUserAsync(request);
+                return Response(response);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-        //[Authorize]
-        //[HttpGet("introspect")]
-        //public IActionResult Introspection()
-        //{
-        //    return Ok(new
-        //    {
-        //        UserId = HttpContext.GetUserId(),
-        //        TokenValidUntil = HttpContext.GetJWTokenExpiryDate()
-        //    });
-        //}
 
         //[Authorize(Roles = "SuperAdmin")]
         [HttpGet("all")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var response = await _membershipService.GetAllUsers();
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    throw new UserNotFoundException("You are not authorized!");
+                }
+                var response = await _membershipService.GetAllUsers();
 
-            if (response.IsSuccessfull)
-            {
-                return Ok(response); // Return the list of users
+                if (response.IsSuccessfull)
+                    return BadRequest(response.Errors);
+
+                return Ok(response);
             }
-            else
+            catch (InternalServerErrorException ex)
             {
-                return BadRequest(response.Errors); // Return errors, if any
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        [HttpGet]
+        public async Task<IActionResult> GetUserById()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var response = await _membershipService.DeleteUserAsync(id);
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return NotFound("User Not Found");
+                }
+                var response = await _membershipService.GetUserByIdAsync(userId);
+                if (!response.IsSuccessfull)
+                    return BadRequest(response.Errors);
 
-            if (response.IsSuccessfull)
-            {
-                return Ok(response.Errors);
+                return Ok(response);
             }
-            else
+            catch (InternalServerErrorException ex)
             {
-                return NotFound(response.Errors);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser([FromBody] DeleteUserDto password)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                    return NotFound("User Not Found");
+                
+                var response = await _membershipService.DeleteUserAsync(userId, password);
+                if (!response.IsSuccessfull)
+                    return BadRequest(response.Errors);
+
+                return Ok(response);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        //[Authorize(Roles = "SuperAdmin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(string id, [FromBody] ApplicationUserDto updatedUser)
+        public async Task<IActionResult> UpdateUser([FromBody] ApplicationUserDto updatedUser)
         {
-            var response = await _membershipService.UpdateUserAsync(id, updatedUser);
-
-            if (response.IsSuccessfull)
+            try
             {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                    return NotFound("User Not Found");
+                
+                var response = await _membershipService.UpdateUserAsync(userId, updatedUser);
+                if (!response.IsSuccessfull)
+                    return BadRequest(response.Errors);
+
                 return Ok(response.Errors);
             }
-            else
+            catch (InternalServerErrorException e)
             {
-                return BadRequest(response.Errors);
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
 
-        [HttpGet("error")]
-        public IActionResult Error()
+        [HttpPost("Change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
         {
-            throw new Exception("error");
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User Id not found!");
+                }
+                var response = await _membershipService.ChangePassword(userId, model);
+                return Ok(response);
+            }
+            catch (InternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
 
         [AllowAnonymous]
@@ -191,9 +184,74 @@ namespace OpenScholarApp.Controllers
                 await _membershipService.ResetPassword(request.Email, request.Token, request.NewPassword);
                 return Ok("Password reset successful.");
             }
-            catch (UserDataException ex)
+            catch (InternalServerErrorException e)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("confirm-account")]
+        public async Task<IActionResult> ConfirmAccount()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return NotFound("User Not Found");
+                }
+                await _membershipService.ConfirmAccountSendMail(userId);
+                return Ok("Verification email send!");
+            }
+            catch (InternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("confirm-account-check")]
+        public async Task<IActionResult> ConfirmAccountCheck(string token)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return NotFound("User Not Found");
+                }
+
+                var response = await _membershipService.ConfirmAccountCheck(userId, token);
+                return Ok(response);
+            }
+            catch (InternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost("upload-photo")]
+        public async Task<IActionResult> UploadPhoto(IFormFile photo)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return NotFound("User Not Found");
+                }
+                if (photo == null || photo.Length == 0)
+                {
+                    return BadRequest("Photo file must be provided.");
+                }
+
+                var response = await _membershipService.UploadUserPhotoAsync(userId, photo);
+                return Response(response);
+            }
+            catch (InternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
 
@@ -209,9 +267,9 @@ namespace OpenScholarApp.Controllers
                 await _membershipService.ForgotPassword(request.Email);
                 return Ok("Password reset email sent successfully.");
             }
-            catch (UserDataException ex)
+            catch (InternalServerErrorException e)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
     }

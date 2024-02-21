@@ -18,5 +18,17 @@ namespace OpenScholarApp.Data.Repositories.Implementations
         {
             return await _openScholarDbContext.Topics.Include(t => t.User).ToListAsync();
         }
+
+        public async Task<List<Topic>> GetAllWithUserAndFiltersAsync(int? facultyId = null, int pageNumber = 1, int pageSize = 10)
+        {
+            var query = _openScholarDbContext.Topics.AsQueryable();
+
+            if (facultyId.HasValue)
+                query = query.Where(t => t.FacultyId == facultyId.Value);
+
+            query = query.Include(t => t.User);
+            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            return await query.ToListAsync();
+        }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.FacultyDto;
-using OpenScholarApp.Dtos.UniversityDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
 using System.Security.Claims;
@@ -17,11 +13,9 @@ namespace OpenScholarApp.Controllers
     public class FacultyController : BaseController
     {
         private readonly IFacultyService _facultyService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public FacultyController(IFacultyService facultyService, UserManager<ApplicationUser> userManager)
+        public FacultyController(IFacultyService facultyService)
         {
-            _userManager = userManager;
             _facultyService = facultyService;
         }
 
@@ -37,21 +31,7 @@ namespace OpenScholarApp.Controllers
                     return BadRequest("User not found.");
                 }
 
-                var response = await _facultyService.CreateFacultyAsync(facultyDto, userId);
-                return Response(response);
-            }
-            catch (InternalServerErrorException ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetFacultyById(int id)
-        {
-            try
-            {
-                var response = await _facultyService.GetFacultyByIdAsync(id);
+                var response = await _facultyService.CreateFacultyAsync(userId, facultyDto);
                 return Response(response);
             }
             catch (InternalServerErrorException ex)
@@ -74,12 +54,12 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFaculty(int id, [FromBody] UpdateFacultyDto updatedFacultyDto)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetFacultyById(int id)
         {
             try
             {
-                var response = await _facultyService.UpdateFacultyAsync(id, updatedFacultyDto);
+                var response = await _facultyService.GetFacultyByIdAsync(id);
                 return Response(response);
             }
             catch (InternalServerErrorException ex)
@@ -88,13 +68,43 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateFaculty(int id, [FromBody] UpdateFacultyDto facultyDto )
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _facultyService.UpdateFacultyAsync(userId, id, facultyDto);
+                return Response(response);
+
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete]
         public async Task<IActionResult> DeleteFaculty(int id)
         {
             try
             {
-                var response = await _facultyService.DeleteFacultyAsync(id);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _facultyService.DeleteFacultyAsync(userId, id);
                 return Response(response);
+
             }
             catch (InternalServerErrorException ex)
             {

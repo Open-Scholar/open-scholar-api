@@ -2,9 +2,12 @@
 {
     public class AddTopicDto
     {
-        public string UserId { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
-        public string? Description { get; set; } = string.Empty;
-        public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
+        public string? Description { get; set; }
+        public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.UtcNow;
+        //public string UserId { get; set; }
+        //public DateTimeOffset? EditedAt { get; set; }
+        public int FacultyId { get; set; }
+        //public List<TopicComment>? Comments { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using OpenScholarApp.Dtos.UniversityDto;
+﻿using OpenScholarApp.Dtos.University;
 using OpenScholarApp.Shared.Responses;
 
 namespace OpenScholarApp.Services.Interfaces
@@ -7,8 +7,8 @@ namespace OpenScholarApp.Services.Interfaces
     {
         Task<Response<List<UniversityDto>>> GetAllUniversitiesAsync();
         Task<Response<UniversityDto>> GetUniversityByIdAsync(int id);
-        Task<Response> CreateUniversityAsync(AddUniversityDto addDto, string userId);
-        Task<Response> UpdateUniversityAsync(int id, UpdateUniversityDto updateDto);
-        Task<Response> DeleteUniversityAsync(int id);
+        Task<Response> CreateUniversityAsync(string userId, AddUniversityDto universityDto);
+        Task<Response> UpdateUniversityAsync(string userId, int id, UpdateUniversityDto updateFacultyDto);
+        Task<Response> DeleteUniversityAsync(string userId, int id);
     }
 }

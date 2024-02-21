@@ -2,9 +2,6 @@
 {
     public class InternalServerErrorException : Exception
     {
-        public InternalServerErrorException() : base("An error occurred, contact the admin!")
-        {
-
-        }
+        public InternalServerErrorException() : base("An error occurred, contact the admin!") { }
     }
 }

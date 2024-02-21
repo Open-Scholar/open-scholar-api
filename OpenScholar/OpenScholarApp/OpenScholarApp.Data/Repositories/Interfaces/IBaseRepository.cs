@@ -4,6 +4,7 @@
     {
         Task Add(T entity);
         Task AddRange(IEnumerable<T> entity);
+        Task<(IEnumerable<T> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize);
         Task Remove(T entity);
         Task RemoveEntirely(T entity);
         Task RemoveRange(IEnumerable<T> entity);

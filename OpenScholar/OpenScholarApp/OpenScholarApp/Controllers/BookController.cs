@@ -16,11 +16,9 @@ namespace OpenScholarApp.Controllers
     public class BookController : BaseController
     {
         private readonly IBookService _bookService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookController(IBookService bookService, UserManager<ApplicationUser> userManager)
+        public BookController(IBookService bookService)
         {
-            _userManager = userManager;
             _bookService = bookService;
         }
 

@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
-using OpenScholarApp.Domain.Enums;
-using OpenScholarApp.Dtos.StudentDto;
-using OpenScholarApp.Dtos.UniversityDto;
+using OpenScholarApp.Dtos.University;
 using OpenScholarApp.Services.Interfaces;
+using OpenScholarApp.Shared.CustomExceptions.StudentExceptions;
 using OpenScholarApp.Shared.CustomExceptions.UniversityExceptions;
 using OpenScholarApp.Shared.Responses;
 
@@ -13,64 +12,55 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class UniversityService : IUniversityService
     {
-        private readonly IUniversityRepository _universityRepository;
+
+        private readonly IUniversityRepository _repository;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UniversityService(IUniversityRepository universityRepository, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public UniversityService(IUniversityRepository repository, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
-            _universityRepository = universityRepository;
+            _repository = repository;
             _mapper = mapper;
             _userManager = userManager;
         }
-
-        public async Task<Response> CreateUniversityAsync(AddUniversityDto addDto, string userId)
+        public async Task<Response> CreateUniversityAsync(string userId, AddUniversityDto universityDto)
         {
             try
             {
-                var response = new Response();
-                var university = _mapper.Map<University>(addDto);
-                var user = await _userManager.FindByIdAsync(addDto.UserId);
+                var user = await _userManager.FindByIdAsync(userId);
 
-                if (user == null)
-                    throw new UniversityDataException("User not found");
+                if (user == null/* && user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
+                {
+                    return new Response("You dont have authorization to add new Faculties");
+                }
 
-                if (user.IsProfileCreated == true)
-                    return new Response<AddStudentDto>("Account already exists");
-
-                if (user.AccountType != AccountType.University)
-                    return new Response<AddStudentDto>("You can only create University account type");
-
-                university.User = user;
-                await _universityRepository.Add(university);
-                user.IsProfileCreated = true;
-                await _userManager.UpdateAsync(user);
-                response.IsSuccessfull = true;
-                return response;
+                var university = _mapper.Map<University>(universityDto);
+                await _repository.Add(university);
+                return new Response<AddUniversityDto> { IsSuccessfull = true, Result = universityDto };
             }
             catch (UniversityDataException ex)
             {
-                return new Response { Errors = new List<string> { $"An error occurred while creating the University: {ex.Message}" } };
+                return new Response($"Error in creating new university! {ex.Message}");
             }
         }
 
-        public async Task<Response> DeleteUniversityAsync(int id)
+        public async Task<Response> DeleteUniversityAsync(string userId, int id)
         {
             try
             {
-                var existingUniversity = await _universityRepository.GetByIdInt(id);
+                var existingUniversity = await _repository.GetByIdInt(id);
 
                 if (existingUniversity == null)
                 {
-                    return new Response() { Errors = new List<string> { $"University with Id {id} not found" }, IsSuccessfull = false };
+                    return new Response() { Errors = new List<string> { $"University not found! not found" }, IsSuccessfull = false };
                 }
 
-                await _universityRepository.RemoveEntirely(existingUniversity);
+                var response = _repository.RemoveEntirely(existingUniversity);
                 return Response.Success;
             }
             catch (UniversityDataException ex)
             {
-                return new Response { Errors = new List<string> { $"An error occurred while deleting the University {ex.Message}" } };
+                return new Response { Errors = new List<string> { $"An error occurred while deleting the university {ex.Message}" } };
             }
         }
 
@@ -78,13 +68,13 @@ namespace OpenScholarApp.Services.Implementations
         {
             try
             {
-                var universities = await _universityRepository.GetAllWithUserAsync();
-                var universitiesDtos = _mapper.Map<List<UniversityDto>>(universities);
-                return new Response<List<UniversityDto>>() { IsSuccessfull = true, Result = universitiesDtos };
+                var universities = await _repository.GetAll();
+                var universityDtos = _mapper.Map<List<UniversityDto>>(universities);
+                return new Response<List<UniversityDto>>() { IsSuccessfull = true, Result = universityDtos };
             }
             catch (UniversityDataException ex)
             {
-                return new Response<List<UniversityDto>>() { Errors = new List<string> { $"An error occurred while fetching all Universities: {ex.Message}" }, IsSuccessfull = false };
+                return new Response<List<UniversityDto>>() { Errors = new List<string> { $"An error occurred while fetching all universities: {ex.Message}" }, IsSuccessfull = false };
             }
         }
 
@@ -92,10 +82,10 @@ namespace OpenScholarApp.Services.Implementations
         {
             try
             {
-                var university = await _universityRepository.GetByIdInt(id);
+                var university = await _repository.GetByIdInt(id);
                 if (university == null)
                 {
-                    return new Response<UniversityDto>() { Errors = new List<string> { $"University with Id {id} not found" }, IsSuccessfull = false };
+                    return new Response<UniversityDto>() { Errors = new List<string> { $"University not found" }, IsSuccessfull = false };
                 }
 
                 var universityDto = _mapper.Map<UniversityDto>(university);
@@ -103,26 +93,32 @@ namespace OpenScholarApp.Services.Implementations
             }
             catch (UniversityDataException ex)
             {
-                return new Response<UniversityDto> { Errors = new List<string> { $"An error occurred while fetching the University {ex.Message}" } };
+                return new Response<UniversityDto> { Errors = new List<string> { $"An error occurred while fetching the university {ex.Message}" } };
             }
         }
 
-        public async Task<Response> UpdateUniversityAsync(int id, UpdateUniversityDto updateDto)
+        public async Task<Response> UpdateUniversityAsync(string userId, int id, UpdateUniversityDto updateUniversityDto)
         {
             try
             {
-                var response = new Response();
-                var existingUniversity = await _universityRepository.GetByIdInt(id);
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null/* && user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
+                {
+                    return new Response("You dont have authorization to add new Universities");
+                }
+
+                var existingUniversity = await _repository.GetByIdInt(id);
 
                 if (existingUniversity == null)
                 {
-                    response.IsSuccessfull = false;
-                    response.Errors = new List<string>() { ($"University with ID {id} not found.") };
-                    return response;
+                    return new Response<UpdateUniversityDto>("University not found.");
                 }
 
-                await _universityRepository.Update(existingUniversity);
-                return response;
+                var updatedUniversity = _mapper.Map(updateUniversityDto, existingUniversity);
+
+                var result = _repository.Update(updatedUniversity);
+                return new Response<UpdateUniversityDto> { IsSuccessfull = true, Result = updateUniversityDto };
             }
             catch (UniversityDataException ex)
             {

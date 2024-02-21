@@ -18,5 +18,13 @@ namespace OpenScholarApp.Data.Repositories.Implementations
         {
             return await _openScholarDbContext.Students.Include(s => s.User).ToListAsync();
         }
+
+        public async Task<Student> GetByUserIdAsync(string userId)
+        {
+            return await _openScholarDbContext.Students
+                        .FirstOrDefaultAsync(s => s.User != null && s.User.Id == userId);
+        }
     }
+
+
 }

@@ -1,12 +1,17 @@
-﻿namespace OpenScholarApp.Dtos.TopicDto
+﻿using OpenScholarApp.Domain.Entities;
+
+namespace OpenScholarApp.Dtos.TopicDto
 {
     public class TopicDto
     {
         public int Id { get; set; }
-        public string UserId { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
-        public string? Description { get; set; } = string.Empty;
-        public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
+        public string? Description { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+        public string? UserName { get; set; }
+        public string UserId { get; set; }
         public DateTimeOffset? EditedAt { get; set; }
+        public int FacultyId { get; set; }
+        public List<TopicComment>? Comments { get; set; }
     }
 }

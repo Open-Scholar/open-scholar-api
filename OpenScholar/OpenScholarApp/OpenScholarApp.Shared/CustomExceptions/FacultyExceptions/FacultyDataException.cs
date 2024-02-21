@@ -2,6 +2,6 @@
 {
     public class FacultyDataException : Exception
     {
-        public FacultyDataException(string message) : base(message) { }
+        public FacultyDataException(string message) :base(message) { }
     }
 }

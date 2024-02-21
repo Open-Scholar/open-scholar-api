@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.BookRatingDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
@@ -16,11 +14,9 @@ namespace OpenScholarApp.Controllers
     public class BookRatingController : BaseController
     {
         private readonly IBookRatingService _bookRatingService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookRatingController(IBookRatingService bookRatingService, UserManager<ApplicationUser> userManager)
+        public BookRatingController(IBookRatingService bookRatingService)
         {
-            _userManager = userManager;
             _bookRatingService = bookRatingService;
         }
 
@@ -34,10 +30,6 @@ namespace OpenScholarApp.Controllers
                     return BadRequest("User Not found");
                 var response = await _bookRatingService.CreateBookRatingAsync(bookRating, userId, bookId);
                 return Response(response);
-            }
-            catch (BookRatingDataException e)
-            {
-                return BadRequest(e.Message);
             }
             catch (InternalServerErrorException e)
             {
@@ -53,10 +45,6 @@ namespace OpenScholarApp.Controllers
                 var response = await _bookRatingService.GetAllBookRatingsAsync();
                 return Response(response);
             }
-            catch (BookRatingDataException e)
-            {
-                return BadRequest(e.Message);
-            }
             catch (InternalServerErrorException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
@@ -70,10 +58,6 @@ namespace OpenScholarApp.Controllers
             {
                 var response = await _bookRatingService.DeleteBookRatingAsync(id);
                 return Response(response);
-            }
-            catch (BookRatingDataException e)
-            {
-                return BadRequest(e.Message);
             }
             catch (InternalServerErrorException ex)
             {
@@ -89,10 +73,6 @@ namespace OpenScholarApp.Controllers
                 var response = await _bookRatingService.UpdateBookRatingAsync(updatedBookRatingDto, id, bookId);
                 return Response(response);
             }
-            catch (BookRatingDataException e)
-            {
-                return BadRequest(e.Message);
-            }
             catch (InternalServerErrorException ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
@@ -106,10 +86,6 @@ namespace OpenScholarApp.Controllers
             {
                 var response = await _bookRatingService.DeleteBookRatingAsync(id);
                 return Response(response);
-            }
-            catch (BookRatingDataException e)
-            {
-                return BadRequest(e.Message);
             }
             catch (InternalServerErrorException ex)
             {

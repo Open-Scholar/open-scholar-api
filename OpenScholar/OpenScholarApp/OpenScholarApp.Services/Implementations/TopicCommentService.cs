@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
-using OpenScholarApp.Domain.Enums;
+using OpenScholarApp.Dtos.Shared;
 using OpenScholarApp.Dtos.TopicCommentDto;
 using OpenScholarApp.Dtos.TopicDto;
+using OpenScholarApp.Services.Helpers.Interaces;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.TopicCommentExceptions;
 using OpenScholarApp.Shared.CustomExceptions.TopicExceptions;
@@ -14,35 +15,46 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class TopicCommentService : ITopicCommentService
     {
+        private readonly ITopicRepository _topicRepository;
+        private readonly IUserHelperService _userHelperService;
         private readonly ITopicCommentRepository _topicCommentRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
-        public TopicCommentService(ITopicCommentRepository topicCommentRepository, UserManager<ApplicationUser> userManager, IMapper mapper)
+        public TopicCommentService(ITopicCommentRepository topicCommentRepository,
+                                   IUserHelperService userHelperService,
+                                   ITopicRepository topicRepository, 
+                                   UserManager<ApplicationUser> userManager, 
+                                   IMapper mapper)
         {
+            _userHelperService = userHelperService;
+            _topicRepository = topicRepository;
             _topicCommentRepository = topicCommentRepository;
             _userManager = userManager;
             _mapper = mapper;
         }
 
-        public async Task<Response> CreateTopicCommetAsync(AddTopicCommentDto topicCommentDto, string UserId)
+        public async Task<Response> CreateTopicCommentAsync(AddTopicCommentDto topicCommentDto, string UserId)
         {
             try
             {
-                var response = new Response();
                 var topicComment = _mapper.Map<TopicComment>(topicCommentDto);
                 var user = await _userManager.FindByIdAsync(UserId);
-
                 if (user == null)
                     return new Response<AddTopicCommentDto>("User Not found");
 
-                if (user.AccountType != AccountType.Student || user.AccountType != AccountType.Professor)
-                    return new Response<AddTopicCommentDto>("You dont have permission to post");
-
                 topicComment.User = user;
-                await _topicCommentRepository.Add(topicComment);
-                response.IsSuccessfull = true;
-                return response;
+                topicComment.UserId = user.Id;
+
+                var topic = await _topicRepository.GetByIdInt(topicCommentDto.TopicId);
+                if (topic == null)
+                    return new Response<AddTopicCommentDto>("Topic not found!");
+
+                topicComment.Topic = topic;
+                topicComment.TopicId = topicCommentDto.TopicId;
+
+                var result = _topicCommentRepository.Add(topicComment);
+                return new Response<AddTopicCommentDto> { IsSuccessfull = true, Result = topicCommentDto };
             }
             catch (TopicCommentDataException e)
             {
@@ -50,7 +62,7 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<Response> DeleteTopiCommentcAsync(int id, string userId)
+        public async Task<Response> DeleteTopicCommentAsync(int id, string userId)
         {
             try
             {
@@ -76,13 +88,20 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<Response<List<TopicCommentDto>>> GetAllTopicsAsync()
+        public async Task<Response<List<TopicCommentDto>>> GetAllTopicCommentsAsync()
         {
             try
             {
-                var topics = await _topicCommentRepository.GetAllWithUserAndTopicAsync();
-                var topicDtos = _mapper.Map<List<TopicCommentDto>>(topics);
-                return new Response<List<TopicCommentDto>>() { IsSuccessfull = true, Result = topicDtos };
+                var topicComments = await _topicCommentRepository.GetAllWithUserAndTopicAsync();
+                var topicCommentDtos = new List<TopicCommentDto>();
+                foreach (var topicComment in topicComments)
+                {
+                    var topicCommentDto = _mapper.Map<TopicCommentDto>(topicComment);
+                    var userName = await _userHelperService.GetUsername(topicComment.User);
+                    topicCommentDto.UserName = userName;
+                    topicCommentDtos.Add(topicCommentDto);
+                }
+                return new Response<List<TopicCommentDto>>() { IsSuccessfull = true, Result = topicCommentDtos };
             }
             catch (TopicCommentDataException ex)
             {
@@ -90,17 +109,41 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<Response<TopicCommentDto>> GetTopicByIdAsync(int id, string userId)
+        public async Task<PagedResultDto<TopicCommentDto>> GetAllTopicCommentsPagedAsync(int pageNumber, int pageSize, int topicId)
+        {
+            var (items, totalCount) = await _topicCommentRepository.GetAllTopicCommentsByTopicIdPagedAsync(topicId, pageNumber, pageSize);
+            var dtos = _mapper.Map<List<TopicCommentDto>>(items);
+            foreach (var topicComment in dtos)
+            {
+                var user = await _userManager.FindByIdAsync(topicComment.UserId);
+                var userName = await _userHelperService.GetUsername(user);
+                topicComment.UserName = userName;
+            }
+
+            return new PagedResultDto<TopicCommentDto>
+            {
+                Items = dtos,
+                TotalItems = dtos.Count(),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            };
+        }
+
+        public async Task<Response<TopicCommentDto>> GetTopicCommentByIdAsync(int id, string userId)
         {
             try
             {
                 var existingUser = await _userManager.FindByIdAsync(userId);
                 if (existingUser == null)
-                    return new Response<TopicCommentDto>() { Errors = new List<string> { $"User with Id {id} not found" }, IsSuccessfull = false };
+                    return new Response<TopicCommentDto>() { Errors = new List<string> { $"User not found" }, IsSuccessfull = false };
 
                 var topicComment = await _topicCommentRepository.GetByIdInt(id);
+                if (topicComment == null)
+                    return new Response<TopicCommentDto>("Topic Comment not found!");
 
                 var topicCommentDto = _mapper.Map<TopicCommentDto>(topicComment);
+                topicCommentDto.UserName = await _userHelperService.GetUsername(topicComment.User);
                 return new Response<TopicCommentDto>() { IsSuccessfull = true, Result = topicCommentDto };
             }
             catch (TopicCommentDataException ex)
@@ -109,36 +152,37 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<Response> UpdateTopicAsync(int id, string userId, UpdateTopicDto updatedTopicDto)
+        public async Task<Response<UpdateTopicCommentDto>> UpdateTopicCommentAsync(int id, string userId, UpdateTopicCommentDto updatedTopicCommentDto)
         {
             try
             {
                 var existingUser = await _userManager.FindByIdAsync(userId);
                 if (existingUser == null)
                 {
-                    return new Response { Errors = new List<string> { $"User with Id {userId} not found" }, IsSuccessfull = false };
+                    return new Response<UpdateTopicCommentDto> { Errors = new List<string> { $"User with Id {userId} not found" }, IsSuccessfull = false };
                 }
 
                 var existingTopicComment = await _topicCommentRepository.GetByIdInt(id);
 
                 if (existingTopicComment == null)
                 {
-                    return new Response { Errors = new List<string> { $"Topic Comment with ID {id} not found." }, IsSuccessfull = false };
+                    return new Response<UpdateTopicCommentDto> { Errors = new List<string> { $"Topic Comment with ID {id} not found." }, IsSuccessfull = false };
                 }
 
                 if (existingTopicComment.User.Id != userId)
                 {
-                    return new Response { Errors = new List<string> { $"You don't have permissions to update this topic" }, IsSuccessfull = false };
+                    return new Response<UpdateTopicCommentDto> { Errors = new List<string> { $"You don't have permissions to update this topic" }, IsSuccessfull = false };
                 }
 
-                var updatedTopicComment = _mapper.Map<TopicComment>(updatedTopicDto);
+                //var updatedTopicComment = _mapper.Map<TopicComment>(updatedTopicDto);
+                var updatedTopicComment = _mapper.Map(updatedTopicCommentDto, existingTopicComment);
                 await _topicCommentRepository.Update(updatedTopicComment);
 
-                return new Response { IsSuccessfull = true };
+                return new Response<UpdateTopicCommentDto> { IsSuccessfull = true, Result = updatedTopicCommentDto };
             }
             catch (TopicDataException ex)
             {
-                return new Response { Errors = new List<string> { $"An error occurred while updating the topic: {ex.Message}" }, IsSuccessfull = false };
+                return new Response<UpdateTopicCommentDto> { Errors = new List<string> { $"An error occurred while updating the topic: {ex.Message}" }, IsSuccessfull = false };
             }
         }
     }

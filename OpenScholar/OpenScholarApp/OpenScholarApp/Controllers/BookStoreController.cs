@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.BookStoreDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
@@ -16,11 +15,9 @@ namespace OpenScholarApp.Controllers
     public class BookStoreController : BaseController
     {
         private readonly IBookStoreService _bookStoreService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookStoreController(IBookStoreService bookStoreService, UserManager<ApplicationUser> userManager)
+        public BookStoreController(IBookStoreService bookStoreService)
         {
-            _userManager = userManager;
             _bookStoreService = bookStoreService;
         }
 
@@ -41,22 +38,24 @@ namespace OpenScholarApp.Controllers
             }
             catch (InternalServerErrorException ex)
             {
-                // Log the exception here.
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBookStoreById(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetBookStore()
         {
             try
             {
-                var response = await _bookStoreService.GetBookStoreByIdAsync(id);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _bookStoreService.GetBookStoreAsync(userId);
                 return Response(response);
-            }
-            catch (BookStoreNotFoundException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
@@ -64,7 +63,7 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("/api/allstores")]
         public async Task<IActionResult> GetAllBookStores()
         {
             try
@@ -78,17 +77,18 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBookStore(int id, [FromBody] UpdateBookStoreDto updatedBookStoreDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateBookStore([FromBody] UpdateBookStoreDto updatedBookStoreDto)
         {
             try
             {
-                var response = await _bookStoreService.UpdateBookStoreAsync(id, updatedBookStoreDto);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User Not Found");
+                }
+                var response = await _bookStoreService.UpdateBookStoreAsync(userId, updatedBookStoreDto);
                 return Response(response);
-            }
-            catch (BookStoreNotFoundException ex)
-            {
-                return NotFound($"There is no such book store to update {ex.Message}");
             }
             catch (InternalServerErrorException ex)
             {

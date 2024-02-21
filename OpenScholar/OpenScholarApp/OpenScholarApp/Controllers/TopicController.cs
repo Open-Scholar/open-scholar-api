@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Dtos.BookDto;
-using OpenScholarApp.Services.Implementations;
-using OpenScholarApp.Services.Interfaces;
-using OpenScholarApp.Shared.CustomExceptions.BookException;
-using OpenScholarApp.Shared.CustomExceptions;
-using System.Security.Claims;
 using OpenScholarApp.Dtos.TopicDto;
+using OpenScholarApp.Services.Interfaces;
+using OpenScholarApp.Shared.CustomExceptions;
 using OpenScholarApp.Shared.CustomExceptions.TopicExceptions;
+using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
 {
@@ -34,10 +31,6 @@ namespace OpenScholarApp.Controllers
                 var response = await _topicService.CreateTopicAsync(topicDto, userId);
                 return Response(response);
             }
-            catch (TopicDataException e)
-            {
-                return BadRequest(e.Message);
-            }
             catch (InternalServerErrorException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
@@ -52,9 +45,39 @@ namespace OpenScholarApp.Controllers
                 var response = await _topicService.GetAllTopicsAsync();
                 return Response(response);
             }
-            catch (TopicDataException e)
+            catch (InternalServerErrorException e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        //[HttpGet("paged")]
+        //public async Task<IActionResult> GetAllPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        //{
+        //    try
+        //    {
+        //        // Ensure pageNumber and pageSize are positive values
+        //        pageNumber = Math.Max(pageNumber, 1);
+        //        pageSize = Math.Max(pageSize, 1);
+
+        //        var response = await _topicService.GetAllTopicsPagedAsync(pageNumber, pageSize);
+        //        return Ok(response);
+        //    }
+        //    catch (InternalServerErrorException e)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+        //    }
+        //}
+
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetAllPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10,[FromQuery] int? facultyId = null)
+        {
+            try
+            {
+                pageNumber = Math.Max(pageNumber, 1);
+                pageSize = Math.Max(pageSize, 1);
+                var response = await _topicService.GetAllTopicsFilteredAsync(facultyId, pageNumber, pageSize);
+                return Ok(response);
             }
             catch (InternalServerErrorException e)
             {
@@ -70,12 +93,8 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
-                var response = await _topicService.DeleteTopicAsync(id, userId);
+                var response = await _topicService.GetTopicByIdAsync(id, userId);
                 return Response(response);
-            }
-            catch (TopicDataException e)
-            {
-                return BadRequest(e.Message);
             }
             catch (InternalServerErrorException ex)
             {
@@ -93,10 +112,6 @@ namespace OpenScholarApp.Controllers
                     return BadRequest("User Not found");
                 var response = await _topicService.UpdateTopicAsync(id, userId, updatedTopicDto);
                 return Response(response);
-            }
-            catch (TopicDataException e)
-            {
-                return BadRequest(e.Message);
             }
             catch (InternalServerErrorException ex)
             {

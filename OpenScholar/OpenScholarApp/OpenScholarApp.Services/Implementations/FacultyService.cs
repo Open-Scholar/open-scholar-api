@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
-using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.FacultyDto;
-using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.FacultyExceptions;
 using OpenScholarApp.Shared.Responses;
@@ -13,64 +11,71 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class FacultyService : IFacultyService
     {
-        private readonly IFacultyRepository _facultyRepository;
+
+        private readonly IFacultyRepository _repository;
+        private readonly IUniversityRepository _universityRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public FacultyService(IFacultyRepository facultyRepository, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public FacultyService(IFacultyRepository repository, IUniversityRepository universityRepository,IMapper mapper, UserManager<ApplicationUser> userManager)
         {
-            _facultyRepository = facultyRepository;
+            _universityRepository = universityRepository;
+            _repository = repository;
             _mapper = mapper;
             _userManager = userManager;
         }
 
-        public async Task<Response> CreateFacultyAsync(AddFacultyDto addDto, string userId)
+        public async Task<Response> CreateFacultyAsync(string userId, AddFacultyDto facultyDto)
         {
             try
             {
-                var response = new Response();
-                var faculty = _mapper.Map<Faculty>(addDto);
-                var user = await _userManager.FindByIdAsync(addDto.UserId);
+                var user = await _userManager.FindByIdAsync(userId);
 
-                if (user == null)
-                    throw new FacultyDataException("User not found");
+                if (user == null /*|| user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
+                {
+                    return new Response("You dont have authorization to add new Faculties");
+                }
 
-                if (user.IsProfileCreated == true)
-                    return new Response<AddStudentDto>("Account already exists");
+                var universityExists = await _universityRepository.GetByIdInt(facultyDto.UniversityId);
+                if (universityExists == null)
+                {
+                    return new Response("The specified university does not exist.");
+                }
 
-                if (user.AccountType != AccountType.Faculty)
-                    return new Response<AddStudentDto>("You can only create Faculty account type");
-
-                faculty.User = user;
-                await _facultyRepository.Add(faculty);
-                user.IsProfileCreated = true;
-                await _userManager.UpdateAsync(user);
-                response.IsSuccessfull = true;
-                return response;
+                //var faculty = _mapper.Map<AddFacultyDto>(facultyDto);
+                var faculty = _mapper.Map<Faculty>(facultyDto);
+                await _repository.Add(faculty);
+                return new Response<AddFacultyDto> { IsSuccessfull = true, Result = facultyDto };
             }
             catch (FacultyDataException ex)
             {
-                return new Response { Errors = new List<string> { $"An error occurred while creating the Faculty: {ex.Message}" } };
+                return new Response($"Error in creating new faculty! {ex.Message}");
             }
         }
 
-        public async Task<Response> DeleteFacultyAsync(int id)
+        public async Task<Response> DeleteFacultyAsync(string userId, int id)
         {
             try
             {
-                var existingFaculty = await _facultyRepository.GetByIdInt(id);
+                var user = await _userManager.FindByIdAsync(userId);
 
-                if (existingFaculty == null)
+                if (user == null /*&& user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
                 {
-                    return new Response() { Errors = new List<string> { $"Faculty with Id {id} not found" }, IsSuccessfull = false };
+                    return new Response("You dont have authorization to add new Faculties");
                 }
 
-                await _facultyRepository.RemoveEntirely(existingFaculty);
-                return Response.Success;
+                var faculty = await _repository.GetByIdInt(id);
+                if (faculty == null)
+                {
+                    return new Response("Faculty not found, cannot delete!");
+                }
+
+                var response = _repository.RemoveEntirely(faculty);
+                return new Response { IsSuccessfull = true, };
             }
             catch (FacultyDataException ex)
             {
-                return new Response { Errors = new List<string> { $"An error occurred while deleting the Faculty {ex.Message}" } };
+                return new Response($"Error in deleting the faculty! {ex.Message}");
             }
         }
 
@@ -78,13 +83,13 @@ namespace OpenScholarApp.Services.Implementations
         {
             try
             {
-                var faculties = await _facultyRepository.GetAllWithUserAsync();
-                var facultyDtos = _mapper.Map<List<FacultyDto>>(faculties);
-                return new Response<List<FacultyDto>>() { IsSuccessfull = true, Result = facultyDtos };
+                var faculties = await _repository.GetAll();
+                var facultiesDto = _mapper.Map<List<FacultyDto>>(faculties);
+                return new Response<List<FacultyDto>>() { IsSuccessfull = true, Result = facultiesDto };
             }
             catch (FacultyDataException ex)
             {
-                return new Response<List<FacultyDto>>() { Errors = new List<string> { $"An error occurred while fetching all Faculties: {ex.Message}" }, IsSuccessfull = false };
+                return new Response<List<FacultyDto>>($"Error getting all the faculties! {ex.Message}");
             }
         }
 
@@ -92,42 +97,34 @@ namespace OpenScholarApp.Services.Implementations
         {
             try
             {
-                var faculty = await _facultyRepository.GetByIdInt(id);
-                if (faculty == null)
-                {
-                    return new Response<FacultyDto>() { Errors = new List<string> { $"Faculty with Id {id} not found" }, IsSuccessfull = false };
-                }
-
+                var faculty = await _repository.GetByIdInt(id);
                 var facultyDto = _mapper.Map<FacultyDto>(faculty);
                 return new Response<FacultyDto>() { IsSuccessfull = true, Result = facultyDto };
             }
             catch (FacultyDataException ex)
             {
-                return new Response<FacultyDto> { Errors = new List<string> { $"An error occurred while fetching the Faculty {ex.Message}" } };
+                return new Response<FacultyDto>($"Error getting the faculty! {ex.Message}");
             }
         }
 
-        public async Task<Response> UpdateFacultyAsync(int id, UpdateFacultyDto updateDto)
+        public async Task<Response> UpdateFacultyAsync(string userId, int id, UpdateFacultyDto updateFacultyDto)
         {
-            try
-            {
-                var response = new Response();
-                var existingFaculty = await _facultyRepository.GetByIdInt(id);
+            var user = await _userManager.FindByIdAsync(userId);
 
-                if (existingFaculty == null)
-                {
-                    response.IsSuccessfull = false;
-                    response.Errors = new List<string>() { ($"Faculty with ID {id} not found.") };
-                    return response;
-                }
-
-                await _facultyRepository.Update(existingFaculty);
-                return response;
-            }
-            catch (FacultyDataException ex)
+            if (user == null /*&& user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
             {
-                return new Response { Errors = new List<string> { $"An error occurred while updating the Faculty {ex.Message}" } };
+                return new Response("You dont have authorization to update Faculty");
             }
+
+            var faculty = await _repository.GetByIdInt(id);
+            if (faculty == null)
+            {
+                return new Response("Faculty not found, cannot delete!");
+            }
+
+            var updatedFaculty = _mapper.Map(updateFacultyDto, faculty);
+            await _repository.Update(updatedFaculty);
+            return new Response<UpdateFacultyDto> { IsSuccessfull = true, Result = updateFacultyDto };
         }
     }
 }

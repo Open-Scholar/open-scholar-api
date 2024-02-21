@@ -316,7 +316,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Microsoft.IdentityModel.Abstractions/7.0.0": {
+      "Microsoft.IdentityModel.Abstractions/7.3.1": {
         "type": "package",
         "compile": {
           "lib/net6.0/Microsoft.IdentityModel.Abstractions.dll": {
@@ -774,10 +774,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.IdentityModel.Abstractions/7.0.0": {
-      "sha512": "7iSWSRR72VKeonFdfDi43Lvkca98Y0F3TmmWhRSuHbkjk/IKUSO0Qd272LQFZpi5eDNQNbUXy3o4THXhOAU6cw==",
+    "Microsoft.IdentityModel.Abstractions/7.3.1": {
+      "sha512": "gIw8Sr5ZpuzKFBTfJonh2F54DivTzm5IIK15QB4Y6uE30uQdEO1NnCojTC/b6sWZoZzD0sdBa6SqwMXhucD+nA==",
       "type": "package",
-      "path": "microsoft.identitymodel.abstractions/7.0.0",
+      "path": "microsoft.identitymodel.abstractions/7.3.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -793,7 +793,7 @@
         "lib/net8.0/Microsoft.IdentityModel.Abstractions.xml",
         "lib/netstandard2.0/Microsoft.IdentityModel.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.IdentityModel.Abstractions.xml",
-        "microsoft.identitymodel.abstractions.7.0.0.nupkg.sha512",
+        "microsoft.identitymodel.abstractions.7.3.1.nupkg.sha512",
         "microsoft.identitymodel.abstractions.nuspec"
       ]
     }
@@ -803,7 +803,7 @@
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 7.0.11",
       "Microsoft.Extensions.Identity.Core >= 7.0.11",
       "Microsoft.Extensions.Identity.Stores >= 7.0.11",
-      "Microsoft.IdentityModel.Abstractions >= 7.0.0"
+      "Microsoft.IdentityModel.Abstractions >= 7.3.1"
     ]
   },
   "packageFolders": {
@@ -864,7 +864,7 @@
           },
           "Microsoft.IdentityModel.Abstractions": {
             "target": "Package",
-            "version": "[7.0.0, )"
+            "version": "[7.3.1, )"
           }
         },
         "imports": [
@@ -883,7 +883,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

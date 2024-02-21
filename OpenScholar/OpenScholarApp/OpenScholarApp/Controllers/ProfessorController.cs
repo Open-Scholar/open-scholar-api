@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.ProfessorDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
@@ -39,22 +37,24 @@ namespace OpenScholarApp.Controllers
             }
             catch (InternalServerErrorException ex)
             {
-                // Log the exception here.
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProfessorById(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetProfessorById()
         {
             try
             {
-                var response = await _professorService.GetProfessorByIdAsync(id);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _professorService.GetProfessorAsync(userId);
                 return Response(response);
-            }
-            catch(ProfessorNotFoundException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
@@ -62,7 +62,7 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("/api/allprofessors")]
         public async Task<IActionResult> GetAllProfessors()
         {
             try
@@ -76,17 +76,20 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProfessor(int id, [FromBody] UpdateProfessorDto updatedProfessorDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateProfessor([FromBody] UpdateProfessorDto updatedProfessorDto)
         {
             try
             {
-                var response = await _professorService.UpdateProfessorAsync(id, updatedProfessorDto);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _professorService.UpdateProfessorAsync(userId, updatedProfessorDto);
                 return Response(response);
-            }
-            catch(ProfessorNotFoundException ex)
-            {
-                return NotFound($"There is no such Professor to update {ex.Message}");
             }
             catch (InternalServerErrorException ex)
             {

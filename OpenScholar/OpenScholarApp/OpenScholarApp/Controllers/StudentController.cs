@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
@@ -14,11 +12,9 @@ namespace OpenScholarApp.Controllers
     public class StudentController : BaseController
     {
         private readonly IStudentService _studentService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public StudentController(IStudentService studentService, UserManager<ApplicationUser> userManager)
+        public StudentController(IStudentService studentService)
         {
-            _userManager = userManager;
             _studentService = studentService;
         }
 
@@ -34,7 +30,7 @@ namespace OpenScholarApp.Controllers
                     return BadRequest("User not found.");
                 }
 
-                var response = await _studentService.CreateStudentAsync(studentDto);
+                var response = await _studentService.CreateStudentAsync(studentDto, userId);
                 return Response(response); 
             }
             catch (InternalServerErrorException ex)
@@ -43,12 +39,19 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentById(int id)
+        [HttpGet()]
+        public async Task<IActionResult> GetStudent()
         {
             try
             {
-                var response = await _studentService.GetStudentByIdAsync(id);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                var response = await _studentService.GetStudent(userId);
                 return Response(response);
             }
             catch (InternalServerErrorException ex)
@@ -57,7 +60,7 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("/api/allstudents")]
         public async Task<IActionResult> GetAllStudents()
         {
             try
@@ -71,12 +74,18 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStudent(int id, [FromBody] UpdateStudentDto updatedStudentDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDto updatedStudentDto)
         {
             try
             {
-                var response = await _studentService.UpdateStudentAsync(id, updatedStudentDto);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User not found.");
+                }
+                var response = await _studentService.UpdateStudentAsync(userId, updatedStudentDto);
                 return Response(response); 
             }
             catch (InternalServerErrorException ex)
