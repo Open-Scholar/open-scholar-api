@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenScholarApp.Dtos.TopicCommentDto;
-using OpenScholarApp.Services.Implementations;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
 using OpenScholarApp.Shared.CustomExceptions.TopicExceptions;
@@ -29,6 +28,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
+
                 var response = await _topicCommentService.CreateTopicCommentAsync(topicCommentDto, userId);
                 return Response(response);
             }
@@ -57,11 +57,14 @@ namespace OpenScholarApp.Controllers
         {
             try
             {
-                // Ensure pageNumber and pageSize are positive values
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                    return BadRequest("User Not found");
+
                 pageNumber = Math.Max(pageNumber, 1);
                 pageSize = Math.Max(pageSize, 1);
 
-                var response = await _topicCommentService.GetAllTopicCommentsPagedAsync(pageNumber, pageSize, topicId);
+                var response = await _topicCommentService.GetAllTopicCommentsPagedAsync(userId, pageNumber, pageSize, topicId);
                 return Ok(response);
             }
             catch (InternalServerErrorException e)
@@ -78,6 +81,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
+
                 var response = await _topicCommentService.GetTopicCommentByIdAsync(id, userId);
                 return Response(response);
             }
@@ -95,6 +99,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
+
                 var response = await _topicCommentService.UpdateTopicCommentAsync(id, userId, updatedTopicCommentDto);
                 return Response(response);
             }
@@ -112,12 +117,9 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
+
                 var response = await _topicCommentService.DeleteTopicCommentAsync(id, userId);
                 return Response(response);
-            }
-            catch (TopicDataException e)
-            {
-                return BadRequest(e.Message);
             }
             catch (InternalServerErrorException ex)
             {

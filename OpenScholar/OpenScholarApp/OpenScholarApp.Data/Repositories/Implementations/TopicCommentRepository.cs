@@ -25,10 +25,17 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             return await _openScholarDbContext.TopicComments.Where(tc => tc.TopicId == topicId).ToListAsync();
         }
 
+        public async Task<TopicComment> GetByIdWithLikesAsync(int topicCommentId)
+        {
+            return await _openScholarDbContext.TopicComments.Include(l => l.Likes).FirstOrDefaultAsync(tc => tc.Id == topicCommentId);
+        }
+
         public async Task<(IEnumerable<TopicComment> Items, int TotalCount)> GetAllTopicCommentsByTopicIdPagedAsync(int topicId, int pageNumber, int pageSize)
         {
             var query = _openScholarDbContext.TopicComments
                 .Where(tc => tc.TopicId == topicId)
+                .Include(a => a.Likes)
+                .Include(u => u.User)
                 .AsQueryable();
 
             var totalCount = await query.CountAsync();

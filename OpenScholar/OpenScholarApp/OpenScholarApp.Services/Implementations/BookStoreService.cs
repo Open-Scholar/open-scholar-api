@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.BookStoreDto;
-using OpenScholarApp.Dtos.StudentDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.BookStoreExceptions;
 using OpenScholarApp.Shared.Responses;
@@ -33,7 +31,7 @@ namespace OpenScholarApp.Services.Implementations
                 var bookStore = _mapper.Map<BookStore>(addDto);
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null)
-                    throw new BookStoreDataException("BookStore not found");
+                    return new Response("User not found!");
 
                 if (user.IsProfileCreated == true)
                     return new Response<AddBookStoreDto>("Account already exists");
@@ -60,11 +58,8 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingBookStore = await _bookStoreRepository.GetByIdInt(id);
-
                 if (existingBookStore == null)
-                {
                     return new Response() { Errors = new List<string> { $"Book Store with Id {id} not found" }, IsSuccessfull = false };
-                }
 
                 await _bookStoreRepository.RemoveEntirely(existingBookStore);
                 return Response.Success;
@@ -95,9 +90,7 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var bookStore = await _bookStoreRepository.GetByUserIdAsync(userId);
                 if (bookStore == null)
-                {
                     return new Response<BookStoreDto>() { Errors = new List<string> { $"Bookstore account not found" }, IsSuccessfull = false };
-                }
 
                 var bookStoreDto = _mapper.Map<BookStoreDto>(bookStore);
                 return new Response<BookStoreDto>() { IsSuccessfull = true, Result = bookStoreDto };
@@ -113,13 +106,10 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingBookStore = await _bookStoreRepository.GetByUserIdAsync(userId);
-
                 if (existingBookStore == null)
-                {
                     return new Response("BookStore not found!");
-                }
-                var updatedProfessor = _mapper.Map(updateBookStoreDto, existingBookStore);
 
+                var updatedProfessor = _mapper.Map(updateBookStoreDto, existingBookStore);
                 var result = _bookStoreRepository.Update(updatedProfessor);
                 return new Response<UpdateBookStoreDto> { IsSuccessfull = true, Result = updateBookStoreDto };
             }

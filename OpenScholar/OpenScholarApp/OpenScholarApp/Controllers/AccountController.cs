@@ -153,7 +153,7 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpPost("Change-password")]
+        [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
         {
             try
@@ -164,7 +164,7 @@ namespace OpenScholarApp.Controllers
                     return BadRequest("User Id not found!");
                 }
                 var response = await _membershipService.ChangePassword(userId, model);
-                return Ok(response);
+                return Response(response);
             }
             catch (InternalServerErrorException e)
             {

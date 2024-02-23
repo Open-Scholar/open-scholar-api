@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using OpenScholarApp.Dtos.BookStoreDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
-using OpenScholarApp.Shared.CustomExceptions.BookStoreExceptions;
 using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
@@ -29,9 +27,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _bookStoreService.CreateBookStoreAsync(bookStoreDto, userId);
                 return Response(response);
@@ -50,9 +46,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _bookStoreService.GetBookStoreAsync(userId);
                 return Response(response);
@@ -84,9 +78,8 @@ namespace OpenScholarApp.Controllers
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
-                {
                     return BadRequest("User Not Found");
-                }
+
                 var response = await _bookStoreService.UpdateBookStoreAsync(userId, updatedBookStoreDto);
                 return Response(response);
             }

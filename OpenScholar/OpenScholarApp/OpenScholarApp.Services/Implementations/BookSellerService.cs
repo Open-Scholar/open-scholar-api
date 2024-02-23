@@ -33,7 +33,7 @@ namespace OpenScholarApp.Services.Implementations
                 var user = await _userManager.FindByIdAsync(userId);
 
                 if (user == null)
-                    throw new BookSellerDataException("BookSeller not found");
+                    return new Response("BookSeller not found!");
 
                 if (user.IsProfileCreated == true)
                     return new Response<AddBookSellerDto>("Account already exists");
@@ -60,11 +60,8 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingBookSeller = await _bookSellerRepository.GetByIdInt(id);
-
                 if (existingBookSeller == null)
-                {
                     return new Response() { Errors = new List<string> { $"Book Seller with Id {id} not found" }, IsSuccessfull = false };
-                }
 
                 await _bookSellerRepository.RemoveEntirely(existingBookSeller);
                 return Response.Success;
@@ -95,9 +92,7 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var bookSeller = await _bookSellerRepository.GetByUserIdAsync(userId);
                 if (bookSeller == null)
-                {
                     return new Response<BookSellerDto>() { Errors = new List<string> { $"Book Seller account not found" }, IsSuccessfull = false };
-                }
 
                 var bookSellerDto = _mapper.Map<BookSellerDto>(bookSeller);
                 return new Response<BookSellerDto>() { IsSuccessfull = true, Result = bookSellerDto };
@@ -113,14 +108,10 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingBookSeller = await _bookSellerRepository.GetByUserIdAsync(userId);
-
                 if (existingBookSeller == null)
-                {
                     return new Response("Account not found!");
-                }
 
                 var updatedBookSeller = _mapper.Map(updateBookSellerDto, existingBookSeller);
-
                 await _bookSellerRepository.Update(updatedBookSeller);
                 return new Response<UpdateBookSellerDto> { IsSuccessfull = true, Result = updateBookSellerDto };
             }

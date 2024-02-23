@@ -17,7 +17,6 @@ namespace OpenScholarApp.Services.Implementations
         private readonly IUniversityRepository _universityRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
-        
 
         public StudentService(IStudentRepository studentRepository, IFacultyRepository facultyRepository, IUniversityRepository universityRepository, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
@@ -44,25 +43,22 @@ namespace OpenScholarApp.Services.Implementations
 
                 if(user.AccountType != AccountType.Student)
                     return new Response<AddStudentDto>("You can only create Student account type");
+
                 student.User = user;
                 student.ApplicationUserId = userId;
                 
 
                 var faculty = await _facultyRepository.GetByIdInt(studentDto.FacultyId);
-
                 if (faculty == null)
-                {
                     return new Response<AddStudentDto>("Faculty Not Found!");
-                }
 
                 student.FacultyId = studentDto.FacultyId;
                 student.Faculty = faculty;
 
                 var university = await _universityRepository.GetByIdInt(studentDto.UniversityId);
                 if (university == null)
-                {
                     return new Response<AddStudentDto>("University Not Found!");
-                }
+
                 student.UniversityId = studentDto.UniversityId;
                 student.University = university;
 
@@ -83,14 +79,10 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingStudent = await _studentRepository.GetByUserIdAsync(userId);
-
                 if (existingStudent == null)
-                {
                     return new Response<UpdateStudentDto>("Student not found.");
-                }
 
                 var updatedStudent = _mapper.Map(updatedStudentDto, existingStudent);
-
                 var result = _studentRepository.Update(updatedStudent);
                 return new Response<UpdateStudentDto> {IsSuccessfull = true, Result = updatedStudentDto };
             }
@@ -105,11 +97,8 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingStudent = await _studentRepository.GetByIdInt(id);
-
                 if (existingStudent == null)
-                {
                     return new Response() { Errors = new List<string> { $"Student with Id {id} not found" }, IsSuccessfull = false };
-                }
 
                 await _studentRepository.RemoveEntirely(existingStudent);
                 return Response.Success;
@@ -126,9 +115,7 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var student = await _studentRepository.GetByUserIdAsync(userId);
                 if (student == null)
-                {
                     return new Response<StudentDto>() { Errors = new List<string> { $"Student not found" }, IsSuccessfull = false };
-                }
 
                 var studentDto = _mapper.Map<StudentDto>(student);
                 return new Response<StudentDto>() { IsSuccessfull = true, Result = studentDto };

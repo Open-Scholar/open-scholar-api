@@ -14,21 +14,43 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             _openScholarDbContext = context;
         }
 
-        public async Task<List<Topic>> GetAllWithUserAsync()
+        public async Task<List<Topic>> GetAllWithUserAndLikesAsync()
         {
-            return await _openScholarDbContext.Topics.Include(t => t.User).ToListAsync();
+            return await _openScholarDbContext.Topics.Include(t => t.User).Include(l => l.Likes).ToListAsync();
         }
 
-        public async Task<List<Topic>> GetAllWithUserAndFiltersAsync(int? facultyId = null, int pageNumber = 1, int pageSize = 10)
+        public async Task<(IEnumerable<Topic> Items, int TotalCount)> GetAllWithUserAndFiltersAsync(int? facultyId = null, int? universityId = null, bool? isMostPopular = false, int pageNumber = 1, int pageSize = 10)
         {
-            var query = _openScholarDbContext.Topics.AsQueryable();
+            var query = _openScholarDbContext.Topics.Include(t => t.User)
+                                                    .Include(q => q.Likes)
+                                                    .Include(c => c.Comments)/*.Select(c => c.Id)*/
+                                                    .AsQueryable();
+
+            var totalCount = await query.CountAsync();
 
             if (facultyId.HasValue)
                 query = query.Where(t => t.FacultyId == facultyId.Value);
 
-            query = query.Include(t => t.User);
+            if (universityId.HasValue)
+                query = query.Where(t => t.Faculty.UniversityId == universityId.Value);
+
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
-            return await query.ToListAsync();
+            query = query.OrderByDescending(t => t.CreatedDate);
+
+            //query.Include(t => t.User);
+
+            if (isMostPopular.HasValue && isMostPopular.Value == true)
+                query = query.OrderByDescending(t => t.Likes.Count());
+
+            var items = await query.ToListAsync();
+            //var items = await query.
+            return (items, totalCount);
+        }
+
+        public async Task<Topic> GetByIdWithLikesAsync(int id)
+        {
+            var result = await _openScholarDbContext.Topics.Include(l => l.Likes).FirstOrDefaultAsync(t => t.Id == id);
+            return result;
         }
     }
 }

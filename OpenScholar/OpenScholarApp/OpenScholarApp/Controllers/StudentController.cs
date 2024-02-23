@@ -26,9 +26,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _studentService.CreateStudentAsync(studentDto, userId);
                 return Response(response); 
@@ -47,9 +45,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _studentService.GetStudent(userId);
                 return Response(response);
@@ -82,9 +78,8 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
+
                 var response = await _studentService.UpdateStudentAsync(userId, updatedStudentDto);
                 return Response(response); 
             }

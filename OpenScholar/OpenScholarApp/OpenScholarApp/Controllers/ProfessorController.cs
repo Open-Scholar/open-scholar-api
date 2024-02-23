@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using OpenScholarApp.Dtos.ProfessorDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
-using OpenScholarApp.Shared.CustomExceptions.ProfessorExceptions;
 using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
@@ -28,9 +27,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _professorService.CreateProfessorAsync(professorDto, userId);
                 return Response(response);
@@ -49,9 +46,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _professorService.GetProfessorAsync(userId);
                 return Response(response);
@@ -84,9 +79,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _professorService.UpdateProfessorAsync(userId, updatedProfessorDto);
                 return Response(response);

@@ -6,5 +6,6 @@ namespace OpenScholarApp.Data.Repositories.Interfaces
     {
         Task<List<TopicComment>> GetAllWithUserAndTopicAsync();
         Task<(IEnumerable<TopicComment> Items, int TotalCount)> GetAllTopicCommentsByTopicIdPagedAsync(int topicId, int pageNumber, int pageSize);
+        Task<TopicComment> GetByIdWithLikesAsync(int topicCommentId);
     }
 }

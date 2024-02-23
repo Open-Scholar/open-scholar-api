@@ -19,12 +19,9 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             return await _context.TopicLikes.Include(s => s.User).Where(x => x.TopicId == topicId).ToListAsync();
         }
 
-        public async Task<TopicLike> GetByIdWithUserAsync(int id, string userId)
+        public async Task<TopicLike> GetByIdWithUserAsync(int topicId, string userId)
         {
-            var result = await _context.TopicLikes.Include(tl => tl.User)
-                                                   .Include(tl => tl.Topic)
-                                                   .FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
-            return result;
+            return await _context.TopicLikes.FirstOrDefaultAsync(tl => tl.TopicId == topicId && tl.UserId == userId);
         }
     }
 }

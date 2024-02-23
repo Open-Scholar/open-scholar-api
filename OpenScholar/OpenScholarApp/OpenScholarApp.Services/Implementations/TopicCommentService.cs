@@ -4,7 +4,6 @@ using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.Shared;
 using OpenScholarApp.Dtos.TopicCommentDto;
-using OpenScholarApp.Dtos.TopicDto;
 using OpenScholarApp.Services.Helpers.Interaces;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.TopicCommentExceptions;
@@ -23,8 +22,8 @@ namespace OpenScholarApp.Services.Implementations
 
         public TopicCommentService(ITopicCommentRepository topicCommentRepository,
                                    IUserHelperService userHelperService,
-                                   ITopicRepository topicRepository, 
-                                   UserManager<ApplicationUser> userManager, 
+                                   ITopicRepository topicRepository,
+                                   UserManager<ApplicationUser> userManager,
                                    IMapper mapper)
         {
             _userHelperService = userHelperService;
@@ -67,12 +66,10 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingUser = await _userManager.FindByIdAsync(userId);
-
                 if (existingUser == null)
                     return new Response() { Errors = new List<string> { $"User with Id {id} not found" }, IsSuccessfull = false };
 
                 var topicComment = await _topicCommentRepository.GetByIdInt(id);
-
                 if (topicComment == null)
                     return new Response() { Errors = new List<string> { $"Topic Comment with Id {id} not found" }, IsSuccessfull = false };
 
@@ -109,21 +106,26 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<PagedResultDto<TopicCommentDto>> GetAllTopicCommentsPagedAsync(int pageNumber, int pageSize, int topicId)
+        public async Task<PagedResultDto<TopicCommentDto>> GetAllTopicCommentsPagedAsync(string userId, int pageNumber, int pageSize, int topicId)
         {
             var (items, totalCount) = await _topicCommentRepository.GetAllTopicCommentsByTopicIdPagedAsync(topicId, pageNumber, pageSize);
-            var dtos = _mapper.Map<List<TopicCommentDto>>(items);
-            foreach (var topicComment in dtos)
-            {
-                var user = await _userManager.FindByIdAsync(topicComment.UserId);
-                var userName = await _userHelperService.GetUsername(user);
-                topicComment.UserName = userName;
-            }
+            var topicCommentDtos = new List<TopicCommentDto>();
 
+            foreach (var topicComment in items)
+            {
+                var topicCommentDto = new TopicCommentDto();
+                var userName = await _userHelperService.GetUsername(topicComment.User);
+                topicCommentDto.Id = topicComment.Id;
+                topicCommentDto.UserName = userName;
+                topicCommentDto.IsLikedByUser = topicComment.Likes.Any(like => like.UserId == userId);
+                topicCommentDto.UserId = topicComment.User.Id;
+                topicCommentDto.TopicCommentLikeCount = topicComment.Likes.Count();
+                topicCommentDtos.Add(topicCommentDto);
+            }
             return new PagedResultDto<TopicCommentDto>
             {
-                Items = dtos,
-                TotalItems = dtos.Count(),
+                Items = topicCommentDtos,
+                TotalItems = totalCount,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
@@ -138,12 +140,14 @@ namespace OpenScholarApp.Services.Implementations
                 if (existingUser == null)
                     return new Response<TopicCommentDto>() { Errors = new List<string> { $"User not found" }, IsSuccessfull = false };
 
-                var topicComment = await _topicCommentRepository.GetByIdInt(id);
+                var topicComment = await _topicCommentRepository.GetByIdWithLikesAsync(id);
                 if (topicComment == null)
                     return new Response<TopicCommentDto>("Topic Comment not found!");
 
                 var topicCommentDto = _mapper.Map<TopicCommentDto>(topicComment);
                 topicCommentDto.UserName = await _userHelperService.GetUsername(topicComment.User);
+                topicCommentDto.TopicCommentLikeCount = topicComment.Likes.Count();
+                topicCommentDto.IsLikedByUser = topicComment.Likes.Any(t => t.UserId == userId);
                 return new Response<TopicCommentDto>() { IsSuccessfull = true, Result = topicCommentDto };
             }
             catch (TopicCommentDataException ex)
@@ -158,26 +162,18 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var existingUser = await _userManager.FindByIdAsync(userId);
                 if (existingUser == null)
-                {
                     return new Response<UpdateTopicCommentDto> { Errors = new List<string> { $"User with Id {userId} not found" }, IsSuccessfull = false };
-                }
 
                 var existingTopicComment = await _topicCommentRepository.GetByIdInt(id);
 
                 if (existingTopicComment == null)
-                {
                     return new Response<UpdateTopicCommentDto> { Errors = new List<string> { $"Topic Comment with ID {id} not found." }, IsSuccessfull = false };
-                }
 
                 if (existingTopicComment.User.Id != userId)
-                {
                     return new Response<UpdateTopicCommentDto> { Errors = new List<string> { $"You don't have permissions to update this topic" }, IsSuccessfull = false };
-                }
 
-                //var updatedTopicComment = _mapper.Map<TopicComment>(updatedTopicDto);
                 var updatedTopicComment = _mapper.Map(updatedTopicCommentDto, existingTopicComment);
                 await _topicCommentRepository.Update(updatedTopicComment);
-
                 return new Response<UpdateTopicCommentDto> { IsSuccessfull = true, Result = updatedTopicCommentDto };
             }
             catch (TopicDataException ex)

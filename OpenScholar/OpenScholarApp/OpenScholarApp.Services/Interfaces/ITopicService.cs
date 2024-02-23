@@ -11,7 +11,6 @@ namespace OpenScholarApp.Services.Interfaces
         Task<Response> DeleteTopicAsync(int id, string userId);
         Task<Response<TopicDto>> GetTopicByIdAsync(int id, string UserId);
         Task<Response<List<TopicDto>>> GetAllTopicsAsync();
-        Task<PagedResultDto<TopicDto>> GetAllTopicsPagedAsync(int pageNumber, int pageSize);
-        Task<Response<List<TopicDto>>> GetAllTopicsFilteredAsync(int? facultyId, int pageNumber, int pageSize);
+        Task<Response<PagedResultDto<TopicDto>>> GetAllTopicsFilteredAsync(string userId, int? facultyId, int? universityId, bool? isMostPopular, int pageNumber, int pageSize);
     }
 }

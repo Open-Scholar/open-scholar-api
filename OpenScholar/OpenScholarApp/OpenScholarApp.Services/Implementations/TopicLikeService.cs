@@ -11,7 +11,6 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class TopicLikeService : ITopicLikeService
     {
-
         private readonly ITopicLikeRepository _topicLikeRepository;
         private readonly ITopicRepository _topicRepository;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -82,6 +81,7 @@ namespace OpenScholarApp.Services.Implementations
                 var topicLike = await _topicLikeRepository.GetByIdInt(id);
                 if (topicLike == null) 
                     return new Response<TopicLikeDto>("Topic Like Like not found!");
+
                 var topicDto = _mapper.Map<TopicLikeDto>(topicLike);
                 return new Response<TopicLikeDto>() { IsSuccessfull = true, Result = topicDto};
             }

@@ -18,16 +18,16 @@ namespace OpenScholarApp.Data.Repositories.Implementations
         {
             try
             {
-            var query = _openScholarDbContext.Set<T>().AsQueryable();
+                var query = _openScholarDbContext.Set<T>().AsQueryable();
 
-            var totalCount = await query.CountAsync();
+                var totalCount = await query.CountAsync();
 
-            var items = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                var items = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
 
-            return (items, totalCount);
+                return (items, totalCount);
             }
             catch (Exception)
             {
@@ -40,7 +40,7 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             try
             {
                 _openScholarDbContext.Set<T>().Add(entity);
-               await _openScholarDbContext.SaveChangesAsync();
+                await _openScholarDbContext.SaveChangesAsync();
             }
             catch (Exception)
             {

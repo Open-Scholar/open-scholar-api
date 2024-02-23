@@ -102,10 +102,6 @@ namespace OpenScholarApp.Mappers.MapperConfig
             CreateMap<TopicCommentLike, AddRemoveTopicCommentLikeDto>().ReverseMap();
             //DocumentFile mappings
             CreateMap<DocumentFile, DocumentFileDto>().ReverseMap();
-
-            //PdfFileDto
-            //CreateMap<DocFile, DocFileDto>().ReverseMap();
-
         }
     }
 }

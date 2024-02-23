@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenScholarApp.Domain.Enums;
+﻿using OpenScholarApp.Domain.Enums;
 
 namespace OpenScholarApp.Services.UserServices.Models
 {

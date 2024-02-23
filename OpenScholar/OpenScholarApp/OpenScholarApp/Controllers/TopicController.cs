@@ -28,6 +28,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
+
                 var response = await _topicService.CreateTopicAsync(topicDto, userId);
                 return Response(response);
             }
@@ -51,32 +52,22 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        //[HttpGet("paged")]
-        //public async Task<IActionResult> GetAllPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    try
-        //    {
-        //        // Ensure pageNumber and pageSize are positive values
-        //        pageNumber = Math.Max(pageNumber, 1);
-        //        pageSize = Math.Max(pageSize, 1);
-
-        //        var response = await _topicService.GetAllTopicsPagedAsync(pageNumber, pageSize);
-        //        return Ok(response);
-        //    }
-        //    catch (InternalServerErrorException e)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-        //    }
-        //}
-
-        [HttpGet("paged")]
-        public async Task<IActionResult> GetAllPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10,[FromQuery] int? facultyId = null)
+        [HttpGet("paged-with-filters")]
+        public async Task<IActionResult> GetAllPaged2([FromQuery] int pageNumber = 1,
+                                                      [FromQuery] int pageSize = 10,
+                                                      [FromQuery] int? facultyId = null,
+                                                      [FromQuery] int? universityId = null,
+                                                      [FromQuery] bool? isMostPopular = false)
         {
             try
             {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                    return BadRequest("User Not found!");
+
                 pageNumber = Math.Max(pageNumber, 1);
                 pageSize = Math.Max(pageSize, 1);
-                var response = await _topicService.GetAllTopicsFilteredAsync(facultyId, pageNumber, pageSize);
+                var response = await _topicService.GetAllTopicsFilteredAsync(userId, facultyId, universityId, isMostPopular, pageNumber, pageSize);
                 return Ok(response);
             }
             catch (InternalServerErrorException e)
@@ -93,6 +84,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
+
                 var response = await _topicService.GetTopicByIdAsync(id, userId);
                 return Response(response);
             }
@@ -110,6 +102,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
+
                 var response = await _topicService.UpdateTopicAsync(id, userId, updatedTopicDto);
                 return Response(response);
             }
@@ -127,12 +120,9 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
+
                 var response = await _topicService.DeleteTopicAsync(id, userId);
                 return Response(response);
-            }
-            catch (TopicDataException e)
-            {
-                return BadRequest(e.Message);
             }
             catch (InternalServerErrorException ex)
             {

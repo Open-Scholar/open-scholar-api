@@ -30,19 +30,13 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var user = await _userManager.FindByIdAsync(userId);
-
-                if (user == null /*|| user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
-                {
+                if (user == null)
                     return new Response("You dont have authorization to add new Faculties");
-                }
 
                 var universityExists = await _universityRepository.GetByIdInt(facultyDto.UniversityId);
                 if (universityExists == null)
-                {
                     return new Response("The specified university does not exist.");
-                }
 
-                //var faculty = _mapper.Map<AddFacultyDto>(facultyDto);
                 var faculty = _mapper.Map<Faculty>(facultyDto);
                 await _repository.Add(faculty);
                 return new Response<AddFacultyDto> { IsSuccessfull = true, Result = facultyDto };
@@ -58,17 +52,12 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var user = await _userManager.FindByIdAsync(userId);
-
-                if (user == null /*&& user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
-                {
+                if (user == null)
                     return new Response("You dont have authorization to add new Faculties");
-                }
 
                 var faculty = await _repository.GetByIdInt(id);
                 if (faculty == null)
-                {
                     return new Response("Faculty not found, cannot delete!");
-                }
 
                 var response = _repository.RemoveEntirely(faculty);
                 return new Response { IsSuccessfull = true, };
@@ -110,17 +99,12 @@ namespace OpenScholarApp.Services.Implementations
         public async Task<Response> UpdateFacultyAsync(string userId, int id, UpdateFacultyDto updateFacultyDto)
         {
             var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null /*&& user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
-            {
+            if (user == null)
                 return new Response("You dont have authorization to update Faculty");
-            }
 
             var faculty = await _repository.GetByIdInt(id);
             if (faculty == null)
-            {
-                return new Response("Faculty not found, cannot delete!");
-            }
+                return new Response("Faculty not found, cannot update!");
 
             var updatedFaculty = _mapper.Map(updateFacultyDto, faculty);
             await _repository.Update(updatedFaculty);

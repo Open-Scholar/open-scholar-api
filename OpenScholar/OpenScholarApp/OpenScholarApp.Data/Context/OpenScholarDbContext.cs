@@ -39,7 +39,7 @@ namespace OpenScholarApp.Data.Context
             base.OnModelCreating(modelBuilder);
 
             #region AccountManagement
-            //ACCONUT SECTION
+            
             modelBuilder.Entity<ApplicationUser>(entity =>
             {
                 entity.Property(e => e.AccountType)
@@ -226,7 +226,6 @@ namespace OpenScholarApp.Data.Context
             #endregion
 
             #region ItemsManagement
-            //ITEMS SECTION
 
             modelBuilder.Entity<University>(entity =>
             {
@@ -250,7 +249,6 @@ namespace OpenScholarApp.Data.Context
                       .HasMaxLength(255);
             });
 
-            // Configure Topic
             modelBuilder.Entity<Topic>(entity =>
             {
                 entity.HasKey(t => t.Id);

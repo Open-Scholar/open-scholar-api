@@ -3,7 +3,6 @@ using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Services.Helpers.Interaces;
-using System.Data.Entity;
 
 namespace OpenScholarApp.Services.Helpers.Implementations
 {
@@ -33,11 +32,11 @@ namespace OpenScholarApp.Services.Helpers.Implementations
 
         public async Task<string> GetUsername(ApplicationUser user)
         {
-            //var allusers = await _userRepository.GetAllUsersWithDetails();
             if (user != null)
             {
                 if (user.AccountType == AccountType.Student)
                 {
+                    //var student = user.Students?.FirstOrDefault(i => i.User.Id == user.Id);
                     var student = await _studentRepository.GetByUserIdAsync(user.Id);
                     if (student == null)
                         return "/";
@@ -47,6 +46,7 @@ namespace OpenScholarApp.Services.Helpers.Implementations
 
                 if (user.AccountType == AccountType.Professor)
                 {
+                    //var professor = user.Professors?.FirstOrDefault(i => i.User.Id == user.Id);
                     var professor = await _professorRepository.GetByUserIdAsync(user.Id);
                     if (professor == null)
                         return "/";
@@ -56,6 +56,7 @@ namespace OpenScholarApp.Services.Helpers.Implementations
 
                 if (user.AccountType == AccountType.BookSeller)
                 {
+                    //var bookSeller = user.BookSellers?.FirstOrDefault(i => i.User.Id == user.Id);
                     var bookSeller = await _bookSellerRepository.GetByUserIdAsync(user.Id);
                     if (bookSeller == null)
                         return "/";
@@ -65,6 +66,7 @@ namespace OpenScholarApp.Services.Helpers.Implementations
 
                 if (user.AccountType == AccountType.BookStore)
                 {
+                    //var bookStore = user.BookStores?.FirstOrDefault(i => i.User.Id == user.Id);
                     var bookStore = await _bookStoreRepository.GetByUserIdAsync(user.Id);
                     if (bookStore == null)
                         return "/";
@@ -72,7 +74,7 @@ namespace OpenScholarApp.Services.Helpers.Implementations
                     return result;
                 }
             }
-            return new string("Annonymus");
+            return "Annonymus";
         }
     }
 }

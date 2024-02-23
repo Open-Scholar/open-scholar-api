@@ -18,6 +18,7 @@ namespace OpenScholarApp.Controllers
         {
             _topicCommentLikeService = topicCommentLikeService;
         }
+
         [HttpPost]
         public async Task<IActionResult> AddRemoveTopicCommentLike([FromBody] AddRemoveTopicCommentLikeDto topicCommentDto)
         {
@@ -34,7 +35,6 @@ namespace OpenScholarApp.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
-
         }
 
         [HttpGet]

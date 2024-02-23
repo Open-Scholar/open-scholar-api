@@ -67,12 +67,10 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingUser = await _userManager.FindByIdAsync(userId);
-
                 if (existingUser == null)
                     return new Response() { Errors = new List<string> { $"User with Id {id} not found" }, IsSuccessfull = false };
 
                 var topic = await _topicRepository.GetByIdInt(id);
-
                 if (topic == null)
                     return new Response() { Errors = new List<string> { $"Topic with Id {id} not found" }, IsSuccessfull = false };
 
@@ -92,7 +90,7 @@ namespace OpenScholarApp.Services.Implementations
         {
             try
             {
-                var topics = await _topicRepository.GetAllWithUserAsync();
+                var topics = await _topicRepository.GetAllWithUserAndLikesAsync();
                 var topicDtos = new List<TopicDto>();
                 foreach (var topic in topics)
                 {
@@ -109,46 +107,42 @@ namespace OpenScholarApp.Services.Implementations
             }
         }
 
-        public async Task<Response<List<TopicDto>>> GetAllTopicsFilteredAsync(int? facultyId, int pageNumber, int pageSize)
+        public async Task<Response<PagedResultDto<TopicDto>>> GetAllTopicsFilteredAsync(string userId,
+                                                                                        int? facultyId,
+                                                                                        int? universityId,
+                                                                                        bool? isMostPopular,
+                                                                                        int pageNumber,
+                                                                                        int pageSize)
         {
             try
             {
-                var topics = await _topicRepository.GetAllWithUserAndFiltersAsync(facultyId, pageNumber, pageSize);
+                var (topics, totalCount) = await _topicRepository.GetAllWithUserAndFiltersAsync(facultyId, universityId, isMostPopular, pageNumber, pageSize);
                 var topicDtos = new List<TopicDto>();
                 foreach (var topic in topics)
                 {
                     var topicDto = _mapper.Map<TopicDto>(topic);
                     var userName = await _userHelperService.GetUsername(topic.User);
                     topicDto.UserName = userName;
+                    topicDto.IsLikedByUser = topic.Likes.Any(like => like.UserId == userId);
+                    topicDto.TopicLikeCount = topic.Likes.Count;
+                    topicDto.TopicCommentCount = topic.Comments.Count;
                     topicDtos.Add(topicDto);
                 }
-                return new Response<List<TopicDto>>() { IsSuccessfull = true, Result = topicDtos };
+
+                var result = new PagedResultDto<TopicDto>
+                {
+                    Items = topicDtos,
+                    TotalItems = totalCount,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                };
+                return new Response<PagedResultDto<TopicDto>>() { IsSuccessfull = true, Result = result };
             }
             catch (TopicDataException ex)
             {
-                return new Response<List<TopicDto>>() { Errors = new List<string> { $"An error occurred: {ex.Message}" }, IsSuccessfull = false };
+                return new Response<PagedResultDto<TopicDto>>() { Errors = new List<string> { $"An error occurred: {ex.Message}" }, IsSuccessfull = false };
             }
-        }
-
-        public async Task<PagedResultDto<TopicDto>> GetAllTopicsPagedAsync(int pageNumber, int pageSize)
-        {
-            var (items, totalCount) = await _topicRepository.GetAllPagedAsync(pageNumber, pageSize);
-            var dtos = _mapper.Map<List<TopicDto>>(items);
-            foreach (var topic in dtos)
-            {
-                var user = await _userManager.FindByIdAsync(topic.UserId);
-                var userName = await _userHelperService.GetUsername(user);
-                topic.UserName = userName;
-            }
-
-            return new PagedResultDto<TopicDto>
-            {
-                Items = dtos,
-                TotalItems = dtos.Count(),
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
-            };
         }
 
         public async Task<Response<TopicDto>> GetTopicByIdAsync(int id, string userId)
@@ -159,11 +153,13 @@ namespace OpenScholarApp.Services.Implementations
                 if (existingUser == null)
                     return new Response<TopicDto>() { Errors = new List<string> { $"User with Id {id} not found" }, IsSuccessfull = false };
 
-                var topic = await _topicRepository.GetByIdInt(id);
+                var topic = await _topicRepository.GetByIdWithLikesAsync(id);
                 if (topic == null)
                     return new Response<TopicDto>() { Errors = new List<string> { $"Topic not found!" }, IsSuccessfull = false };
 
                 var topicDto = _mapper.Map<TopicDto>(topic);
+                topicDto.TopicLikeCount = topic.Likes.Count();
+                topicDto.IsLikedByUser = topic.Likes.Any(t => t.UserId == userId);
                 topicDto.UserName = await _userHelperService.GetUsername(topic.User);
                 return new Response<TopicDto>() { IsSuccessfull = true, Result = topicDto };
             }
@@ -189,9 +185,7 @@ namespace OpenScholarApp.Services.Implementations
                     return new Response<UpdateTopicDto> { Errors = new List<string> { $"You don't have permissions to update this topic" }, IsSuccessfull = false };
 
                 var updatedTopic = _mapper.Map(updatedTopicDto, existingTopic);
-                
                 var result = _topicRepository.Update(updatedTopic);
-
                 return new Response<UpdateTopicDto> { IsSuccessfull = true, Result = updatedTopicDto };
             }
             catch (TopicDataException ex)

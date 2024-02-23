@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using OpenScholarApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenScholarApp.Domain.Entities;
 
 namespace OpenScholarApp.Data.Repositories.Interfaces
 {

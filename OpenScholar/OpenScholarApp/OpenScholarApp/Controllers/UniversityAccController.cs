@@ -15,11 +15,9 @@ namespace OpenScholarApp.Controllers
     public class UniversityAccController : BaseController
     {
         private readonly IUniversityAccService _universityService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UniversityAccController(IUniversityAccService universityService, UserManager<ApplicationUser> userManager)
+        public UniversityAccController(IUniversityAccService universityService)
         {
-            _userManager = userManager;
             _universityService = universityService;
         }
 
@@ -29,11 +27,8 @@ namespace OpenScholarApp.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _universityService.CreateUniversityAsync(universityDto, userId);
                 return Response(response);

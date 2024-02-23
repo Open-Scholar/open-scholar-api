@@ -11,6 +11,6 @@ namespace OpenScholarApp.Services.Interfaces
         Task<Response> DeleteTopicCommentAsync(int id, string userId);
         Task<Response<TopicCommentDto>> GetTopicCommentByIdAsync(int id, string UserId);
         Task<Response<List<TopicCommentDto>>> GetAllTopicCommentsAsync();
-        Task <PagedResultDto<TopicCommentDto>>GetAllTopicCommentsPagedAsync(int pageNumber, int pageSize, int topicId);
+        Task <PagedResultDto<TopicCommentDto>>GetAllTopicCommentsPagedAsync(string userId, int pageNumber, int pageSize, int topicId);
     }
 }

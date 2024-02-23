@@ -2,7 +2,6 @@
 
 namespace OpenScholarApp.Data.Repositories.Interfaces
 {
-
     public interface IMembershipRepository : IBaseRepository<ApplicationUser>
     {
 

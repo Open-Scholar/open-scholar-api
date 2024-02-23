@@ -46,20 +46,17 @@ namespace OpenScholarApp.Services.Implementations
 
                 var faculty = await _facultyRepository.GetByIdInt(addDto.FacultyId);
                 if (faculty == null)
-                {
                     return new Response<AddProfessorDto>("Faculty not found while trying to add professor!");
-                }
+
                 professor.Faculty = faculty;
                 professor.FacultyId = addDto.FacultyId;
 
                 var university = await _universityRepository.GetByIdInt(addDto.UniversityId);
                 if (university == null)
-                {
                     return new Response<AddProfessorDto>("University not found while trying to add professor");
-                }
+
                 professor.University = university;
                 professor.universityId = addDto.UniversityId;
-
                 professor.User = user;
                 professor.ApplicationUserId = userId;
                 await _professorRepository.Add(professor);
@@ -79,11 +76,8 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingProfessor = await _professorRepository.GetByIdInt(id);
-
                 if (existingProfessor == null)
-                {
-                    return new Response() { Errors = new List<string> { $"Professor with Id {id} not found" }, IsSuccessfull = false };
-                }
+                    return new Response() { Errors = new List<string> { $"Professor with given id not found" }, IsSuccessfull = false };
 
                 await _professorRepository.RemoveEntirely(existingProfessor);
                 return Response.Success;
@@ -114,9 +108,7 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var professor = await _professorRepository.GetByUserIdAsync(userId);
                 if (professor == null)
-                {
                     return new Response<ProfessorDto>() { Errors = new List<string> { $"Professor account not found" }, IsSuccessfull = false };
-                }
 
                 var professorDto = _mapper.Map<ProfessorDto>(professor);
                 return new Response<ProfessorDto>() { IsSuccessfull = true, Result = professorDto };
@@ -132,11 +124,8 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingProfessor = await _professorRepository.GetByUserIdAsync(userId);
-
                 if (existingProfessor == null)
-                {
                     return new Response<UpdateProfessorDto>("Account not found!");
-                }
                 var updatedProfessor = _mapper.Map(updatedProfessorDto, existingProfessor);
 
                 var result = _professorRepository.Update(updatedProfessor);

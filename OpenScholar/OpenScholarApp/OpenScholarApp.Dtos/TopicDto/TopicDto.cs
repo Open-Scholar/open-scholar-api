@@ -12,6 +12,8 @@ namespace OpenScholarApp.Dtos.TopicDto
         public string UserId { get; set; }
         public DateTimeOffset? EditedAt { get; set; }
         public int FacultyId { get; set; }
-        public List<TopicComment>? Comments { get; set; }
+        public int TopicLikeCount { get; set; } = 0;
+        public int TopicCommentCount { get; set; } = 0;
+        public bool IsLikedByUser { get; set; } = false;
     }
 }

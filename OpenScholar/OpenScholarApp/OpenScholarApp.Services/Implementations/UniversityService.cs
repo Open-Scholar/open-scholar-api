@@ -4,7 +4,6 @@ using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Dtos.University;
 using OpenScholarApp.Services.Interfaces;
-using OpenScholarApp.Shared.CustomExceptions.StudentExceptions;
 using OpenScholarApp.Shared.CustomExceptions.UniversityExceptions;
 using OpenScholarApp.Shared.Responses;
 
@@ -12,7 +11,6 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class UniversityService : IUniversityService
     {
-
         private readonly IUniversityRepository _repository;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,11 +26,8 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var user = await _userManager.FindByIdAsync(userId);
-
-                if (user == null/* && user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
-                {
+                if (user == null)
                     return new Response("You dont have authorization to add new Faculties");
-                }
 
                 var university = _mapper.Map<University>(universityDto);
                 await _repository.Add(university);
@@ -49,11 +44,8 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var existingUniversity = await _repository.GetByIdInt(id);
-
                 if (existingUniversity == null)
-                {
                     return new Response() { Errors = new List<string> { $"University not found! not found" }, IsSuccessfull = false };
-                }
 
                 var response = _repository.RemoveEntirely(existingUniversity);
                 return Response.Success;
@@ -84,9 +76,7 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var university = await _repository.GetByIdInt(id);
                 if (university == null)
-                {
                     return new Response<UniversityDto>() { Errors = new List<string> { $"University not found" }, IsSuccessfull = false };
-                }
 
                 var universityDto = _mapper.Map<UniversityDto>(university);
                 return new Response<UniversityDto>() { IsSuccessfull = true, Result = universityDto };
@@ -102,21 +92,14 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var user = await _userManager.FindByIdAsync(userId);
-
                 if (user == null/* && user.AccountType != Domain.Enums.AccountType.SuperAdmin*/)
-                {
                     return new Response("You dont have authorization to add new Universities");
-                }
 
                 var existingUniversity = await _repository.GetByIdInt(id);
-
                 if (existingUniversity == null)
-                {
                     return new Response<UpdateUniversityDto>("University not found.");
-                }
 
                 var updatedUniversity = _mapper.Map(updateUniversityDto, existingUniversity);
-
                 var result = _repository.Update(updatedUniversity);
                 return new Response<UpdateUniversityDto> { IsSuccessfull = true, Result = updateUniversityDto };
             }

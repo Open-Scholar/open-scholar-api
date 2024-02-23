@@ -42,8 +42,6 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IFacultyRepository, FacultyRepository>();
             services.AddTransient<IUniversityRepository, UniversityRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
-            //services.AddTransient<IDocFileRepository, DocFileRepository>();
-            
         }
 
         public static void InjectServices(IServiceCollection services)
@@ -65,10 +63,6 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IUniversityService, UniversityService>();
             services.AddScoped<IBlobService, BlobService>();
             services.AddTransient<IUserHelperService, UserHelperService>();
-
-            //services.AddTransient<IDocFileService, DocFileService>();
-            //services.AddTransient<IDocFileService2, DocFileService2>();
-
         }
     }
 }

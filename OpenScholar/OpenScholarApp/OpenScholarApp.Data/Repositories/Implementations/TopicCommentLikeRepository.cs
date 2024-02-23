@@ -22,12 +22,10 @@ namespace OpenScholarApp.Data.Repositories.Implementations
                                                                 .ToListAsync();
         }
 
-        public async Task<TopicCommentLike> GetByIdWithUserAsync(int id, string userId)
+        public async Task<TopicCommentLike> GetByIdWithUserAsync(int topicCommentId, string userId)
         {
-            var result = await _openScholarDbContext.TopicCommentLikes.Include(tl => tl.User)
-                                            .Include(tl => tl.TopicComment)
-                                            .FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
-            return result;
+            return await _openScholarDbContext.TopicCommentLikes
+                                               .FirstOrDefaultAsync(tcl => tcl.TopicCommentId == topicCommentId && tcl.UserId == userId);
         }
     }
 }

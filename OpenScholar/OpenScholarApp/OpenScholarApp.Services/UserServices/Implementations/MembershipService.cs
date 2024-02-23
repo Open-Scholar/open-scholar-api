@@ -307,7 +307,7 @@ namespace OpenScholarApp.Services.UserServices.Implementations
                 if (!result.Succeeded)
                     return new Response("Operation unsuccessfull!");
 
-                return new Response("Password changed Successfully!");
+                return new Response {IsSuccessfull = true};
             }
             catch (UserDataException ex)
             {

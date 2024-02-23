@@ -27,9 +27,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _facultyService.CreateFacultyAsync(userId, facultyDto);
                 return Response(response);
@@ -76,9 +74,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _facultyService.UpdateFacultyAsync(userId, id, facultyDto);
                 return Response(response);
@@ -98,9 +94,7 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _facultyService.DeleteFacultyAsync(userId, id);
                 return Response(response);

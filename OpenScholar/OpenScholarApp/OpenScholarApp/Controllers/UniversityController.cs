@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OpenScholarApp.Dtos.FacultyDto;
 using OpenScholarApp.Dtos.University;
-using OpenScholarApp.Services.Implementations;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
 using System.Security.Claims;
@@ -27,11 +25,8 @@ namespace OpenScholarApp.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _universityService.CreateUniversityAsync(userId, universityDto);
                 return Response(response);
@@ -76,11 +71,8 @@ namespace OpenScholarApp.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _universityService.UpdateUniversityAsync(userId, id, universityDto);
                 return Response(response);
@@ -98,11 +90,8 @@ namespace OpenScholarApp.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
                 if (userId == null)
-                {
                     return BadRequest("User not found.");
-                }
 
                 var response = await _universityService.DeleteUniversityAsync(userId, id);
                 return Response(response);

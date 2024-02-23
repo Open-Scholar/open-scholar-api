@@ -27,8 +27,8 @@ namespace OpenScholarApp.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                     return BadRequest("User Not found");
-                var response = await _topicLikeService.CreateRemoveTopicLikeAsync(userId, topicLikeDto);
 
+                var response = await _topicLikeService.CreateRemoveTopicLikeAsync(userId, topicLikeDto);
                 return Response(response);
             }
             catch (InternalServerErrorException e)

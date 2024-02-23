@@ -38,7 +38,7 @@ namespace OpenScholarApp.Services.Implementations
                 var existingLike = await _topicCommentLikeRepository.GetByIdWithUserAsync(topicCommentLikeDto.TopicCommentId, userId);
                 if (existingLike != null)
                 {
-                    await _topicCommentLikeRepository.Remove(existingLike);
+                    await _topicCommentLikeRepository.RemoveEntirely(existingLike);
                     return Response.Success;
                 }
                 else
@@ -84,6 +84,7 @@ namespace OpenScholarApp.Services.Implementations
                 var topicCommentLike = await _topicCommentLikeRepository.GetByIdInt(id);
                 if (topicCommentLike == null)
                     return new Response<TopicCommentLikeDto>("Topic comment Like not found!");
+
                 var topicCommentLikeDto = _mapper.Map<TopicCommentLikeDto>(topicCommentLike);
                 return new Response<TopicCommentLikeDto>() { IsSuccessfull = true, Result = topicCommentLikeDto };
             }
