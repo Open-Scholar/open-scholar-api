@@ -88,7 +88,6 @@ namespace OpenScholarApp.Services.UserServices.Implementations
                 user.PhotoUrl = string.Empty;
 
                 var result = await _userManager.UpdateAsync(user);
-
                 if (!result.Succeeded)
                     return new Response(result.Errors.Select(e => e.Description));
 
@@ -105,7 +104,6 @@ namespace OpenScholarApp.Services.UserServices.Implementations
             try
             {
                 var removalResponse = await RemoveUserPhotoAsync(userId);
-
                 if (!removalResponse.IsSuccessfull)
                     return removalResponse;
 
@@ -130,7 +128,6 @@ namespace OpenScholarApp.Services.UserServices.Implementations
                         return new("invalid password or username");
 
                     var result = await _userManager.DeleteAsync(user);
-
                     if (!result.Succeeded)
                         return new Response(result.Errors.Select(error => error.Description));
 
@@ -185,7 +182,6 @@ namespace OpenScholarApp.Services.UserServices.Implementations
                     return new Response<ApplicationUserDto>("User not found.");
 
                 var userDto = _mapper.Map<ApplicationUserDto>(user);
-
                 return new Response<ApplicationUserDto>(userDto);
             }
             catch (UserDataException ex)
@@ -218,7 +214,6 @@ namespace OpenScholarApp.Services.UserServices.Implementations
                     return new("invalid password or username");
 
                 var token = await _tokenService.GenerateTokenAsync(user);
-
                 return new Response<LoginUserResponse>(new LoginUserResponse
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -351,34 +346,23 @@ namespace OpenScholarApp.Services.UserServices.Implementations
 
         public async Task<Response<ApplicationUserDto>> UpdateUserAsync(string id, ApplicationUserDto updatedUser)
         {
+
             var user = await _userManager.FindByIdAsync(id);
-
-            if (user != null)
-            {
-                var result = await _userManager.UpdateAsync(user);
-
-                if (result.Succeeded)
-                {
-                    return new Response<ApplicationUserDto>("User updated successfully.");
-                }
-                else
-                {
-                    return new Response<ApplicationUserDto>(result.Errors.Select(error => error.Description));
-                }
-            }
-            else
-            {
+            if (user == null)
                 return new Response<ApplicationUserDto>("User not found.");
-            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return new Response<ApplicationUserDto>(result.Errors.Select(error => error.Description));
+
+            return new Response<ApplicationUserDto>("User updated successfully.");
         }
 
         public async Task<Response> ConfirmAccountSendMail(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
-            {
                 return new Response("User not found");
-            }
 
             var userEmail = user.Email;
             if (userEmail == null)
