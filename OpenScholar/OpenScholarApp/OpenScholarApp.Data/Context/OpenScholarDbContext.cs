@@ -33,6 +33,7 @@ namespace OpenScholarApp.Data.Context
         public DbSet<DocumentFile> DocumentFiles { get; set; }
         public DbSet<TopicLike> TopicLikes { get; set; }
         public DbSet<TopicCommentLike> TopicCommentLikes { get; set; }
+        public DbSet<UserConnection> UserConnections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -329,6 +330,19 @@ namespace OpenScholarApp.Data.Context
                 entity.HasOne(tcl => tcl.TopicComment)
                       .WithMany(tc => tc.Likes) 
                       .HasForeignKey(tcl => tcl.TopicCommentId);
+            });
+
+            modelBuilder.Entity<UserConnection>(entity =>
+            {
+                entity.HasKey(uc => uc.Id);
+
+                entity.HasOne<ApplicationUser>() 
+                      .WithMany() 
+                      .HasForeignKey(uc => uc.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(uc => uc.UserId).HasDatabaseName("IDX_UserConnection_UserId");
+                entity.HasIndex(uc => uc.ConnectionId).HasDatabaseName("IDX_UserConnection_ConnectionId");
             });
             #endregion
 

@@ -1872,6 +1872,7 @@
           "OpenScholarApp.Dtos": "1.0.0",
           "OpenScholarApp.Mappers": "1.0.0",
           "OpenScholarApp.Shared": "1.0.0",
+          "OpenScholarApp.SignalR": "1.0.0",
           "System.IdentityModel.Tokens.Jwt": "7.3.1"
         },
         "compile": {
@@ -1898,6 +1899,16 @@
         },
         "runtime": {
           "bin/placeholder/OpenScholarApp.Shared.dll": {}
+        }
+      },
+      "OpenScholarApp.SignalR/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/OpenScholarApp.SignalR.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OpenScholarApp.SignalR.dll": {}
         }
       }
     }
@@ -4545,6 +4556,11 @@
       "type": "project",
       "path": "../OpenScholarApp.Shared/OpenScholarApp.Shared.csproj",
       "msbuildProject": "../OpenScholarApp.Shared/OpenScholarApp.Shared.csproj"
+    },
+    "OpenScholarApp.SignalR/1.0.0": {
+      "type": "project",
+      "path": "../OpenScholar.SignalR/OpenScholarApp.SignalR.csproj",
+      "msbuildProject": "../OpenScholar.SignalR/OpenScholarApp.SignalR.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -4559,6 +4575,7 @@
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 7.0.11",
       "OpenScholarApp.Data >= 1.0.0",
       "OpenScholarApp.Services >= 1.0.0",
+      "OpenScholarApp.SignalR >= 1.0.0",
       "Swashbuckle.AspNetCore.Filters >= 7.0.11",
       "System.IdentityModel.Tokens.Jwt >= 7.3.1"
     ]
@@ -4595,6 +4612,9 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
+            "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholar.SignalR\\OpenScholarApp.SignalR.csproj": {
+              "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholar.SignalR\\OpenScholarApp.SignalR.csproj"
+            },
             "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj": {
               "projectPath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj"
             },

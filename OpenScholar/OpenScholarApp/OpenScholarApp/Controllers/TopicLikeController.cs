@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using OpenScholarApp.Dtos.TopicLikeDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions;
+using OpenScholarApp.SignalR;
 using System.Security.Claims;
 
 namespace OpenScholarApp.Controllers
@@ -13,9 +15,11 @@ namespace OpenScholarApp.Controllers
     public class TopicLikeController : BaseController
     {
         private readonly ITopicLikeService _topicLikeService;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public TopicLikeController(ITopicLikeService topicLikeService)
+        public TopicLikeController(ITopicLikeService topicLikeService, IHubContext<NotificationHub> hubContext)
         {
+            _hubContext = hubContext;
             _topicLikeService = topicLikeService;
         }
 
@@ -29,6 +33,8 @@ namespace OpenScholarApp.Controllers
                     return BadRequest("User Not found");
 
                 var response = await _topicLikeService.CreateRemoveTopicLikeAsync(userId, topicLikeDto);
+                
+
                 return Response(response);
             }
             catch (InternalServerErrorException e)

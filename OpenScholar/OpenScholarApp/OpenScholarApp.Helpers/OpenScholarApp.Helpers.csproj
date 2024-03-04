@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenScholar.SignalR\OpenScholarApp.SignalR.csproj" />
     <ProjectReference Include="..\OpenScholarApp.Data\OpenScholarApp.Data.csproj" />
     <ProjectReference Include="..\OpenScholarApp.Services\OpenScholarApp.Services.csproj" />
   </ItemGroup>

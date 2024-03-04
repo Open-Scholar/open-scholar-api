@@ -10,6 +10,7 @@ using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Services.StorageServices;
 using OpenScholarApp.Services.UserServices.Implementations;
 using OpenScholarApp.Services.UserServices.Interfaces;
+using OpenScholarApp.SignalR;
 
 namespace OpenScholarApp.Helpers.DIContainer
 {
@@ -42,6 +43,7 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddTransient<IFacultyRepository, FacultyRepository>();
             services.AddTransient<IUniversityRepository, UniversityRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IConnectionManagerRepository, ConnectionManagerRepository>();
         }
 
         public static void InjectServices(IServiceCollection services)

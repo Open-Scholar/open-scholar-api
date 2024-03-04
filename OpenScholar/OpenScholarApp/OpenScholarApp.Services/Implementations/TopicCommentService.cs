@@ -51,6 +51,7 @@ namespace OpenScholarApp.Services.Implementations
 
                 topicComment.Topic = topic;
                 topicComment.TopicId = topicCommentDto.TopicId;
+                topicComment.CreatedAt = DateTimeOffset.UtcNow;
 
                 var result = _topicCommentRepository.Add(topicComment);
                 return new Response<AddTopicCommentDto> { IsSuccessfull = true, Result = topicCommentDto };
@@ -115,11 +116,13 @@ namespace OpenScholarApp.Services.Implementations
             {
                 var topicCommentDto = new TopicCommentDto();
                 var userName = await _userHelperService.GetUsername(topicComment.User);
+                topicCommentDto.Comment = topicComment.Comment;
                 topicCommentDto.Id = topicComment.Id;
                 topicCommentDto.UserName = userName;
                 topicCommentDto.IsLikedByUser = topicComment.Likes.Any(like => like.UserId == userId);
                 topicCommentDto.UserId = topicComment.User.Id;
                 topicCommentDto.TopicCommentLikeCount = topicComment.Likes.Count();
+                topicCommentDto.CreatedAt = topicComment.CreatedAt;
                 topicCommentDtos.Add(topicCommentDto);
             }
             return new PagedResultDto<TopicCommentDto>

@@ -77,11 +77,26 @@ namespace OpenScholarApp.Helpers.Extensions
 
         public static ConfigBuilder AddCors(this ConfigBuilder builder)
         {
+            //builder.Services.AddCors(options => {
+            //    options.AddPolicy("CorsPolicy", policy => {
+            //        policy.WithOrigins("http://localhost:3000") // Replace with your React app's origin
+            //              .AllowAnyOrigin()
+            //              .AllowAnyHeader()
+            //              .AllowAnyMethod()
+            //              .AllowCredentials(); // SignalR needs credentials
+            //    });
+            //});
+
+            //app.UseCors("CorsPolicy");
+
+
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("CORSPolicy", builder => builder.AllowAnyMethod()
+                options.AddPolicy("CORSPolicy", builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
                 .AllowAnyHeader()
-                .AllowCredentials()
+                //.AllowCredentials()
                 .SetIsOriginAllowed((hosts) => true));
             });
             return builder;

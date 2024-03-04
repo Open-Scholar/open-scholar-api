@@ -6,21 +6,28 @@ using OpenScholarApp.Dtos.TopicLikeDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.TopicLikeExceptions;
 using OpenScholarApp.Shared.Responses;
+using OpenScholarApp.SignalR;
 
 namespace OpenScholarApp.Services.Implementations
 {
     public class TopicLikeService : ITopicLikeService
     {
+        private readonly IConnectionManagerRepository _connectionManagerRepository;
         private readonly ITopicLikeRepository _topicLikeRepository;
         private readonly ITopicRepository _topicRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
         public TopicLikeService(IMapper mapper,
+                                IConnectionManagerRepository connectionManagerRepository,
                                 UserManager<ApplicationUser> userManager,
+                                INotificationService notificationService,
                                 ITopicRepository topicRepository,
                                 ITopicLikeRepository topicLikeRepository)
         {
+            _connectionManagerRepository = connectionManagerRepository;
+            _notificationService = notificationService;
             _topicRepository = topicRepository;
             _mapper = mapper;
             _userManager = userManager;
@@ -51,6 +58,7 @@ namespace OpenScholarApp.Services.Implementations
 
                     like.Topic = topic;
                     await _topicLikeRepository.Add(like);
+                    await _notificationService.SendLikeNotification(topic.UserId, $"{user.UserName} liked your post!");
                     return Response.Success;
                 }
             }

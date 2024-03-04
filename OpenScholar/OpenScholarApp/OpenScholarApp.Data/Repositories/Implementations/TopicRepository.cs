@@ -16,7 +16,10 @@ namespace OpenScholarApp.Data.Repositories.Implementations
 
         public async Task<List<Topic>> GetAllWithUserAndLikesAsync()
         {
-            return await _openScholarDbContext.Topics.Include(t => t.User).Include(l => l.Likes).ToListAsync();
+            return await _openScholarDbContext.Topics.Include(t => t.User)
+                                                     .Include(l => l.Likes)
+                                                     .Include(c =>c.Comments)
+                                                     .ToListAsync();
         }
 
         public async Task<(IEnumerable<Topic> Items, int TotalCount)> GetAllWithUserAndFiltersAsync(int? facultyId = null, int? universityId = null, bool? isMostPopular = false, int pageNumber = 1, int pageSize = 10)
@@ -49,7 +52,9 @@ namespace OpenScholarApp.Data.Repositories.Implementations
 
         public async Task<Topic> GetByIdWithLikesAsync(int id)
         {
-            var result = await _openScholarDbContext.Topics.Include(l => l.Likes).FirstOrDefaultAsync(t => t.Id == id);
+            var result = await _openScholarDbContext.Topics.Include(l => l.Likes)
+                .Include(t => t.User)                      .Include(c => c.Comments)
+                                                           .FirstOrDefaultAsync(t => t.Id == id);
             return result;
         }
     }

@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Helpers", "O
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenScholarApp.Shared", "OpenScholarApp.Shared\OpenScholarApp.Shared.csproj", "{346D2F45-3842-4F90-8E8D-D308E6FE5275}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenScholarApp.SignalR", "OpenScholar.SignalR\OpenScholarApp.SignalR.csproj", "{E51C57D1-69CE-43E4-83F7-ACDF5BD45FE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{346D2F45-3842-4F90-8E8D-D308E6FE5275}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{346D2F45-3842-4F90-8E8D-D308E6FE5275}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{346D2F45-3842-4F90-8E8D-D308E6FE5275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E51C57D1-69CE-43E4-83F7-ACDF5BD45FE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E51C57D1-69CE-43E4-83F7-ACDF5BD45FE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E51C57D1-69CE-43E4-83F7-ACDF5BD45FE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E51C57D1-69CE-43E4-83F7-ACDF5BD45FE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

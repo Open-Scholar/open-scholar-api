@@ -52,6 +52,7 @@ namespace OpenScholarApp.Services.Implementations
 
                 topic.Faculty = faculty;
                 topic.FacultyId = topicDto.FacultyId;
+                topic.CreatedDate = DateTimeOffset.UtcNow;
                 await _topicRepository.Add(topic);
                 response.IsSuccessfull = true;
                 return response;
@@ -160,6 +161,7 @@ namespace OpenScholarApp.Services.Implementations
                 var topicDto = _mapper.Map<TopicDto>(topic);
                 topicDto.TopicLikeCount = topic.Likes.Count();
                 topicDto.IsLikedByUser = topic.Likes.Any(t => t.UserId == userId);
+                topicDto.TopicCommentCount = topic.Comments.Count();
                 topicDto.UserName = await _userHelperService.GetUsername(topic.User);
                 return new Response<TopicDto>() { IsSuccessfull = true, Result = topicDto };
             }

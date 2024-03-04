@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "QCf7ctzUq0EYsdZhyP5NgTHZfD2M7sDe/D5BCFw48q6iONILaotkoolR0hH93hfK2DEudBEBDHygH0HbwO5bbQ==",
+  "dgSpecHash": "lFBwFdu5m4L7v3VC0vxqDvUiP6bdZQDjq/v+oOvtcXSE6Fr80E4ygGff5DMCiW1cXfOpAKse3vUhbdhL7jhCpw==",
   "success": true,
   "projectFilePath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj",
   "expectedPackageFiles": [
