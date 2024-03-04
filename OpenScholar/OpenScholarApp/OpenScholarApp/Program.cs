@@ -6,7 +6,7 @@ using OpenScholarApp.SignalR;
 var builder = WebApplication.CreateBuilder(args);
 var appSettings = builder.Configuration.GetSection("AppSettings");
 builder.Configuration.AddEnvironmentVariables();
-builder.Services.AddSignalR(); //dodadeno za singalR
+builder.Services.AddSignalR(); 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly)
@@ -27,14 +27,6 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors("CORSPolicy");
-//app.UseCors(builder =>
-//    {
-//        builder
-//        .AllowAnyOrigin()
-//        .AllowAnyMethod()
-//        .AllowAnyHeader();
-//        .AllowCredentials(); // dodadeno za signalR
-//    });
 app.MapControllers();
-app.MapHub<NotificationHub>("/NotificationsHub"); //dodadeno za singalR
+app.MapHub<NotificationHub>("/NotificationsHub");
 app.Run();

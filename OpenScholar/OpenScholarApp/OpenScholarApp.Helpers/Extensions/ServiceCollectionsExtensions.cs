@@ -15,7 +15,6 @@ namespace OpenScholarApp.Helpers.Extensions
 {
     public static class ServiceCollectionsExtensions
     {
-
         public class ConfigBuilder
         {
             public IServiceCollection Services { get; set; }
@@ -77,19 +76,6 @@ namespace OpenScholarApp.Helpers.Extensions
 
         public static ConfigBuilder AddCors(this ConfigBuilder builder)
         {
-            //builder.Services.AddCors(options => {
-            //    options.AddPolicy("CorsPolicy", policy => {
-            //        policy.WithOrigins("http://localhost:3000") // Replace with your React app's origin
-            //              .AllowAnyOrigin()
-            //              .AllowAnyHeader()
-            //              .AllowAnyMethod()
-            //              .AllowCredentials(); // SignalR needs credentials
-            //    });
-            //});
-
-            //app.UseCors("CorsPolicy");
-
-
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("CORSPolicy", builder => builder
@@ -126,6 +112,23 @@ namespace OpenScholarApp.Helpers.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Token)),
                     ValidateIssuer = false,
                     ValidateAudience = false
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/notificationsHub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
             return builder;

@@ -22,7 +22,7 @@ namespace OpenScholarApp.Data.Repositories.Implementations
 
         public async Task RemoveConnectionAsync(string connectionId)
         {
-            var connection = await _openScholarDbContext.UserConnections.FindAsync(connectionId);
+            var connection = await _openScholarDbContext.UserConnections.FirstOrDefaultAsync(uc => uc.ConnectionId == connectionId);
             if (connection != null)
             {
                 _openScholarDbContext.UserConnections.Remove(connection);
