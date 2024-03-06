@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OpenScholarApp.Data.Context;
@@ -11,9 +12,11 @@ using OpenScholarApp.Data.Context;
 namespace OpenScholarApp.Data.Migrations
 {
     [DbContext(typeof(OpenScholarDbContext))]
-    partial class OpenScholarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240305113146_hotfix1")]
+    partial class hotfix1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

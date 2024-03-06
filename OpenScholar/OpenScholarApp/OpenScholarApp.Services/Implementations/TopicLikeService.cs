@@ -12,7 +12,6 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class TopicLikeService : ITopicLikeService
     {
-        private readonly IConnectionManagerRepository _connectionManagerRepository;
         private readonly ITopicLikeRepository _topicLikeRepository;
         private readonly ITopicRepository _topicRepository;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -20,13 +19,11 @@ namespace OpenScholarApp.Services.Implementations
         private readonly INotificationService _notificationService;
 
         public TopicLikeService(IMapper mapper,
-                                IConnectionManagerRepository connectionManagerRepository,
                                 UserManager<ApplicationUser> userManager,
                                 INotificationService notificationService,
                                 ITopicRepository topicRepository,
                                 ITopicLikeRepository topicLikeRepository)
         {
-            _connectionManagerRepository = connectionManagerRepository;
             _notificationService = notificationService;
             _topicRepository = topicRepository;
             _mapper = mapper;
@@ -58,7 +55,7 @@ namespace OpenScholarApp.Services.Implementations
 
                     like.Topic = topic;
                     await _topicLikeRepository.Add(like);
-                    await _notificationService.SendLikeNotification(topic.UserId, $"{user.UserName} liked your post!");
+                    await _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!");
                     return Response.Success;
                 }
             }

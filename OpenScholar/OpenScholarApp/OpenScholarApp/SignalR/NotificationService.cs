@@ -11,7 +11,7 @@ namespace OpenScholarApp.SignalR
             _hubContext = hubContext;
         }
 
-        public async Task SendLikeNotification(string userId, string message)
+        public async Task SendNotification(string userId, string message)
         {
             await _hubContext.Clients.User(userId).SendAsync("ReceiveNotification", message);
         }

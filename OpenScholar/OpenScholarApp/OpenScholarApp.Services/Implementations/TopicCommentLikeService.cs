@@ -6,21 +6,25 @@ using OpenScholarApp.Dtos.TopicCommentLikeDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.TopicCommentLikeExceptions;
 using OpenScholarApp.Shared.Responses;
+using OpenScholarApp.SignalR;
 
 namespace OpenScholarApp.Services.Implementations
 {
     public class TopicCommentLikeService : ITopicCommentLikeService
     {
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITopicCommentRepository _topicCommentRepository;
         private readonly ITopicCommentLikeRepository _topicCommentLikeRepository;
 
         public TopicCommentLikeService(IMapper mapper,
                                        UserManager<ApplicationUser> userManager,
+                                       INotificationService notificationService,
                                        ITopicCommentLikeRepository topicCommentLikeRepository,
                                        ITopicCommentRepository topicCommentRepository)
         {
+            _notificationService = notificationService;
             _mapper = mapper;
             _userManager = userManager;
             _topicCommentLikeRepository = topicCommentLikeRepository;
@@ -54,6 +58,7 @@ namespace OpenScholarApp.Services.Implementations
                     like.TopicComment = topicComment;
 
                     await _topicCommentLikeRepository.Add(like);
+                    await _notificationService.SendNotification(topicComment.UserId, $"{user.UserName} liked your comment!");
                     return Response.Success;
                 }
             }

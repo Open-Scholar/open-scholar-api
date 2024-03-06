@@ -127,6 +127,7 @@ namespace OpenScholarApp.Services.Implementations
                     topicDto.IsLikedByUser = topic.Likes.Any(like => like.UserId == userId);
                     topicDto.TopicLikeCount = topic.Likes.Count;
                     topicDto.TopicCommentCount = topic.Comments.Count;
+                    topicDto.EditedAt = topic.EditedAt;
                     topicDtos.Add(topicDto);
                 }
 
@@ -187,6 +188,7 @@ namespace OpenScholarApp.Services.Implementations
                     return new Response<UpdateTopicDto> { Errors = new List<string> { $"You don't have permissions to update this topic" }, IsSuccessfull = false };
 
                 var updatedTopic = _mapper.Map(updatedTopicDto, existingTopic);
+                updatedTopic.EditedAt = DateTimeOffset.UtcNow;
                 var result = _topicRepository.Update(updatedTopic);
                 return new Response<UpdateTopicDto> { IsSuccessfull = true, Result = updatedTopicDto };
             }

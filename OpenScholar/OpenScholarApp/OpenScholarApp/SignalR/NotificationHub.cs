@@ -21,7 +21,6 @@ namespace OpenScholarApp.SignalR
                 var connectionId = Context.ConnectionId;
                 await _connectionManagerRepository.AddConnectionAsync(userId, connectionId);
                 await base.OnConnectedAsync();
-                await SendConnectedMessage($"user with connection id{connectionId} successfully joined the notification center!");
             }
             catch (HubOnConnectDataException ex)
             {

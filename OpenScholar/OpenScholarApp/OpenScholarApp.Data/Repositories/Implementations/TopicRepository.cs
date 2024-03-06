@@ -22,11 +22,15 @@ namespace OpenScholarApp.Data.Repositories.Implementations
                                                      .ToListAsync();
         }
 
-        public async Task<(IEnumerable<Topic> Items, int TotalCount)> GetAllWithUserAndFiltersAsync(int? facultyId = null, int? universityId = null, bool? isMostPopular = false, int pageNumber = 1, int pageSize = 10)
+        public async Task<(IEnumerable<Topic> Items, int TotalCount)> GetAllWithUserAndFiltersAsync(int? facultyId = null,
+                                                                                                    int? universityId = null,
+                                                                                                    bool? isMostPopular = false,
+                                                                                                    int pageNumber = 1,
+                                                                                                    int pageSize = 10)
         {
             var query = _openScholarDbContext.Topics.Include(t => t.User)
                                                     .Include(q => q.Likes)
-                                                    .Include(c => c.Comments)/*.Select(c => c.Id)*/
+                                                    .Include(c => c.Comments)
                                                     .AsQueryable();
 
             var totalCount = await query.CountAsync();
@@ -37,16 +41,14 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             if (universityId.HasValue)
                 query = query.Where(t => t.Faculty.UniversityId == universityId.Value);
 
-            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            query = query.OrderByDescending(t => t.CreatedDate)
+                         .Skip((pageNumber - 1) * pageSize).Take(pageSize);
             query = query.OrderByDescending(t => t.CreatedDate);
-
-            //query.Include(t => t.User);
 
             if (isMostPopular.HasValue && isMostPopular.Value == true)
                 query = query.OrderByDescending(t => t.Likes.Count());
 
             var items = await query.ToListAsync();
-            //var items = await query.
             return (items, totalCount);
         }
 

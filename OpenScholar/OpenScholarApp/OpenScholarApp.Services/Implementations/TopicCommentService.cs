@@ -9,11 +9,13 @@ using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.TopicCommentExceptions;
 using OpenScholarApp.Shared.CustomExceptions.TopicExceptions;
 using OpenScholarApp.Shared.Responses;
+using OpenScholarApp.SignalR;
 
 namespace OpenScholarApp.Services.Implementations
 {
     public class TopicCommentService : ITopicCommentService
     {
+        private readonly INotificationService _notificationService;
         private readonly ITopicRepository _topicRepository;
         private readonly IUserHelperService _userHelperService;
         private readonly ITopicCommentRepository _topicCommentRepository;
@@ -21,11 +23,13 @@ namespace OpenScholarApp.Services.Implementations
         private readonly IMapper _mapper;
 
         public TopicCommentService(ITopicCommentRepository topicCommentRepository,
+                                   INotificationService notificationService,
                                    IUserHelperService userHelperService,
                                    ITopicRepository topicRepository,
                                    UserManager<ApplicationUser> userManager,
                                    IMapper mapper)
         {
+            _notificationService = notificationService;
             _userHelperService = userHelperService;
             _topicRepository = topicRepository;
             _topicCommentRepository = topicCommentRepository;
@@ -54,6 +58,7 @@ namespace OpenScholarApp.Services.Implementations
                 topicComment.CreatedAt = DateTimeOffset.UtcNow;
 
                 var result = _topicCommentRepository.Add(topicComment);
+                await _notificationService.SendNotification(topic.UserId, $"User {topicComment.UserId} has liked your comment!");
                 return new Response<AddTopicCommentDto> { IsSuccessfull = true, Result = topicCommentDto };
             }
             catch (TopicCommentDataException e)
@@ -123,6 +128,7 @@ namespace OpenScholarApp.Services.Implementations
                 topicCommentDto.UserId = topicComment.User.Id;
                 topicCommentDto.TopicCommentLikeCount = topicComment.Likes.Count();
                 topicCommentDto.CreatedAt = topicComment.CreatedAt;
+                topicCommentDto.UpdatedAt = topicComment.UpdatedAt;
                 topicCommentDtos.Add(topicCommentDto);
             }
             return new PagedResultDto<TopicCommentDto>
@@ -176,6 +182,7 @@ namespace OpenScholarApp.Services.Implementations
                     return new Response<UpdateTopicCommentDto> { Errors = new List<string> { $"You don't have permissions to update this topic" }, IsSuccessfull = false };
 
                 var updatedTopicComment = _mapper.Map(updatedTopicCommentDto, existingTopicComment);
+                updatedTopicComment.UpdatedAt = DateTimeOffset.Now;
                 await _topicCommentRepository.Update(updatedTopicComment);
                 return new Response<UpdateTopicCommentDto> { IsSuccessfull = true, Result = updatedTopicCommentDto };
             }

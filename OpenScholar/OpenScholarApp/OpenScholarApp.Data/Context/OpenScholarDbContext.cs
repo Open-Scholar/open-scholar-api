@@ -268,12 +268,12 @@ namespace OpenScholarApp.Data.Context
                 entity.HasOne(t => t.User)
                       .WithMany() 
                       .HasForeignKey(t => t.UserId)
-                      .OnDelete(DeleteBehavior.Restrict); 
+                      .OnDelete(DeleteBehavior.Cascade); 
 
                 entity.HasOne(t => t.Faculty)
                       .WithMany(f => f.Topics) 
                       .HasForeignKey(t => t.FacultyId)
-                      .OnDelete(DeleteBehavior.Restrict); 
+                      .OnDelete(DeleteBehavior.Cascade); 
 
                 entity.HasMany(t => t.Comments)
                       .WithOne(c => c.Topic)
@@ -296,7 +296,7 @@ namespace OpenScholarApp.Data.Context
                 entity.HasOne(tc => tc.User)
                       .WithMany() 
                       .HasForeignKey(tc => tc.UserId)
-                      .OnDelete(DeleteBehavior.Restrict); 
+                      .OnDelete(DeleteBehavior.Cascade); 
 
                 entity.HasOne(tc => tc.Topic)
                       .WithMany(t => t.Comments)

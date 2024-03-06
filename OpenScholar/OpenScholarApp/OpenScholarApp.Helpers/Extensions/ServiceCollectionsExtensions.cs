@@ -82,7 +82,6 @@ namespace OpenScholarApp.Helpers.Extensions
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                //.AllowCredentials()
                 .SetIsOriginAllowed((hosts) => true));
             });
             return builder;
@@ -118,13 +117,10 @@ namespace OpenScholarApp.Helpers.Extensions
                     OnMessageReceived = context =>
                     {
                         var accessToken = context.Request.Query["access_token"];
-
-                        // If the request is for our hub...
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
                             (path.StartsWithSegments("/notificationsHub")))
                         {
-                            // Read the token out of the query string
                             context.Token = accessToken;
                         }
                         return Task.CompletedTask;
