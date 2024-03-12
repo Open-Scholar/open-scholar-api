@@ -25,6 +25,7 @@ namespace OpenScholarApp.Data.Repositories.Implementations
         public async Task<(IEnumerable<Topic> Items, int TotalCount)> GetAllWithUserAndFiltersAsync(int? facultyId = null,
                                                                                                     int? universityId = null,
                                                                                                     bool? isMostPopular = false,
+                                                                                                    bool? isUserPost = false,
                                                                                                     int pageNumber = 1,
                                                                                                     int pageSize = 10)
         {
@@ -46,6 +47,9 @@ namespace OpenScholarApp.Data.Repositories.Implementations
             query = query.OrderByDescending(t => t.CreatedDate);
 
             if (isMostPopular.HasValue && isMostPopular.Value == true)
+                query = query.OrderByDescending(t => t.Likes.Count());
+
+            if (isUserPost.HasValue && isUserPost.Value == true)
                 query = query.OrderByDescending(t => t.Likes.Count());
 
             var items = await query.ToListAsync();

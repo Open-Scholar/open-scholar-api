@@ -57,7 +57,8 @@ namespace OpenScholarApp.Controllers
                                                       [FromQuery] int pageSize = 10,
                                                       [FromQuery] int? facultyId = null,
                                                       [FromQuery] int? universityId = null,
-                                                      [FromQuery] bool? isMostPopular = false)
+                                                      [FromQuery] bool? isMostPopular = false,
+                                                      [FromQuery] bool? isUserPost = false)
         {
             try
             {
@@ -67,7 +68,7 @@ namespace OpenScholarApp.Controllers
 
                 pageNumber = Math.Max(pageNumber, 1);
                 pageSize = Math.Max(pageSize, 1);
-                var response = await _topicService.GetAllTopicsFilteredAsync(userId, facultyId, universityId, isMostPopular, pageNumber, pageSize);
+                var response = await _topicService.GetAllTopicsFilteredAsync(userId, facultyId, universityId, isMostPopular, isUserPost, pageNumber, pageSize);
                 return Ok(response);
             }
             catch (InternalServerErrorException e)

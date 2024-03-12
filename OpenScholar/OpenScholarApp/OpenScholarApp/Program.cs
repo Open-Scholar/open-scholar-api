@@ -6,6 +6,7 @@ using OpenScholarApp.SignalR;
 var builder = WebApplication.CreateBuilder(args);
 var appSettings = builder.Configuration.GetSection("AppSettings");
 builder.Configuration.AddEnvironmentVariables();
+builder.Host.UseSerilogConfiguration();
 builder.Services.AddSignalR(); 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -15,6 +16,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly)
     .AddJWT(appSettings)
     .AddIdentity()
     .AddCors()
+    .AddHostedServices()
     .AddSwager();
 
 builder.Services.AddSingleton<INotificationService, NotificationService>();

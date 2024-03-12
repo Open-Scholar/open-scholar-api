@@ -18,6 +18,7 @@ using OpenScholarApp.Dtos.TopicDto;
 using OpenScholarApp.Dtos.TopicLikeDto;
 using OpenScholarApp.Dtos.University;
 using OpenScholarApp.Dtos.UniversityAccDto;
+using OpenScholarApp.Dtos.UserNotificationDto;
 
 namespace OpenScholarApp.Mappers.MapperConfig
 {
@@ -25,6 +26,7 @@ namespace OpenScholarApp.Mappers.MapperConfig
     {
         public AutoMapperProfile() 
         {
+            #region Accounts
             //ACCOUNTS
 
             //ApplicationUser Mappings
@@ -55,7 +57,9 @@ namespace OpenScholarApp.Mappers.MapperConfig
             CreateMap<UniversityAcc, UniversityAccDto>().ReverseMap();
             CreateMap<UniversityAcc, AddUniversityAccDto>().ReverseMap();
             CreateMap<UniversityAcc, UpdateUniversityAccDto>().ReverseMap();
+            #endregion
 
+            #region Items
             //ITEMS
 
             //Faculty Mappings
@@ -102,6 +106,10 @@ namespace OpenScholarApp.Mappers.MapperConfig
             CreateMap<TopicCommentLike, AddRemoveTopicCommentLikeDto>().ReverseMap();
             //DocumentFile mappings
             CreateMap<DocumentFile, DocumentFileDto>().ReverseMap();
+            //Notification Mappings
+            CreateMap<UserNotification, UserNotificationDto>().ReverseMap();
+            CreateMap<UserNotification, AddUserNotificationDto>().ReverseMap();
+            #endregion
         }
     }
 }

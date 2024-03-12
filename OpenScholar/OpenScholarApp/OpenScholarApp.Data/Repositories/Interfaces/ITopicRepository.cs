@@ -9,6 +9,7 @@ namespace OpenScholarApp.Data.Repositories.Interfaces
         Task<(IEnumerable<Topic> Items, int TotalCount)> GetAllWithUserAndFiltersAsync(int? facultyId = null,
                                                                                         int? universityId = null,
                                                                                         bool? isMostPopular = false,
+                                                                                        bool? isUserPost = false,
                                                                                         int pageNumber = 1,
                                                                                         int pageSize = 10);
     }

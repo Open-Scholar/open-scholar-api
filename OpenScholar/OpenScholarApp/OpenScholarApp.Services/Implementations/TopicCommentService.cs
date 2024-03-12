@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
+using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.Shared;
 using OpenScholarApp.Dtos.TopicCommentDto;
+using OpenScholarApp.Dtos.UserNotificationDto;
 using OpenScholarApp.Services.Helpers.Interaces;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.TopicCommentExceptions;
@@ -15,6 +18,7 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class TopicCommentService : ITopicCommentService
     {
+        private readonly IUserNotificationRepository _userNotificationRepository;
         private readonly INotificationService _notificationService;
         private readonly ITopicRepository _topicRepository;
         private readonly IUserHelperService _userHelperService;
@@ -24,11 +28,13 @@ namespace OpenScholarApp.Services.Implementations
 
         public TopicCommentService(ITopicCommentRepository topicCommentRepository,
                                    INotificationService notificationService,
+                                   IUserNotificationRepository userNotificationRepository,
                                    IUserHelperService userHelperService,
                                    ITopicRepository topicRepository,
                                    UserManager<ApplicationUser> userManager,
                                    IMapper mapper)
         {
+            _userNotificationRepository = userNotificationRepository;
             _notificationService = notificationService;
             _userHelperService = userHelperService;
             _topicRepository = topicRepository;
@@ -37,12 +43,12 @@ namespace OpenScholarApp.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<Response> CreateTopicCommentAsync(AddTopicCommentDto topicCommentDto, string UserId)
+        public async Task<Response> CreateTopicCommentAsync(AddTopicCommentDto topicCommentDto, string userId)
         {
             try
             {
                 var topicComment = _mapper.Map<TopicComment>(topicCommentDto);
-                var user = await _userManager.FindByIdAsync(UserId);
+                var user = await _userManager.FindByIdAsync(userId);
                 if (user == null)
                     return new Response<AddTopicCommentDto>("User Not found");
 
@@ -57,8 +63,27 @@ namespace OpenScholarApp.Services.Implementations
                 topicComment.TopicId = topicCommentDto.TopicId;
                 topicComment.CreatedAt = DateTimeOffset.UtcNow;
 
-                var result = _topicCommentRepository.Add(topicComment);
-                await _notificationService.SendNotification(topic.UserId, $"User {topicComment.UserId} has liked your comment!");
+                var userNotificationDto = new AddUserNotificationDto()
+                {
+                    ReferenceId = topicComment.Id,
+                    UserId = userId,
+                    RecieverUserId = topicComment.UserId,
+                    Message = $"{user.UserName} Commented on your post",
+                    NotificationType = NotificationType.TopicComment,
+                    IsRead = false,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                var userNotification = new UserNotification();
+                _mapper.Map(userNotificationDto, userNotification);
+                
+                //var result = _topicCommentRepository.Add(topicComment);
+                //await _notificationService.SendNotification(topic.UserId, $"User {topicComment.UserId} has liked your comment!");
+                await Task.WhenAll(
+                          _topicCommentRepository.Add(topicComment),
+                          _notificationService.SendNotification(topic.UserId, $"{user.UserName} commented on your post!"),
+                          _userNotificationRepository.Add(userNotification));
+
                 return new Response<AddTopicCommentDto> { IsSuccessfull = true, Result = topicCommentDto };
             }
             catch (TopicCommentDataException e)

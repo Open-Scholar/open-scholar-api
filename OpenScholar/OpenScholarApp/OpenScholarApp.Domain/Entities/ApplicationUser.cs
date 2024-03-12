@@ -25,5 +25,6 @@ namespace OpenScholarApp.Domain.Entities
         public List<TopicLike> TopicLikes { get; set; } = new List<TopicLike>();
         public List<TopicCommentLike> TopicCommentLikes { get; set; } = new List<TopicCommentLike>();
         public List<UserConnection>? UserConnections { get; set; } = new List<UserConnection>();
+        public List<UserNotification>? UserNotifications { get; set; } = new List<UserNotification>();
     }
 }

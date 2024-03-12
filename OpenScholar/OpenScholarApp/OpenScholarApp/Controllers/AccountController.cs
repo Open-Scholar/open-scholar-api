@@ -16,10 +16,12 @@ namespace OpenScholarApp.Controllers
     public class AccountController : BaseController
     {
         private readonly IMembershipService _membershipService;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IMembershipService membershipService)
+        public AccountController(IMembershipService membershipService, ILogger<AccountController> logger)
         {
             _membershipService = membershipService;
+            _logger = logger;
         }
 
         [AllowAnonymous]
@@ -56,10 +58,12 @@ namespace OpenScholarApp.Controllers
                     Username = model.Username,
                 };
                 var response = await _membershipService.LoginUserAsync(request);
+                _logger.LogInformation($"user with username {model.Username} just logged in");
                 return Response(response);
             }
             catch (InternalServerErrorException ex)
             {
+                _logger.LogError($"Ctitical error while logging in: {ex.Message}");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }

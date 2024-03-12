@@ -4,10 +4,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OpenScholarApp.Data.Context;
 using OpenScholarApp.Domain.Entities;
+using OpenScholarApp.Services.CleanUpServices;
+using Serilog;
+using Serilog.Events;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -36,6 +40,27 @@ namespace OpenScholarApp.Helpers.Extensions
                 options.UseSqlServer(connectionString));
 
             return new(services, configuration);
+        }
+
+        public static IHostBuilder UseSerilogConfiguration(this IHostBuilder hostBuilder)
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File(
+                    path: "./Logs/log-.txt",
+                    rollingInterval: RollingInterval.Day,
+                    restrictedToMinimumLevel: LogEventLevel.Information)
+                .CreateLogger();
+
+            return hostBuilder.UseSerilog();
+        }
+
+        public static ConfigBuilder AddHostedServices(this ConfigBuilder builder)
+        {
+            builder.Services.AddHostedService<NotificationCleanupService>();
+            return builder;
         }
 
         public static ConfigBuilder AddPostgreSqlDbContext(this IServiceCollection services, IConfiguration configuration)

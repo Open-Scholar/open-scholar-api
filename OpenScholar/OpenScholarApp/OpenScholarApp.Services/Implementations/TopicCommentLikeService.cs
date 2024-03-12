@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
+using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.TopicCommentLikeDto;
+using OpenScholarApp.Dtos.UserNotificationDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.TopicCommentLikeExceptions;
 using OpenScholarApp.Shared.Responses;
@@ -13,6 +15,7 @@ namespace OpenScholarApp.Services.Implementations
     public class TopicCommentLikeService : ITopicCommentLikeService
     {
         private readonly IMapper _mapper;
+        private readonly IUserNotificationRepository _userNotificationRepository;
         private readonly INotificationService _notificationService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITopicCommentRepository _topicCommentRepository;
@@ -21,9 +24,11 @@ namespace OpenScholarApp.Services.Implementations
         public TopicCommentLikeService(IMapper mapper,
                                        UserManager<ApplicationUser> userManager,
                                        INotificationService notificationService,
+                                       IUserNotificationRepository userNotificationRepository,
                                        ITopicCommentLikeRepository topicCommentLikeRepository,
                                        ITopicCommentRepository topicCommentRepository)
         {
+            _userNotificationRepository = userNotificationRepository;
             _notificationService = notificationService;
             _mapper = mapper;
             _userManager = userManager;
@@ -56,9 +61,29 @@ namespace OpenScholarApp.Services.Implementations
 
                     like.TopicCommentId = topicComment.Id;
                     like.TopicComment = topicComment;
+                    like.CreatedAt = DateTime.UtcNow;
 
-                    await _topicCommentLikeRepository.Add(like);
-                    await _notificationService.SendNotification(topicComment.UserId, $"{user.UserName} liked your comment!");
+                    var userNotificationDto = new AddUserNotificationDto()
+                    {
+                        ReferenceId = topicComment.Id,
+                        UserId = userId,
+                        RecieverUserId = topicComment.UserId,
+                        Message = $"{user.UserName} Commented on your post",
+                        NotificationType = NotificationType.TopicCommentLike,
+                        IsRead = false,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    var userNotification = new UserNotification();
+                    _mapper.Map(userNotificationDto, userNotification);
+
+                    await Task.WhenAll(
+                          _topicCommentLikeRepository.Add(like),
+                          _notificationService.SendNotification(topicComment.UserId, $"{user.UserName} commented on your post!"),
+                          _userNotificationRepository.Add(userNotification));
+
+                    //await _topicCommentLikeRepository.Add(like);
+                    //await _notificationService.SendNotification(topicComment.UserId, $"{user.UserName} liked your comment!");
                     return Response.Success;
                 }
             }

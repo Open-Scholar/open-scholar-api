@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
+using OpenScholarApp.Domain.Enums;
 using OpenScholarApp.Dtos.TopicLikeDto;
+using OpenScholarApp.Dtos.UserNotificationDto;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Shared.CustomExceptions.TopicLikeExceptions;
 using OpenScholarApp.Shared.Responses;
@@ -12,6 +14,7 @@ namespace OpenScholarApp.Services.Implementations
 {
     public class TopicLikeService : ITopicLikeService
     {
+        private readonly IUserNotificationRepository _userNotificationRepository;
         private readonly ITopicLikeRepository _topicLikeRepository;
         private readonly ITopicRepository _topicRepository;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -20,10 +23,12 @@ namespace OpenScholarApp.Services.Implementations
 
         public TopicLikeService(IMapper mapper,
                                 UserManager<ApplicationUser> userManager,
+                                IUserNotificationRepository userNotificationRepository,
                                 INotificationService notificationService,
                                 ITopicRepository topicRepository,
                                 ITopicLikeRepository topicLikeRepository)
         {
+            _userNotificationRepository = userNotificationRepository;
             _notificationService = notificationService;
             _topicRepository = topicRepository;
             _mapper = mapper;
@@ -54,14 +59,39 @@ namespace OpenScholarApp.Services.Implementations
                         return new Response("Topic Not Found!");
 
                     like.Topic = topic;
-                    await _topicLikeRepository.Add(like);
-                    await _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!");
+                    like.UserId = userId;
+                    like.CreatedAt = DateTime.UtcNow;
+
+                    var userNotificationDto = new AddUserNotificationDto()
+                    {
+                        ReferenceId = topic.Id,
+                        UserId = userId,
+                        RecieverUserId = topic.UserId,
+                        Message = $"{user.UserName} liked your Post",
+                        NotificationType = NotificationType.TopicLike,
+                        IsRead = false,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    var userNotification = new UserNotification();
+                    _mapper.Map(userNotificationDto, userNotification);
+
+                    //await _topicLikeRepository.Add(like);
+                    //await _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!");
+                    //await _userNotificationRepository.Add(userNotification);
+
+                    await Task.WhenAll(
+                          _topicLikeRepository.Add(like),
+                          _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!"),
+                          _userNotificationRepository.Add(userNotification)
+            );
+
                     return Response.Success;
                 }
             }
             catch (TopicLikeDataException ex)
             {
-                return new Response(ex.Message); 
+                return new Response(ex.Message);
             }
         }
 
@@ -84,11 +114,11 @@ namespace OpenScholarApp.Services.Implementations
             try
             {
                 var topicLike = await _topicLikeRepository.GetByIdInt(id);
-                if (topicLike == null) 
+                if (topicLike == null)
                     return new Response<TopicLikeDto>("Topic Like Like not found!");
 
                 var topicDto = _mapper.Map<TopicLikeDto>(topicLike);
-                return new Response<TopicLikeDto>() { IsSuccessfull = true, Result = topicDto};
+                return new Response<TopicLikeDto>() { IsSuccessfull = true, Result = topicDto };
             }
             catch (TopicLikeDataException e)
             {

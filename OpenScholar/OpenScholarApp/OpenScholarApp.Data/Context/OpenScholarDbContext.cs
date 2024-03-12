@@ -12,6 +12,7 @@ namespace OpenScholarApp.Data.Context
             //Database.EnsureCreated();
         }
 
+        #region DbSets
         //User Types
         public DbSet<Student> Students { get; set; }
         public DbSet<Professor> Professors { get; set; }
@@ -34,6 +35,9 @@ namespace OpenScholarApp.Data.Context
         public DbSet<TopicLike> TopicLikes { get; set; }
         public DbSet<TopicCommentLike> TopicCommentLikes { get; set; }
         public DbSet<UserConnection> UserConnections { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
+
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -343,6 +347,35 @@ namespace OpenScholarApp.Data.Context
 
                 entity.HasIndex(uc => uc.UserId).HasDatabaseName("IDX_UserConnection_UserId");
                 entity.HasIndex(uc => uc.ConnectionId).HasDatabaseName("IDX_UserConnection_ConnectionId");
+            });
+
+            modelBuilder.Entity<UserNotification>(entity =>
+            { entity.HasKey(uc => uc.Id);
+
+                entity.Property(n => n.Message)
+                      .IsRequired()
+                      .HasMaxLength(500); 
+
+                entity.Property(n => n.IsRead)
+                      .IsRequired(); 
+
+                entity.Property(n => n.CreatedAt)
+                      .IsRequired(); 
+
+                entity.Property(n => n.NotificationType)
+                      .IsRequired()
+                      .HasMaxLength(50); 
+
+                entity.HasOne(n => n.User)
+                      .WithMany(u => u.UserNotifications) 
+                      .HasForeignKey(n => n.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(n => n.ReferenceId).IsRequired(false);
+
+                entity.HasIndex(n => n.UserId);
+                entity.HasIndex(n => n.IsRead);
+
             });
             #endregion
 
