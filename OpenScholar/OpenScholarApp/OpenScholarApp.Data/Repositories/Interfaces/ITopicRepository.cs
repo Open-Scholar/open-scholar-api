@@ -6,7 +6,8 @@ namespace OpenScholarApp.Data.Repositories.Interfaces
     {
         Task<List<Topic>> GetAllWithUserAndLikesAsync();
         Task<Topic> GetByIdWithLikesAsync(int id);
-        Task<(IEnumerable<Topic> Items, int TotalCount)> GetAllWithUserAndFiltersAsync(int? facultyId = null,
+        Task<(IEnumerable<Topic> Items, int TotalCount)> GetAllWithUserAndFiltersAsync(string userId, 
+                                                                                        int? facultyId = null,
                                                                                         int? universityId = null,
                                                                                         bool? isMostPopular = false,
                                                                                         bool? isUserPost = false,

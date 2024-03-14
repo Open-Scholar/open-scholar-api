@@ -1,0 +1,19 @@
+version: 0.2    
+phases:
+  install:
+    commands:
+      # Install .NET 7
+      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel STS 
+  pre_build:
+    commands:
+      # Restore NuGet packages, etc.
+      - dotnet restore OpenScholarApp/OpenScholarApp.sln
+  build:
+    commands:
+      # Build your .NET 7 project
+      - dotnet build OpenScholarApp/OpenScholarApp.sln --configuration Release
+artifacts:
+  files:
+    # Specify the files and directories to include in the build artifacts
+    - '**/*'
+  base-directory: 'build_output/'

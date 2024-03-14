@@ -118,7 +118,7 @@ namespace OpenScholarApp.Services.Implementations
         {
             try
             {
-                var (topics, totalCount) = await _topicRepository.GetAllWithUserAndFiltersAsync(facultyId, universityId, isMostPopular, isUserPost, pageNumber, pageSize);
+                var (topics, totalCount) = await _topicRepository.GetAllWithUserAndFiltersAsync(userId, facultyId, universityId, isMostPopular, isUserPost, pageNumber, pageSize);
                 var topicDtos = new List<TopicDto>();
                 foreach (var topic in topics)
                 {

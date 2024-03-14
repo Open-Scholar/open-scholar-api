@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OpenScholarApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c3ea005694cf53c531255b7416ab0fdd3fd71b79")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21559ec9ca942933305c92e8247e8ca43f200b82")]
 [assembly: System.Reflection.AssemblyProductAttribute("OpenScholarApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OpenScholarApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
