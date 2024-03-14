@@ -79,11 +79,13 @@ namespace OpenScholarApp.Services.Implementations
                 
                 //var result = _topicCommentRepository.Add(topicComment);
                 //await _notificationService.SendNotification(topic.UserId, $"User {topicComment.UserId} has liked your comment!");
-                await Task.WhenAll(
-                          _topicCommentRepository.Add(topicComment),
-                          _notificationService.SendNotification(topic.UserId, $"{user.UserName} commented on your post!"),
-                          _userNotificationRepository.Add(userNotification));
-
+                //await Task.WhenAll(
+                //          _topicCommentRepository.Add(topicComment),
+                //          _notificationService.SendNotification(topic.UserId, $"{user.UserName} commented on your post!"),
+                //          _userNotificationRepository.Add(userNotification));
+                await _topicCommentRepository.Add(topicComment);
+                await _notificationService.SendNotification(topic.UserId, $"{user.UserName} commented on your post!");
+                await _userNotificationRepository.Add(userNotification);
                 return new Response<AddTopicCommentDto> { IsSuccessfull = true, Result = topicCommentDto };
             }
             catch (TopicCommentDataException e)
