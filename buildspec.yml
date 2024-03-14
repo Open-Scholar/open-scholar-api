@@ -3,15 +3,15 @@ phases:
   install:
     commands:
       # Install .NET 7
-      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel STS 
+      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 7.0 
   pre_build:
     commands:
       # Restore NuGet packages, etc.
-      - dotnet restore OpenScholarApp/OpenScholarApp.sln
+      - dotnet restore "OpenScholarApp/OpenScholarApp.sln"
   build:
     commands:
       # Build your .NET 7 project
-      - dotnet build OpenScholarApp/OpenScholarApp.sln --configuration Release
+      - dotnet build "OpenScholarApp/OpenScholarApp.sln" --configuration Release
 artifacts:
   files:
     # Specify the files and directories to include in the build artifacts
