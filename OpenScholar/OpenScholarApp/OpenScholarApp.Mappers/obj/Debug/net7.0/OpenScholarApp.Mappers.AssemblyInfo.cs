@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OpenScholarApp.Mappers")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d07800367780414e05fca87d9cc4f3ebe5f22b02")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+259ff723e489bb9a336ef2e82c935300db222842")]
 [assembly: System.Reflection.AssemblyProductAttribute("OpenScholarApp.Mappers")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OpenScholarApp.Mappers")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
