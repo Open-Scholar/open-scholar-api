@@ -1,10 +1,8 @@
 version: 0.2    
 phases:
   install:
-    commands:
-      # Install .NET 7
-      - curl -O https://download.visualstudio.microsoft.com/download/pr/c97c327d-c699-455e-8c98-f2bee01a9816/ac33d9589182f506d2c498b5e7d52bb2/aspnetcore-runtime-7.0.17-linux-x64.tar.gz
-      - sudo tar -zxvf aspnetcore-runtime-7.0.17-linux-x64.tar.gz -C /root/.dotnet
+    runtime-versions:
+      dotnet: 8.0    
   pre_build:
     commands:
       - cd OpenScholar/OpenScholarApp
