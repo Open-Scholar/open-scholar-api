@@ -6,6 +6,8 @@ phases:
       - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 7.0 
   pre_build:
     commands:
+      # For debuggin
+      - ls -la
       # Restore NuGet packages, etc.
       - dotnet restore OpenScholarApp.sln
   build:
