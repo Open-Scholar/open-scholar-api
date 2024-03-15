@@ -12,7 +12,7 @@ phases:
     commands:
       # Build your .NET project and output to a specific directory
       - dotnet build OpenScholarApp.sln --configuration Release
-  post-build:
+  post_build:
     commands:
       # Publish your .NET application to a specific folder
       - dotnet publish --configuration Release --output ./
