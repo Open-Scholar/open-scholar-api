@@ -12,10 +12,10 @@ phases:
     commands:
       # Build your .NET project and output to a specific directory
       - dotnet build OpenScholarApp.sln --configuration Release
+  post-build:
+    commands:
       # Publish your .NET application to a specific folder
-      - dotnet publish OpenScholarApp.sln --configuration Release --output ./build_output
+      - dotnet publish --configuration Release --output ./
 artifacts:
   files:
-    # Include everything in the build_output directory
     - '**/*'
-  base-directory: 'build_output/'
