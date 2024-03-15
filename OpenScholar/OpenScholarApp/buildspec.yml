@@ -15,7 +15,7 @@ phases:
   post_build:
     commands:
       # Publish your .NET application to a specific folder
-      - dotnet publish --configuration Release --output ./
+      - dotnet publish OpenScholarApp.sln --configuration Release --output ./build_output
 artifacts:
   files:
     - '**/*'
