@@ -18,4 +18,5 @@ phases:
       - dotnet publish OpenScholarApp.sln --configuration Release --output ./build_output
 artifacts:
   files:
-    - '**/*'
+    - build_output/**/*
+  base-directory: ./build_output
