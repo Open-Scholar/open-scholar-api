@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "deployments": {
+      "aspNetCoreWeb": [
+        {
+          "name": "OpenScholarApp",
+          "parameters": {
+            "appBundle": "OpenScholarApp.zip",
+            "iisPath": "/",
+            "iisWebSite": "Default Web Site"
+          }
+        }
+      ]
+    }
+  }
