@@ -22,9 +22,9 @@ phases:
       - zip -r OpenScholarApp.zip .
       # Navigate back to the project root directory
       - cd ../..
-      - ls -la
       # Add the OpenScholarApp.zip and deployment manifest to the final source bundle
       - zip -r OpenScholarApp.zip ./OpenScholarApp/build_output/OpenScholarApp.zip ./OpenScholarApp/aws-windows-deployment-manifest.json
+      - ls -la
 artifacts:
   files:
     - OpenScholarApp.zip
