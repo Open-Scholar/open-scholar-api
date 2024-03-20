@@ -2,21 +2,20 @@ version: 0.2
 phases:
   install:
     commands:
-      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel STS
-      - export PATH="$PATH:/root/.dotnet"
+      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 7.0   
   pre_build:
     commands:
       - cd OpenScholar/OpenScholarApp
       # Restore NuGet packages, etc.
-      - /root/.dotnet/dotnet restore OpenScholarApp.sln
+      - dotnet restore OpenScholarApp.sln
   build:
     commands:
       # Build your .NET project and output to a specific directory
-      - /root/.dotnet/dotnet build OpenScholarApp.sln --configuration Release
+      - dotnet build OpenScholarApp.sln --configuration Release
   post_build:
     commands:
       # Publish your .NET application to a specific folder
-      - /root/.dotnet/dotnet publish OpenScholarApp.sln --configuration Release --output ./build_output
+      - dotnet publish OpenScholarApp.sln --configuration Release --output ./build_output
 artifacts:
   files:
     - '**/*'
