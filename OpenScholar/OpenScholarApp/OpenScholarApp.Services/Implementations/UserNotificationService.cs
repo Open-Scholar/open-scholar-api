@@ -2,7 +2,6 @@
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Dtos.UserNotificationDto;
 using OpenScholarApp.Services.Interfaces;
-using OpenScholarApp.Shared.CustomExceptions.UserExceptions;
 using OpenScholarApp.Shared.CustomExceptions.UserNotificationExceptions;
 using OpenScholarApp.Shared.Responses;
 

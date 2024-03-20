@@ -74,9 +74,12 @@ namespace OpenScholarApp.Services.Implementations
                         CreatedAt = DateTime.UtcNow
                     };
 
+                    string userNotificationDtoJson = System.Text.Json.JsonSerializer.Serialize(userNotificationDto).ToString();
+
                     var userNotification = new UserNotification();
                     _mapper.Map(userNotificationDto, userNotification);
-                    await _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!");
+                    //await _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!");
+                    await _notificationService.SendNotification(topic.UserId, userNotificationDtoJson);
                     await _userNotificationRepository.Add(userNotification);
                     return Response.Success;
                 }

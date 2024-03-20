@@ -35,7 +35,7 @@ namespace OpenScholarApp.Controllers
             }
         }
 
-        [HttpGet("/unread")]
+        [HttpGet("/api/unreadnotificationscount")]
         public async Task<IActionResult> GetUnreadCount()
         {
             try

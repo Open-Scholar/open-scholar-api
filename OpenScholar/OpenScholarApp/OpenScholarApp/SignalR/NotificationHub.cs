@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using OpenScholarApp.Data.Repositories.Interfaces;
+using OpenScholarApp.Dtos.UserNotificationDto;
 using OpenScholarApp.Shared.CustomExceptions.HubExceptions;
 
 namespace OpenScholarApp.SignalR

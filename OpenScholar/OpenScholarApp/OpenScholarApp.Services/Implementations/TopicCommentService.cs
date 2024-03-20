@@ -67,7 +67,7 @@ namespace OpenScholarApp.Services.Implementations
 
                 var userNotificationDto = new AddUserNotificationDto()
                 {
-                    ReferenceId = topicComment.Id,
+                    ReferenceId = topic.Id,
                     UserId = userId,
                     RecieverUserId = topic.UserId,
                     Message = $"{user.UserName} Commented on your post",
@@ -76,9 +76,10 @@ namespace OpenScholarApp.Services.Implementations
                     CreatedAt = DateTime.UtcNow
                 };
 
+                string userNotificationDtoJson = System.Text.Json.JsonSerializer.Serialize(userNotificationDto);
                 var userNotification = new UserNotification();
                 _mapper.Map(userNotificationDto, userNotification);
-                await _notificationService.SendNotification(topic.UserId, $"{user.UserName} commented on your post!");
+                await _notificationService.SendNotification(topic.UserId, userNotificationDtoJson);
                 await _userNotificationRepository.Add(userNotification);
                 return new Response<AddTopicCommentDto> { IsSuccessfull = true, Result = topicCommentDto };
             }
