@@ -6,6 +6,7 @@ phases:
   pre_build:
     commands:
       - cd OpenScholar/OpenScholarApp
+      - ls -la /root/.dotnet
       # Restore NuGet packages, etc.
       - dotnet restore OpenScholarApp.sln
   build:
