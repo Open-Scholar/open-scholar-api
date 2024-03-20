@@ -13,6 +13,7 @@ namespace OpenScholarApp.Data.Context
         }
 
         #region DbSets
+
         //User Types
         public DbSet<Student> Students { get; set; }
         public DbSet<Professor> Professors { get; set; }
