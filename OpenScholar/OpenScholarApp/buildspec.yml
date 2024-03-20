@@ -1,17 +1,11 @@
 version: 0.2    
 phases:
   install:
-    commands:
-      # Download the .NET 7 runtime tarball
-      - wget https://download.visualstudio.microsoft.com/download/pr/c97c327d-c699-455e-8c98-f2bee01a9816/ac33d9589182f506d2c498b5e7d52bb2/aspnetcore-runtime-7.0.17-linux-x64.tar.gz
-      # Create the directory where you want to install the .NET runtime
-      - mkdir -p /root/.dotnet
-      # Extract the downloaded tarball into the directory
-      - tar -zxf aspnetcore-runtime-7.0.17-linux-x64.tar.gz -C /root/.dotnet  
+    runtime-versions:
+      dotnet: 8.0    
   pre_build:
     commands:
       - cd OpenScholar/OpenScholarApp
-      - ls -la /root/.dotnet
       # Restore NuGet packages, etc.
       - dotnet restore OpenScholarApp.sln
   build:
