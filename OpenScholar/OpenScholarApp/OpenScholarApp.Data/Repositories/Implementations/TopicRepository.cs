@@ -51,7 +51,12 @@ namespace OpenScholarApp.Data.Repositories.Implementations
                 query = query.OrderByDescending(t => t.Likes.Count());
 
             if (isUserPost.HasValue && isUserPost.Value == true)
+            {
                 query = query.Where(t => t.UserId == userId);
+                var totalItems = await query.ToListAsync();
+                totalCount = await query.CountAsync();
+                return (totalItems, totalCount);
+            }
                 
 
             var items = await query.ToListAsync();

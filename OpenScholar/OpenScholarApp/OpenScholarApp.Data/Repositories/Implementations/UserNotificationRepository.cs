@@ -17,7 +17,7 @@ namespace OpenScholarApp.Data.Repositories.Implementations
         public async Task<(IEnumerable<UserNotification> Items, int UnreadCount, int TotalCount)> GetByUserIdAndMarkAsReadPagedAsync(string userId, int pageNumber = 1, int pageSize = 10)
         {
             var allNotifications = await _openScholarDbContext.UserNotifications
-                                        .Where(n => n.UserId == userId)
+                                        .Where(n => n.RecieverUserId == userId)
                                         .ToListAsync();
 
             var unreadCount = allNotifications.Count(n => !n.IsRead);
@@ -41,7 +41,7 @@ namespace OpenScholarApp.Data.Repositories.Implementations
         public async Task<int> UnreadNotificationsCount(string userId)
         {
            var result =  _openScholarDbContext.UserNotifications
-                                .Where(n => n.UserId == userId && n.IsRead == false)
+                                .Where(n => n.RecieverUserId == userId && n.IsRead == false)
                                 .Count();
 
             return result;

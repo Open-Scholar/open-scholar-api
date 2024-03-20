@@ -62,13 +62,14 @@ namespace OpenScholarApp.Services.Implementations
                     like.TopicCommentId = topicComment.Id;
                     like.TopicComment = topicComment;
                     like.CreatedAt = DateTime.UtcNow;
+                    await _topicCommentLikeRepository.Add(like);
 
                     var userNotificationDto = new AddUserNotificationDto()
                     {
                         ReferenceId = topicComment.Id,
                         UserId = userId,
                         RecieverUserId = topicComment.UserId,
-                        Message = $"{user.UserName} Commented on your post",
+                        Message = $"{user.UserName} Liked your comment!",
                         NotificationType = NotificationType.TopicCommentLike,
                         IsRead = false,
                         CreatedAt = DateTime.UtcNow
@@ -76,14 +77,8 @@ namespace OpenScholarApp.Services.Implementations
 
                     var userNotification = new UserNotification();
                     _mapper.Map(userNotificationDto, userNotification);
-
-                    await Task.WhenAll(
-                          _topicCommentLikeRepository.Add(like),
-                          _notificationService.SendNotification(topicComment.UserId, $"{user.UserName} commented on your post!"),
-                          _userNotificationRepository.Add(userNotification));
-
-                    //await _topicCommentLikeRepository.Add(like);
-                    //await _notificationService.SendNotification(topicComment.UserId, $"{user.UserName} liked your comment!");
+                    await _notificationService.SendNotification(topicComment.UserId, $"{user.UserName} commented on your post!");
+                    await _userNotificationRepository.Add(userNotification);
                     return Response.Success;
                 }
             }

@@ -61,6 +61,7 @@ namespace OpenScholarApp.Services.Implementations
                     like.Topic = topic;
                     like.UserId = userId;
                     like.CreatedAt = DateTime.UtcNow;
+                    await _topicLikeRepository.Add(like);
 
                     var userNotificationDto = new AddUserNotificationDto()
                     {
@@ -75,17 +76,8 @@ namespace OpenScholarApp.Services.Implementations
 
                     var userNotification = new UserNotification();
                     _mapper.Map(userNotificationDto, userNotification);
-
-                    //await _topicLikeRepository.Add(like);
-                    //await _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!");
-                    //await _userNotificationRepository.Add(userNotification);
-
-                    await Task.WhenAll(
-                          _topicLikeRepository.Add(like),
-                          _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!"),
-                          _userNotificationRepository.Add(userNotification)
-            );
-
+                    await _notificationService.SendNotification(topic.UserId, $"{user.UserName} liked your post!");
+                    await _userNotificationRepository.Add(userNotification);
                     return Response.Success;
                 }
             }

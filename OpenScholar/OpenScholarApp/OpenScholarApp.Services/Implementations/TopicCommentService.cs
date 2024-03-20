@@ -63,11 +63,13 @@ namespace OpenScholarApp.Services.Implementations
                 topicComment.TopicId = topicCommentDto.TopicId;
                 topicComment.CreatedAt = DateTimeOffset.UtcNow;
 
+                await _topicCommentRepository.Add(topicComment);
+
                 var userNotificationDto = new AddUserNotificationDto()
                 {
                     ReferenceId = topicComment.Id,
                     UserId = userId,
-                    RecieverUserId = topicComment.UserId,
+                    RecieverUserId = topic.UserId,
                     Message = $"{user.UserName} Commented on your post",
                     NotificationType = NotificationType.TopicComment,
                     IsRead = false,
@@ -76,14 +78,6 @@ namespace OpenScholarApp.Services.Implementations
 
                 var userNotification = new UserNotification();
                 _mapper.Map(userNotificationDto, userNotification);
-                
-                //var result = _topicCommentRepository.Add(topicComment);
-                //await _notificationService.SendNotification(topic.UserId, $"User {topicComment.UserId} has liked your comment!");
-                //await Task.WhenAll(
-                //          _topicCommentRepository.Add(topicComment),
-                //          _notificationService.SendNotification(topic.UserId, $"{user.UserName} commented on your post!"),
-                //          _userNotificationRepository.Add(userNotification));
-                await _topicCommentRepository.Add(topicComment);
                 await _notificationService.SendNotification(topic.UserId, $"{user.UserName} commented on your post!");
                 await _userNotificationRepository.Add(userNotification);
                 return new Response<AddTopicCommentDto> { IsSuccessfull = true, Result = topicCommentDto };
