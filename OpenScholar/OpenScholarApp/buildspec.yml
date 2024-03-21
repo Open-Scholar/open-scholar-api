@@ -18,13 +18,13 @@ phases:
       - dotnet publish OpenScholarApp.sln --configuration Release --output ./build_output
       # Navigate to the output directory
       - cd build_output
-      # Zip the contents of the publish directory into site.zip
-      - zip -r OpenScholarApp.zip .
-      # Navigate back to the project root directory
+      # Zip the contents of the publish directory into OpenScholarApp.zip
+      - zip -r ../OpenScholarApp.zip .
+      # Navigate back to the OpenScholarApp directory where aws-windows-deployment-manifest.json is located
       - cd ..
-      # Add the OpenScholarApp.zip and deployment manifest to the final source bundle
-      - zip -r OpenScholarApp.zip ./build_output/OpenScholarApp.zip ./aws-windows-deployment-manifest.json
+      # We add aws-windows-deployment-manifest.json to the OpenScholarApp.zip
+      - zip -g OpenScholarApp.zip aws-windows-deployment-manifest.json
 artifacts:
   files:
     - OpenScholarApp.zip
-  base-directory: 'OpenScholar/OpenScholarApp'
+  base-directory: OpenScholar/OpenScholarApp
