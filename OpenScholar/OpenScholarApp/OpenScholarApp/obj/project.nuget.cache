@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "RpRj0HHOxB0Q/YQuNwAfxiVUwth7nw9YFGk3i/501u3cRTe0gcrKDoQcrhZlmCjZDOGE/IOn866vbG8SgakS6g==",
+  "dgSpecHash": "XuaBSC+lQY5Xw6by3eH9nZqn4zL5yNoZ3ziBgnraZf2gYIYR+Af0UhaVulZvTa2muR4jIs+kfqdwCNFJAtQ6qg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp\\OpenScholarApp.csproj",
   "expectedPackageFiles": [
@@ -136,7 +136,7 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\7.4.1\\microsoft.identitymodel.jsonwebtokens.7.4.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.logging\\7.4.1\\microsoft.identitymodel.logging.7.4.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.protocols\\7.3.1\\microsoft.identitymodel.protocols.7.3.1.nupkg.sha512",
-    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\7.1.2\\microsoft.identitymodel.protocols.openidconnect.7.1.2.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\7.3.1\\microsoft.identitymodel.protocols.openidconnect.7.3.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.4.1\\microsoft.identitymodel.tokens.7.4.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.net.http.headers\\2.2.0\\microsoft.net.http.headers.2.2.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.net.stringtools\\17.8.3\\microsoft.net.stringtools.17.8.3.nupkg.sha512",
