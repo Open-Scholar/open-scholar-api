@@ -2139,14 +2139,10 @@
       },
       "OpenScholarApp.SignalR/1.0.0": {
         "type": "project",
-<<<<<<< HEAD
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "OpenScholarApp.Dtos": "1.0.0"
         },
-=======
-        "framework": ".NETCoreApp,Version=v8.0",
->>>>>>> migration_to_net8_test
         "compile": {
           "bin/placeholder/OpenScholarApp.SignalR.dll": {}
         },
@@ -5336,11 +5332,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Helpers\\OpenScholarApp.Helpers.csproj",
+      "projectUniqueName": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Helpers\\OpenScholarApp.Helpers.csproj",
       "projectName": "OpenScholarApp.Helpers",
-      "projectPath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Helpers\\OpenScholarApp.Helpers.csproj",
+      "projectPath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Helpers\\OpenScholarApp.Helpers.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Helpers\\obj\\",
+      "outputPath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Helpers\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5361,14 +5357,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholar.SignalR\\OpenScholarApp.SignalR.csproj": {
-              "projectPath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholar.SignalR\\OpenScholarApp.SignalR.csproj"
+            "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholar.SignalR\\OpenScholarApp.SignalR.csproj": {
+              "projectPath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholar.SignalR\\OpenScholarApp.SignalR.csproj"
             },
-            "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj": {
-              "projectPath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj"
+            "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj": {
+              "projectPath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj"
             },
-            "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj": {
-              "projectPath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj"
+            "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj": {
+              "projectPath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj"
             }
           }
         }
@@ -5449,12 +5445,16 @@
             "privateAssets": "all"
           }
         },
-<<<<<<< HEAD
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
-=======
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
->>>>>>> migration_to_net8_test
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Helpers\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

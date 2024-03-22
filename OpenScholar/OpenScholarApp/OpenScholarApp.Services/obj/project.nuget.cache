@@ -1,12 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "3PR/NOfgYBHWHQ/vr101mVy8wjTFVzUoTiau1Hbu4fBQVeyglKGRsZInsPMcKgAdGTtSRMGEwcfTPbjBXtUTig==",
-=======
-  "dgSpecHash": "G6v8XFj3T0jzBISE0LZ6y1nWsQbjYUwCvZgQRG/E7e20nqB+Xq0nLRENFRBwrXq+d58HQk5ST5l0UluSVYrVWA==",
->>>>>>> migration_to_net8_test
+  "dgSpecHash": "4mTzpyAZcW30bBOW2mKzyc58gYwWySt00V8Xk1PBslIBKsqJhFBMSnoZd5/Emg44L7zIFIsBNlFXNpVWD3j4HQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj",
+  "projectFilePath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.core\\1.36.0\\azure.core.1.36.0.nupkg.sha512",
@@ -104,5 +100,12 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

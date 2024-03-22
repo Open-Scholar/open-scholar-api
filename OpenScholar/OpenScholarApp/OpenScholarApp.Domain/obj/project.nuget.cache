@@ -1,12 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "z/sGoBKyXAuTiwBWHhFm6oASjiWqaD+SksZFzVWc9PBsuYDlpdPr1SgislA7XN0pZDhs3CjW+QP5fGR4Lpb1Sw==",
-=======
-  "dgSpecHash": "qZ9lPcXb1cVR/5TtejZtU8bqxqQ6/RsuerBM4wKVI+SYTxoqz9DUUjDQO+jb/O82fZNqASVdiOlNZT0joebFng==",
->>>>>>> migration_to_net8_test
+  "dgSpecHash": "1hGzwSK2qRHbjE04TmGN4ZUz1Kgjr2x+NIvNIsl3yN8ke/Az6gsJEVCXcLMCXWu4NcNXc4uU/eTN39v6JYRY+A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\OpenScholarApp.Domain.csproj",
+  "projectFilePath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\OpenScholarApp.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.3\\microsoft.aspnetcore.cryptography.internal.8.0.3.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\8.0.3\\microsoft.aspnetcore.cryptography.keyderivation.8.0.3.nupkg.sha512",
@@ -28,5 +24,12 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.abstractions\\7.4.1\\microsoft.identitymodel.abstractions.7.4.1.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

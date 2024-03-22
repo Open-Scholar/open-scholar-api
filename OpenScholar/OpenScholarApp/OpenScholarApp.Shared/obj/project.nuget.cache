@@ -1,12 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "MBba/68lASZjvqEcVslL1Fx4uAjNUJtRPXPELGndE/5SIl58T1rXaA+dHtieJbUt+lZqHCG0d0acFmpBV9qpcg==",
-=======
-  "dgSpecHash": "gA9d7rGOZGJ1RGCjExy+eU3EXbfqGiEwf4snZjUBLR7oZrdZ0K0RQiB5DH9cEwNlv4EYfeJs6I3F55ZNipGFkg==",
->>>>>>> migration_to_net8_test
+  "dgSpecHash": "77PINMFzQeUtkZTPPpSRjeo7Eilz050SvCUmTKBMTw5j5QXfnqoIdEVUkVxFuFg2u4ZWOwQuVosDe4E1mcb5qw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\OpenScholarApp.Shared.csproj",
+  "projectFilePath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\OpenScholarApp.Shared.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
@@ -58,5 +54,12 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\system.security.principal.windows\\4.5.0\\system.security.principal.windows.4.5.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\system.text.encodings.web\\4.5.0\\system.text.encodings.web.4.5.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

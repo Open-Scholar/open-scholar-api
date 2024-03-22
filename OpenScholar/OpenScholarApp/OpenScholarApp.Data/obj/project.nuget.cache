@@ -1,12 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "GPVCmZR6iAPGu0v0EInQ3NfqNvHMaMtXTUftnDRDdpJ2qpZqpUsdRvQY74iv4Jxat8Fqupjy8u3c2fPEakZ6OQ==",
-=======
-  "dgSpecHash": "hnPTvr69ef56/qijdCI7r5OrD+61CIurFbr1DkohPsy187qzhr9JHATwIbunr01cnbjuQdYM4LNL1JB/sOuzeQ==",
->>>>>>> migration_to_net8_test
+  "dgSpecHash": "uMraLdaEdUCBJxi4gqSOE2TigiME+4whHGzFcG56oa5uy0duWGdKCyqxDrTklTxFELa79TYegLFmPTN6AIzQ1A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj",
+  "projectFilePath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\OpenScholarApp.Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
@@ -101,5 +97,12 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Data\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

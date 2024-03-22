@@ -1,12 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "EIAUz868s+65E3SXSC9xCwkexl6agvd6Bdq785VFbCO8BEec18I3OFScsLgCNNDgfJrNgxAOMqUm/OMklk/MCQ==",
-=======
-  "dgSpecHash": "6+nqtCVnIccArgUhdW7bdGlq3GWqcfXBKl+sjl1HhhjXBksyHBXCXyFq+PO5o639DCosAB4+WdSr/uy2+NL2lg==",
->>>>>>> migration_to_net8_test
+  "dgSpecHash": "b2lghvJ04Jb1o/JrWw6fK0riCqG7XqGijVncmstPPEDvIabnAH10kYW1j1CrCtTGh6MMxXThiH5eFGdX8fuK3w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Mappers\\OpenScholarApp.Mappers.csproj",
+  "projectFilePath": "C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Mappers\\OpenScholarApp.Mappers.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.3\\microsoft.aspnetcore.cryptography.internal.8.0.3.nupkg.sha512",
@@ -31,5 +27,12 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.identitymodel.abstractions\\7.4.1\\microsoft.identitymodel.abstractions.7.4.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\src\\OpenScholarApplication\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Mappers\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
