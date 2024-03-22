@@ -14,7 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OpenScholarApp.Services")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+23f282b49569b5d15febacb4bbb4c08d8d4b4d71")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+400d047c1f1f91882a188fad5c52fc9911a8c0d5")]
+>>>>>>> migration_to_net8_test
 [assembly: System.Reflection.AssemblyProductAttribute("OpenScholarApp.Services")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OpenScholarApp.Services")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
