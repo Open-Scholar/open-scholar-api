@@ -19,12 +19,9 @@ phases:
       # Navigate to the output directory
       - cd site
       # Zip the contents of the publish directory into OpenScholarApp.zip
-      - zip -r ../OpenScholarApp.zip .
-      # Navigate back to the OpenScholarApp directory where aws-windows-deployment-manifest.json is located
-      - cd ..
-      # We add aws-windows-deployment-manifest.json to the OpenScholarApp.zip
-      - zip -r Artifact.zip ./OpenScholarApp.zip ./aws-windows-deployment-manifest.json
+      - zip -r ../site.zip .
 artifacts:
   files:
-    - Artifact.zip
+    - site.zip
+    - aws-windows-deployment-manifest.json
   base-directory: OpenScholar/OpenScholarApp
