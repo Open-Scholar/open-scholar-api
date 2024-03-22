@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hY5G+6auuDCTVZ0MV5hKJRjzoCkuFBMMqqBsuEF9Kp9K8t3R47pkMBKPjr8UWPc8ow84rmFRhZyuYYFU384cVg==",
+  "dgSpecHash": "gA9d7rGOZGJ1RGCjExy+eU3EXbfqGiEwf4snZjUBLR7oZrdZ0K0RQiB5DH9cEwNlv4EYfeJs6I3F55ZNipGFkg==",
   "success": true,
-  "projectFilePath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\OpenScholarApp.Shared.csproj",
+  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Shared\\OpenScholarApp.Shared.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

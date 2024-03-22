@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3MQo2yVI4gVJQ3Ke/Rqjf5O0qq7yJnn/Basa+hHtLSeSgbw1ZYdLZSZhj0Gue+PSqNCwoAg5042orG7BrYuq4w==",
+  "dgSpecHash": "G6v8XFj3T0jzBISE0LZ6y1nWsQbjYUwCvZgQRG/E7e20nqB+Xq0nLRENFRBwrXq+d58HQk5ST5l0UluSVYrVWA==",
   "success": true,
-  "projectFilePath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj",
+  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Services\\OpenScholarApp.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.core\\1.36.0\\azure.core.1.36.0.nupkg.sha512",

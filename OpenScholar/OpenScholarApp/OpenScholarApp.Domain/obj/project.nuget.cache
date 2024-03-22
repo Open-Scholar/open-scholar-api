@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2+K5sCaPQ1HCeI3fgHw/pb/zN1J7mzR/ukwkjuZgPOjym9WsZRBlioOMoXLZ1pH0dq3iMLuIiN+xYxtjlJJ/tA==",
+  "dgSpecHash": "qZ9lPcXb1cVR/5TtejZtU8bqxqQ6/RsuerBM4wKVI+SYTxoqz9DUUjDQO+jb/O82fZNqASVdiOlNZT0joebFng==",
   "success": true,
-  "projectFilePath": "C:\\src\\OpenScholar\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\OpenScholarApp.Domain.csproj",
+  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\blabla\\open-scholar-api\\OpenScholar\\OpenScholarApp\\OpenScholarApp.Domain\\OpenScholarApp.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.3\\microsoft.aspnetcore.cryptography.internal.8.0.3.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\8.0.3\\microsoft.aspnetcore.cryptography.keyderivation.8.0.3.nupkg.sha512",
