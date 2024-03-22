@@ -1,1 +1,1 @@
-# open-scholar-api
+# open-scholar-api backend
