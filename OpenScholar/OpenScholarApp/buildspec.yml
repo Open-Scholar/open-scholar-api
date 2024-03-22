@@ -11,11 +11,11 @@ phases:
   build:
     commands:
       # Build your .NET project and output to a specific directory
-      - dotnet build OpenScholarApp.sln
+      - dotnet build OpenScholarApp.sln --configuration Release
   post_build:
     commands:
       # Publish your .NET application to a specific folder
-      - dotnet publish OpenScholarApp.sln --output ./site
+      - dotnet publish OpenScholarApp.sln --configuration Release --output ./site
       # Navigate to the output directory
       - cd site
       # Zip the contents of the publish directory into OpenScholarApp.zip
