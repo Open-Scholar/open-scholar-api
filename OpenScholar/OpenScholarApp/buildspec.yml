@@ -1,8 +1,8 @@
 version: 0.2
 env:
   parameter-store:
-    S3_ACCESS_KEY_ID: "/S3Storage/AccessKeyId"
-    S3_SECRET_ACCESS_KEY: "/S3Storage/SecretAccessKey"
+    S3Storage:AccessKeyId: "/S3Storage/AccessKeyId"
+    S3Storage:SecretAccessKey: "/S3Storage/SecretAccessKey"
 phases:
   install:
     runtime-versions:
