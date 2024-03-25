@@ -42,7 +42,6 @@ namespace OpenScholarApp.Services.UserServices.Implementations
 
         private string GenerateResetPasswordLink(ApplicationUser user, string token)
         {
-            //need to test this with bekim real time
             var url = _config.GetSection("CurrentUrl").Value;
             var resetPasswordUrl = $"{url}/reset-password?email={user.Email}&token={Uri.EscapeDataString(token)}";
             return resetPasswordUrl;

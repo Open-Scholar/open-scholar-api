@@ -4,10 +4,13 @@ using OpenScholarApp.Mappers.MapperConfig;
 using OpenScholarApp.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
 var appSettings = builder.Configuration.GetSection("AppSettings");
 builder.Configuration.AddEnvironmentVariables();
 builder.Host.UseSerilogConfiguration();
-builder.Services.AddSignalR(); 
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly)
@@ -31,4 +34,6 @@ app.UseSwaggerUI();
 app.UseCors("CORSPolicy");
 app.MapControllers();
 app.MapHub<NotificationHub>("/NotificationsHub");
+
+
 app.Run();

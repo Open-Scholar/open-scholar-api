@@ -13,6 +13,8 @@ using OpenScholarApp.Services.CleanUpServices;
 using Serilog;
 using Serilog.Events;
 using Swashbuckle.AspNetCore.Filters;
+using System.Configuration;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace OpenScholarApp.Helpers.Extensions
@@ -41,6 +43,12 @@ namespace OpenScholarApp.Helpers.Extensions
 
             return new(services, configuration);
         }
+
+        //public static ConfigBuilder AddJsonFiles(this IServiceCollection services, IConfiguration configuration)
+        //{
+        //    services.Configure<JsonFileOptions>(Configuration.GetSection("JsonFileOptions"));
+        //    return new(services, configuration);
+        //}
 
         public static IHostBuilder UseSerilogConfiguration(this IHostBuilder hostBuilder)
         {
