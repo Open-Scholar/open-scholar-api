@@ -1,4 +1,8 @@
-version: 0.2    
+version: 0.2
+env:
+  secrets-manager:
+    S3_ACCESS_KEY_ID: "S3Storage-1yZ8Fm:AccessKeyId"
+    S3_SECRET_ACCESS_KEY: "S3Storage-1yZ8Fm:SecretAccessKey"    
 phases:
   install:
     runtime-versions:
@@ -10,6 +14,7 @@ phases:
       - dotnet restore OpenScholarApp.sln
   build:
     commands:
+      - echo "Building with access key $S3_ACCESS_KEY_ID"
       # Build your .NET project and output to a specific directory
       - dotnet build OpenScholarApp.sln --configuration Release
   post_build:
