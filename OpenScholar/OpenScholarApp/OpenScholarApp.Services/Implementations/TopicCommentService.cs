@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using OpenScholarApp.Data.Repositories.Implementations;
 using OpenScholarApp.Data.Repositories.Interfaces;
 using OpenScholarApp.Domain.Entities;
 using OpenScholarApp.Domain.Enums;
@@ -65,22 +64,25 @@ namespace OpenScholarApp.Services.Implementations
 
                 await _topicCommentRepository.Add(topicComment);
 
-                var userNotificationDto = new AddUserNotificationDto()
+                if (userId != topic.UserId)
                 {
-                    ReferenceId = topic.Id,
-                    UserId = userId,
-                    RecieverUserId = topic.UserId,
-                    Message = $"{user.UserName} Commented on your post",
-                    NotificationType = NotificationType.TopicComment,
-                    IsRead = false,
-                    CreatedAt = DateTime.UtcNow
-                };
+                    var userNotificationDto = new AddUserNotificationDto()
+                    {
+                        ReferenceId = topic.Id,
+                        UserId = userId,
+                        RecieverUserId = topic.UserId,
+                        Message = $"{user.UserName} Commented on your post",
+                        NotificationType = NotificationType.TopicComment,
+                        IsRead = false,
+                        CreatedAt = DateTime.UtcNow
+                    };
 
-                string userNotificationDtoJson = System.Text.Json.JsonSerializer.Serialize(userNotificationDto);
-                var userNotification = new UserNotification();
-                _mapper.Map(userNotificationDto, userNotification);
-                await _notificationService.SendNotification(topic.UserId, userNotificationDtoJson);
-                await _userNotificationRepository.Add(userNotification);
+                    string userNotificationDtoJson = System.Text.Json.JsonSerializer.Serialize(userNotificationDto);
+                    var userNotification = new UserNotification();
+                    _mapper.Map(userNotificationDto, userNotification);
+                    await _notificationService.SendNotification(topic.UserId, userNotificationDtoJson);
+                    await _userNotificationRepository.Add(userNotification);
+                }
                 return new Response<AddTopicCommentDto> { IsSuccessfull = true, Result = topicCommentDto };
             }
             catch (TopicCommentDataException e)

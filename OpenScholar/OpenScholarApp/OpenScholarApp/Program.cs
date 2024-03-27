@@ -2,25 +2,26 @@ using OpenScholarApp.Helpers.DIContainer;
 using OpenScholarApp.Helpers.Extensions;
 using OpenScholarApp.Mappers.MapperConfig;
 using OpenScholarApp.SignalR;
+using Amazon.S3;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonSettings(builder);
 var appSettings = builder.Configuration.GetSection("AppSettings");
 builder.Configuration.AddEnvironmentVariables();
 builder.Host.UseSerilogConfiguration();
 builder.Services.AddSignalR();
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly)
-    .AddPostgreSqlDbContext(appSettings) // => FOR POSTRESQL DB //.AddMSSQLDbContext(appSettings) // => For MS SQL DB
-    .AddAuthentication()
-    .AddJWT(appSettings)
-    .AddIdentity()
-    .AddCors()
-    .AddHostedServices()
-    .AddSwager();
+builder.Services.AddEndpointsApiExplorer()
+                .AddAutoMapper(typeof(AutoMapperProfile).Assembly)
+                .AddPostgreSqlDbContext(appSettings) // => FOR POSTRESQL DB //.AddMSSQLDbContext(appSettings) // => For MS SQL DB
+                .AddAuthentication()
+                .AddJWT(appSettings)
+                .AddIdentity()
+                .AddCors()
+                .AddHostedServices()
+                .AddSwager();
 
 builder.Services.AddSingleton<INotificationService, NotificationService>();
 DependencyInjectionHelper.InjectRepositories(builder.Services);
@@ -34,6 +35,4 @@ app.UseSwaggerUI();
 app.UseCors("CORSPolicy");
 app.MapControllers();
 app.MapHub<NotificationHub>("/NotificationsHub");
-
-
 app.Run();

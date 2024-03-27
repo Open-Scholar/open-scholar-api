@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,8 +14,6 @@ using OpenScholarApp.Services.CleanUpServices;
 using Serilog;
 using Serilog.Events;
 using Swashbuckle.AspNetCore.Filters;
-using System.Configuration;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace OpenScholarApp.Helpers.Extensions
@@ -44,11 +43,13 @@ namespace OpenScholarApp.Helpers.Extensions
             return new(services, configuration);
         }
 
-        //public static ConfigBuilder AddJsonFiles(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    services.Configure<JsonFileOptions>(Configuration.GetSection("JsonFileOptions"));
-        //    return new(services, configuration);
-        //}
+        public static IConfigurationBuilder AddJsonSettings(this IConfigurationBuilder configurationBuilder, WebApplicationBuilder builder)
+        {
+            configurationBuilder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            configurationBuilder.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+            configurationBuilder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+            return configurationBuilder;
+        }
 
         public static IHostBuilder UseSerilogConfiguration(this IHostBuilder hostBuilder)
         {

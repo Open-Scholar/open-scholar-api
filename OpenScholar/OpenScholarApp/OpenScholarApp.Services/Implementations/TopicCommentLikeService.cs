@@ -64,22 +64,25 @@ namespace OpenScholarApp.Services.Implementations
                     like.CreatedAt = DateTime.UtcNow;
                     await _topicCommentLikeRepository.Add(like);
 
-                    var userNotificationDto = new AddUserNotificationDto()
+                    if(userId != topicComment.UserId)
                     {
-                        ReferenceId = topicComment.Topic.Id,
-                        UserId = userId,
-                        RecieverUserId = topicComment.UserId,
-                        Message = $"{user.UserName} Liked your comment!",
-                        NotificationType = NotificationType.TopicCommentLike,
-                        IsRead = false,
-                        CreatedAt = DateTime.UtcNow
-                    };
+                        var userNotificationDto = new AddUserNotificationDto()
+                        {
+                            ReferenceId = topicComment.Topic.Id,
+                            UserId = userId,
+                            RecieverUserId = topicComment.UserId,
+                            Message = $"{user.UserName} Liked your comment!",
+                            NotificationType = NotificationType.TopicCommentLike,
+                            IsRead = false,
+                            CreatedAt = DateTime.UtcNow
+                        };
 
-                    string userNotificationDtoJson = System.Text.Json.JsonSerializer.Serialize(userNotificationDto);
-                    var userNotification = new UserNotification();
-                    _mapper.Map(userNotificationDto, userNotification);
-                    await _notificationService.SendNotification(topicComment.UserId, userNotificationDtoJson);
-                    await _userNotificationRepository.Add(userNotification);
+                        string userNotificationDtoJson = System.Text.Json.JsonSerializer.Serialize(userNotificationDto);
+                        var userNotification = new UserNotification();
+                        _mapper.Map(userNotificationDto, userNotification);
+                        await _notificationService.SendNotification(topicComment.UserId, userNotificationDtoJson);
+                        await _userNotificationRepository.Add(userNotification);
+                    }
                     return Response.Success;
                 }
             }
