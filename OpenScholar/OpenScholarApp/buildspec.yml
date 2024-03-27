@@ -23,7 +23,7 @@ phases:
       # Navigate to the output directory
       - cd site
       # Zip the contents of the publish directory into OpenScholarApp.zip
-      - zip -r ../site.zip .
+      - zip -r ../site.zip . ../.ebextensions
 artifacts:
   files:
     - site.zip
