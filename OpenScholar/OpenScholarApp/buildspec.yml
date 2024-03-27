@@ -23,9 +23,10 @@ phases:
       # Navigate to the output directory
       - cd site
       # Zip the contents of the publish directory into OpenScholarApp.zip
-      - zip -r ../site.zip . ../.ebextensions
+      - zip -r ../site.zip .
 artifacts:
   files:
     - site.zip
     - aws-windows-deployment-manifest.json
+    - '.ebextensions'
   base-directory: OpenScholar/OpenScholarApp
