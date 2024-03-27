@@ -28,5 +28,5 @@ artifacts:
   files:
     - site.zip
     - aws-windows-deployment-manifest.json
-    - '.ebextensions'
+    - '**/.ebextensions/**'
   base-directory: OpenScholar/OpenScholarApp
