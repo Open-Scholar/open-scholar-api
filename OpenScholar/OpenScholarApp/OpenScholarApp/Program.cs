@@ -15,7 +15,7 @@ builder.Services.AddAWSService<IAmazonS3>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer()
                 .AddAutoMapper(typeof(AutoMapperProfile).Assembly)
-                .AddPostgreSqlDbContext(appSettings) // => FOR POSTRESQL DB //.AddMSSQLDbContext(appSettings) // => For MS SQL DB
+                .AddPostgreSqlDbContext(appSettings)
                 .AddAuthentication()
                 .AddJWT(appSettings)
                 .AddIdentity()

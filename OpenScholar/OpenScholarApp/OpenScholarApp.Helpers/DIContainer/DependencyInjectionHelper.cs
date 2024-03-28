@@ -8,9 +8,9 @@ using OpenScholarApp.Services.Helpers.Interaces;
 using OpenScholarApp.Services.Implementations;
 using OpenScholarApp.Services.Interfaces;
 using OpenScholarApp.Services.StorageServices;
+using OpenScholarApp.Services.StorageServices.S3Bucket;
 using OpenScholarApp.Services.UserServices.Implementations;
 using OpenScholarApp.Services.UserServices.Interfaces;
-using OpenScholarApp.SignalR;
 
 namespace OpenScholarApp.Helpers.DIContainer
 {
@@ -67,6 +67,8 @@ namespace OpenScholarApp.Helpers.DIContainer
             services.AddScoped<IBlobService, BlobService>();
             services.AddTransient<IUserHelperService, UserHelperService>();
             services.AddTransient<IUserNotificationService, UserNotificationService>();
+            services.AddTransient<IS3FileService, S3FileService>();
+            services.AddTransient<IFileService, FileService>();
         }
     }
 }
